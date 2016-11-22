@@ -121,7 +121,9 @@ namespace EvotoClient.Blockchain
             var data = Path.Combine(GetAppDataFolder(), "Evoto");
 
             // TODO: Bug with multichain, have to delete existing chain directory
-            Directory.Delete(Path.Combine(data, ChainName), true);
+            var chainDir = Path.Combine(data, ChainName);
+            if (Directory.Exists(chainDir))
+                Directory.Delete(chainDir, true);
 
             Debug.WriteLine("Starting MultiChain");
             try
@@ -191,7 +193,7 @@ namespace EvotoClient.Blockchain
         private string GetAppDataFolder()
         {
             var appData = Environment.GetEnvironmentVariable("APPDATA");
-            if(appData == null)
+            if (appData == null)
                 throw new SystemException("APPDATA Must be set");
 
             return appData;
