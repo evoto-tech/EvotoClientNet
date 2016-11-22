@@ -9,8 +9,6 @@ namespace EvotoClient.Blockchain
 {
     public class MultiChainHandler : IMultiChainHandler
     {
-        public event EventHandler<EventArgs> OnConnect;
-
         private const string ChainHost = "michaelfiford.com";
         private const int ChainPort = 7211;
         private const string ChainName = "chain2";
@@ -22,6 +20,7 @@ namespace EvotoClient.Blockchain
         private MultiChainClient _client;
         private bool _connected;
         private Process _process;
+        public event EventHandler<EventArgs> OnConnect;
 
         public bool Connected
         {
@@ -46,13 +45,11 @@ namespace EvotoClient.Blockchain
                     await Task.Delay(TimeSpan.FromSeconds(10));
                     try
                     {
-
                         await ConnectRpc();
-
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message);
+                        Debug.WriteLine(e.Message);
                     }
 
                     if (!Connected)
@@ -65,9 +62,17 @@ namespace EvotoClient.Blockchain
             }
         }
 
-        public void Disconnect()
+        public void DisconnectAndClose()
         {
+            Task.Factory.StartNew(async () =>
+            {
+                await Disconnect();
+                Close();
+            });
+        }
 
+        public void Close()
+        {
             StopDaemon();
         }
 
@@ -82,20 +87,20 @@ namespace EvotoClient.Blockchain
         {
             _client = new MultiChainClient("127.0.0.1", RpcPort, false, RpcUser, _password, ChainName);
 
-            Console.WriteLine("Attempting to connect to MultiChain using RPC");
+            Debug.WriteLine("Attempting to connect to MultiChain using RPC");
 
             try
             {
                 var info = await _client.GetInfoAsync();
 
-                Console.WriteLine($"Connected to {info.Result.ChainName}!");
+                Debug.WriteLine($"Connected to {info.Result.ChainName}!");
 
                 Connected = true;
             }
             catch (InvalidOperationException e)
             {
-                Console.WriteLine("Could not connect to MultiChain via RPC");
-                Console.WriteLine(e.Message);
+                Debug.WriteLine("Could not connect to MultiChain via RPC");
+                Debug.WriteLine(e.Message);
                 Connected = false;
             }
         }
@@ -105,17 +110,20 @@ namespace EvotoClient.Blockchain
             if (_process != null)
             {
                 if (_process.HasExited)
-                    Console.WriteLine("Restarting Multichain!!");
-                else 
+                    Debug.WriteLine("Restarting Multichain!!");
+                else
                     return true;
             }
 
             // TODO: Nicer way of running this?
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "multichaind.exe");
 
-            var data = Environment.GetEnvironmentVariable("APPDATA") + Path.DirectorySeparatorChar + "Evoto";
+            var data = Path.Combine(GetAppDataFolder(), "Evoto");
 
-            Console.WriteLine("Starting MultiChain");
+            // TODO: Bug with multichain, have to delete existing chain directory
+            Directory.Delete(Path.Combine(data, ChainName), true);
+
+            Debug.WriteLine("Starting MultiChain");
             try
             {
                 _process = new Process
@@ -135,11 +143,11 @@ namespace EvotoClient.Blockchain
                     }
                 };
 
-                //Console.WriteLine(_process.StartInfo.Arguments);
+                Debug.WriteLine(_process.StartInfo.Arguments);
 
                 _process.ErrorDataReceived +=
-                    (sender, args) => { Console.WriteLine($"Multichaind Error: {args.Data}"); };
-                _process.OutputDataReceived += (sender, args) => { Console.WriteLine($"Multichaind: {args.Data}"); };
+                    (sender, args) => { Debug.WriteLine($"Multichaind Error: {args.Data}"); };
+                _process.OutputDataReceived += (sender, args) => { Debug.WriteLine($"Multichaind: {args.Data}"); };
 
                 // Go
                 var success = _process.Start();
@@ -154,17 +162,39 @@ namespace EvotoClient.Blockchain
             }
             catch (Exception e)
             {
-                Console.WriteLine("Could not start MultiChain. " + e.Message);
+                Debug.WriteLine("Could not start MultiChain. " + e.Message);
                 return false;
             }
         }
 
+        private async Task Disconnect()
+        {
+            Debug.WriteLine($"Disconnecting (Connected: {_connected})");
+
+            if (!_connected)
+                return;
+
+            await _client.StopAsync();
+        }
+
         private void StopDaemon()
         {
+            Debug.WriteLine(
+                $"Stopping MultiChain Daemon (Process Exists: {_process != null}, Exited: {_process?.HasExited})");
+
             if (_process == null || _process.HasExited)
                 return;
 
             _process.Close();
+        }
+
+        private string GetAppDataFolder()
+        {
+            var appData = Environment.GetEnvironmentVariable("APPDATA");
+            if(appData == null)
+                throw new SystemException("APPDATA Must be set");
+
+            return appData;
         }
     }
 }

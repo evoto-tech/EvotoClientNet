@@ -8,6 +8,7 @@ namespace EvotoClient.Blockchain
         bool Connected { get; }
         event EventHandler<EventArgs> OnConnect;
         Task Connect();
-        void Disconnect();
+        void DisconnectAndClose();
+        void Close();
     }
 }

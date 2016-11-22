@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using EvotoClient.Blockchain;
 using GalaSoft.MvvmLight;
 
@@ -52,13 +53,14 @@ namespace EvotoClient.ViewModel
 
         public override void Cleanup()
         {
+            Debug.WriteLine("Cleaning Up");
             if (_connected)
             {
-                // TODO
+                _multiChainHandler.DisconnectAndClose();
             }
             else
             {
-                _multiChainHandler.Disconnect();
+                _multiChainHandler.Close();
             }
 
             base.Cleanup();

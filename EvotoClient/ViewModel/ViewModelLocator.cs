@@ -50,6 +50,8 @@ namespace EvotoClient.ViewModel
         /// </summary>
         public static void Cleanup()
         {
+            var main = SimpleIoc.Default.GetInstance<MainViewModel>();
+            main.Cleanup();
         }
     }
 }

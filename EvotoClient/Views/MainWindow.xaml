@@ -49,7 +49,7 @@
             <TextBox Grid.Row="0" Grid.Column="1" />
 
             <Label Grid.Row="1" Grid.Column="0">Password</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" />
+            <PasswordBox Grid.Row="1" Grid.Column="1" />
 
             <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px">Login</Button>
         </Grid>
