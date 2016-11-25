@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,30 +36,17 @@ namespace EvotoClient.Blockchain
 
         public async Task Connect()
         {
-            while (true)
+            try
             {
-                var success = RunDaemon();
-
-                if (success)
+                await Task.Factory.StartNew(async () =>
                 {
-                    // Give multichain a chance to start up
-                    await Task.Delay(TimeSpan.FromSeconds(10));
-                    try
-                    {
-                        await ConnectRpc();
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e.Message);
-                    }
-
-                    if (!Connected)
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(10));
-                        continue;
-                    }
-                }
-                break;
+                    await RunDaemon(ConnectRpc);
+                    Close();
+                });
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
             }
         }
 
@@ -105,14 +93,23 @@ namespace EvotoClient.Blockchain
             }
         }
 
-        private bool RunDaemon()
+        private static void WatchProcess(object sender, DataReceivedEventArgs e, Func<Task> successCallback)
+        {
+            Debug.WriteLine($"Multichaind: {e.Data}");
+            if (e.Data.Contains("Node started"))
+            {
+                successCallback();
+            }
+        }
+
+        private async Task RunDaemon(Func<Task> successCallback)
         {
             if (_process != null)
             {
                 if (_process.HasExited)
                     Debug.WriteLine("Restarting Multichain!!");
                 else
-                    return true;
+                    await successCallback();
             }
 
             // TODO: Nicer way of running this?
@@ -149,7 +146,7 @@ namespace EvotoClient.Blockchain
 
                 _process.ErrorDataReceived +=
                     (sender, args) => { Debug.WriteLine($"Multichaind Error: {args.Data}"); };
-                _process.OutputDataReceived += (sender, args) => { Debug.WriteLine($"Multichaind: {args.Data}"); };
+                _process.OutputDataReceived += new DataReceivedEventHandler((sender, e) => WatchProcess(sender, e, successCallback));
 
                 // Go
                 var success = _process.Start();
@@ -160,12 +157,11 @@ namespace EvotoClient.Blockchain
                 _process.BeginOutputReadLine();
                 _process.BeginErrorReadLine();
 
-                return true;
+                await successCallback();
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Could not start MultiChain. " + e.Message);
-                return false;
+                throw new WarningException(e.Message);
             }
         }
 
