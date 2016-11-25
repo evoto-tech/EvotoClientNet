@@ -102,14 +102,14 @@ namespace EvotoClient.Blockchain
             }
         }
 
-        private Task RunDaemon(Func<Task> successCallback)
+        private async Task RunDaemon(Func<Task> successCallback)
         {
             if (_process != null)
             {
                 if (_process.HasExited)
                     Debug.WriteLine("Restarting Multichain!!");
                 else
-                    return successCallback();
+                    await successCallback();
             }
 
             // TODO: Nicer way of running this?
@@ -157,7 +157,7 @@ namespace EvotoClient.Blockchain
                 _process.BeginOutputReadLine();
                 _process.BeginErrorReadLine();
 
-                return successCallback();
+                await successCallback();
             }
             catch (Exception e)
             {
