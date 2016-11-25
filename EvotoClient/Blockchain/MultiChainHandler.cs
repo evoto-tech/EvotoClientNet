@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -160,9 +161,7 @@ namespace EvotoClient.Blockchain
             }
             catch (Exception e)
             {
-                Debug.WriteLine("Could not start MultiChain. " + e.Message);
-                // Obviously we don't want to call the success callback here but what should we do if we can't connect
-                return successCallback();
+                throw new WarningException(e.Message);
             }
         }
 
