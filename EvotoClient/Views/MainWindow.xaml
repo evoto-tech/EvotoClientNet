@@ -9,50 +9,23 @@
         Height="350"
         Width="525"
         Title="Evoto"
-        
+
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Skins/MainSkin.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <DockPanel>
         <StatusBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom">
-            <TextBlock Text="{Binding Status}" />
+            <TextBlock Text="{Binding MultiChainVm.Status}" />
         </StatusBar>
 
-        <Grid Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
-
-            <Label Grid.Row="0" Grid.Column="0">Username</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" />
-
-            <Label Grid.Row="1" Grid.Column="0">Password</Label>
-            <PasswordBox Grid.Row="1" Grid.Column="1" />
-
-            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px">Login</Button>
-        </Grid>
+        <ContentControl Content="{Binding CurrentView}" />
 
     </DockPanel>
 </Window>

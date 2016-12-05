@@ -97,20 +97,16 @@ namespace EvotoClient.Blockchain
         {
             Debug.WriteLine($"Multichaind: {e.Data}");
             if (e.Data.Contains("Node started"))
-            {
                 successCallback();
-            }
         }
 
         private async Task RunDaemon(Func<Task> successCallback)
         {
             if (_process != null)
-            {
                 if (_process.HasExited)
                     Debug.WriteLine("Restarting Multichain!!");
                 else
                     await successCallback();
-            }
 
             // TODO: Nicer way of running this?
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "multichaind.exe");
@@ -146,7 +142,7 @@ namespace EvotoClient.Blockchain
 
                 _process.ErrorDataReceived +=
                     (sender, args) => { Debug.WriteLine($"Multichaind Error: {args.Data}"); };
-                _process.OutputDataReceived += new DataReceivedEventHandler((sender, e) => WatchProcess(sender, e, successCallback));
+                _process.OutputDataReceived += (sender, e) => WatchProcess(sender, e, successCallback);
 
                 // Go
                 var success = _process.Start();
@@ -180,7 +176,7 @@ namespace EvotoClient.Blockchain
             Debug.WriteLine(
                 $"Stopping MultiChain Daemon (Process Exists: {_process != null}, Exited: {_process?.HasExited})");
 
-            if (_process == null || _process.HasExited)
+            if ((_process == null) || _process.HasExited)
                 return;
 
             _process.Close();

@@ -32,6 +32,8 @@ namespace EvotoClient.ViewModel
             SimpleIoc.Default.Register<IMultiChainHandler, MultiChainHandler>();
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<LoginViewModel>();
+            SimpleIoc.Default.Register<HomeViewModel>();
         }
 
         /// <summary>
@@ -43,6 +45,16 @@ namespace EvotoClient.ViewModel
         public MainViewModel Main
         {
             get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
+        }
+
+        public LoginViewModel Login
+        {
+            get { return ServiceLocator.Current.GetInstance<LoginViewModel>(); }
+        }
+
+        public HomeViewModel Home
+        {
+            get { return ServiceLocator.Current.GetInstance<HomeViewModel>(); }
         }
 
         /// <summary>
