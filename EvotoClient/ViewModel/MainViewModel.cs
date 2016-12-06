@@ -1,69 +1,46 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using EvotoClient.Blockchain;
+﻿using System;
 using GalaSoft.MvvmLight;
+using Microsoft.Practices.ServiceLocation;
 
 namespace EvotoClient.ViewModel
 {
-    /// <summary>
-    ///     This class contains properties that the main View can data bind to.
-    ///     <para>
-    ///         See http://www.mvvmlight.net
-    ///     </para>
-    /// </summary>
+    public enum EvotoView
+    {
+        Login,
+        Home
+    }
+
     public class MainViewModel : ViewModelBase
     {
-        private readonly IMultiChainHandler _multiChainHandler;
-        private bool _connected;
+        private readonly LoginViewModel _loginVm = new LoginViewModel();
+        private ViewModelBase _currentView;
 
-        private string _status = "Not Connected";
-
-        /// <summary>
-        ///     Initializes a new instance of the MainViewModel class.
-        /// </summary>
-        public MainViewModel(IMultiChainHandler multiChainHandler)
+        public MainViewModel()
         {
-            _multiChainHandler = multiChainHandler;
+            CurrentView = _loginVm;
+        }
 
-            _multiChainHandler.OnConnect += (sender, args) =>
+        public MultiChainViewModel MultiChainVm { get; } = new MultiChainViewModel();
+
+        public ViewModelBase CurrentView
+        {
+            get { return _currentView; }
+            set { Set(ref _currentView, value); }
+        }
+
+        public void ChangeView(EvotoView view)
+        {
+            switch (view)
             {
-                _connected = true;
-                UpdateStatus();
-            };
-            UpdateStatus();
-
-            // Connect in background thread to not slow the gui
-            Task.Factory.StartNew(() => { _multiChainHandler.Connect().Wait(); });
-        }
-
-        /// <summary>
-        ///     Gets the WelcomeTitle property.
-        ///     Changes to that property's value raise the PropertyChanged event.
-        /// </summary>
-        public string Status
-        {
-            get { return _status; }
-            set { Set(ref _status, value); }
-        }
-
-        private void UpdateStatus()
-        {
-            Status = _connected ? "Connected" : "Not Connected";
-        }
-
-        public override void Cleanup()
-        {
-            Debug.WriteLine("Cleaning Up");
-            if (_connected)
-            {
-                _multiChainHandler.DisconnectAndClose();
+                case EvotoView.Login:
+                    CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
+                    break;
+                case EvotoView.Home:
+                    CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(view), view, null);
             }
-            else
-            {
-                _multiChainHandler.Close();
-            }
-
-            base.Cleanup();
         }
     }
 }
