@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MultiChainLib;
 
-namespace EvotoClient.Blockchain
+namespace Blockchain
 {
     public class MultiChainHandler : IMultiChainHandler
     {

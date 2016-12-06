@@ -10,17 +10,16 @@ namespace EvotoClient.ViewModel
     public class LoginViewModel : ViewModelBase
     {
         private bool _loading;
-
-        private string _username;
-
         private MainViewModel _mainVm;
-        private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
+        private string _username;
 
         public LoginViewModel()
         {
             LoginCommand = new RelayCommand(Login, CanLogin);
             CanSubmit = CanExecuteChanged;
         }
+
+        private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
 
         public RelayCommand LoginCommand { get; }
 

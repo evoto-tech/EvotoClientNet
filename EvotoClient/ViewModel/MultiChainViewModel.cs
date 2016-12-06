@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using EvotoClient.Blockchain;
+using Blockchain;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 

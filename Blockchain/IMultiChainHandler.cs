@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace EvotoClient.Blockchain
+namespace Blockchain
 {
     public interface IMultiChainHandler
     {
