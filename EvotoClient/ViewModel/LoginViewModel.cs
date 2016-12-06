@@ -13,6 +13,9 @@ namespace EvotoClient.ViewModel
 
         private string _username;
 
+        private MainViewModel _mainVm;
+        private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
+
         public LoginViewModel()
         {
             LoginCommand = new RelayCommand(Login, CanLogin);
@@ -46,8 +49,7 @@ namespace EvotoClient.ViewModel
             Task.Factory.StartNew(() =>
             {
                 Thread.Sleep(5000);
-                var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
-                mainVm.ChangeView(EvotoView.Home);
+                MainVm.ChangeView(EvotoView.Home);
             });
         }
 
