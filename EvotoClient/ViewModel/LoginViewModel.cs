@@ -11,11 +11,12 @@ namespace EvotoClient.ViewModel
     {
         private bool _loading;
         private MainViewModel _mainVm;
-        private string _username;
+        private string _email;
 
         public LoginViewModel()
         {
-            LoginCommand = new RelayCommand(Login, CanLogin);
+            LoginCommand = new RelayCommand(DoLogin, CanLogin);
+            RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             CanSubmit = CanExecuteChanged;
         }
 
@@ -23,25 +24,27 @@ namespace EvotoClient.ViewModel
 
         public RelayCommand LoginCommand { get; }
 
+        public RelayCommand RegisterCommand { get; }
+
         public bool Loading
         {
             get { return _loading; }
             set { Set(ref _loading, value); }
         }
 
-        public string Username
+        public string Email
         {
-            get { return _username; }
+            get { return _email; }
             set
             {
-                Set(ref _username, value);
+                Set(ref _email, value);
                 LoginCommand.RaiseCanExecuteChanged();
             }
         }
 
         public KeyEventHandler CanSubmit { get; }
 
-        private void Login()
+        private void DoLogin()
         {
             Loading = true;
 
@@ -52,14 +55,27 @@ namespace EvotoClient.ViewModel
             });
         }
 
+        private void DoRegister()
+        {
+            MainVm.ChangeView(EvotoView.Register);
+        }
+
         private bool CanLogin()
         {
-            return (Username?.Length > 0) && !Loading;
+            return (Email?.Length > 0) && !Loading;
+        }
+
+        private bool CanRegister()
+        {
+            return RegisterEnabled;
         }
 
         private void CanExecuteChanged(object sender, KeyEventArgs e)
         {
             LoginCommand.RaiseCanExecuteChanged();
         }
+
+        //TODO: Pull from registrar
+        public bool RegisterEnabled => true;
     }
 }

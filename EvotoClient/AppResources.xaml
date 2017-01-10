@@ -21,5 +21,8 @@
     <DataTemplate DataType="{x:Type vm:HomeViewModel}">
         <views:HomeView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:RegisterViewModel}">
+        <views:RegisterView />
+    </DataTemplate>
 
 </ResourceDictionary>

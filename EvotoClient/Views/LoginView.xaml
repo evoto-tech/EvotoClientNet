@@ -20,17 +20,18 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0">Username</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
+        <Label Grid.Row="0" Grid.Column="0">Email</Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
 
         <Label Grid.Row="1" Grid.Column="0">Password</Label>
-        <PasswordBox Grid.Row="1" Grid.Column="1" />
+        <PasswordBox Grid.Row="1" Grid.Column="1" Name="Password" />
 
         <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px" Command="{Binding LoginCommand}">Login</Button>
 
@@ -40,5 +41,10 @@
                      Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
+        
+        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+            Visibility="{Binding RegisterEnabled, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            <Hyperlink Command="{Binding RegisterCommand}">Register</Hyperlink>    
+        </TextBlock>
     </Grid>
 </UserControl>
