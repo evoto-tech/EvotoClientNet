@@ -97,7 +97,10 @@ namespace Blockchain
         {
             Debug.WriteLine($"Multichaind: {e.Data}");
             if (e.Data.Contains("Node started"))
+            {
+                // TODO: Need to await this
                 successCallback();
+            }
         }
 
         private async Task RunDaemon(Func<Task> successCallback)
@@ -111,10 +114,8 @@ namespace Blockchain
             // TODO: Nicer way of running this?
             var path = Path.Combine(Directory.GetCurrentDirectory(), "Resources", "multichaind.exe");
 
-            var data = Path.Combine(GetAppDataFolder(), "Evoto");
-
             // TODO: Bug with multichain, have to delete existing chain directory
-            var chainDir = Path.Combine(data, ChainName);
+            var chainDir = Path.Combine(GetAppDataFolder(), ChainName);
             if (Directory.Exists(chainDir))
                 Directory.Delete(chainDir, true);
 
@@ -182,13 +183,13 @@ namespace Blockchain
             _process.Close();
         }
 
-        private string GetAppDataFolder()
+        public static string GetAppDataFolder()
         {
             var appData = Environment.GetEnvironmentVariable("APPDATA");
             if (appData == null)
                 throw new SystemException("APPDATA Must be set");
 
-            return appData;
+            return Path.Combine(appData, "Evoto");
         }
 
         #region Methods
