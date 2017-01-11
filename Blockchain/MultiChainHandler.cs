@@ -64,7 +64,7 @@ namespace Blockchain
             StopDaemon();
         }
 
-        public static string RandomString(int length)
+        private static string RandomString(int length)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
@@ -190,5 +190,51 @@ namespace Blockchain
 
             return appData;
         }
+
+        #region Methods
+
+        public async Task<BlockchainInfoResponse> GetInfo()
+        {
+            var res = await _client.GetBlockchainInfoAsync();
+            return res.Result;   
+        }
+
+        public async Task<BlockResponse> GetGenesisBlock()
+        {
+            // Should be possible to get the block by height but client doesn't seem to handle it, so get hash first
+            var hashRes = await _client.GetBlockHashAsync(0);
+            var res = await _client.GetBlockVerboseAsync(hashRes.Result);
+            
+            return res.Result;
+        }
+
+        public async Task<string> GetBlock(string hash)
+        {
+            var res = await _client.GetBlockAsync(hash);
+            return res.Result;
+        }
+
+        public async Task<BlockResponse> GetBlockFull(string hash)
+        {
+            var res = await _client.GetBlockVerboseAsync(hash);
+            return res.Result;
+        }
+
+        public async Task<VerboseTransactionResponse> GetTransaction(string txId)
+        {
+            var res = await _client.GetRawTransactionVerboseAsync(txId);
+            return res.Result;
+        }
+
+        public async Task<string> WriteTransaction(object something)
+        {
+            var tx = await _client.CreateRawTransactionAync();
+            var txId = tx.Result;
+            await _client.AppendRawDataAsync(txId, something);
+            await _client.SendRawTransactionAsync(txId);
+            return txId;
+        }
+
+        #endregion
     }
 }
