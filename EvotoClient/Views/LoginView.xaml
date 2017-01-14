@@ -30,9 +30,9 @@
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" />
 
         <Label Grid.Row="1" Grid.Column="0">Password</Label>
-        <PasswordBox Grid.Row="1" Grid.Column="1" />
+        <PasswordBox Grid.Row="1" Grid.Column="1" x:Name="Password" />
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px" Command="{Binding LoginCommand}">Login</Button>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=This}">Login</Button>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
