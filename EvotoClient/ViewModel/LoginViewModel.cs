@@ -16,10 +16,10 @@ namespace EvotoClient.ViewModel
     public class LoginViewModel : ViewModelBase
     {
         private readonly LoginClient _loginClient;
+        private string _errorMessage;
         private bool _loading;
         private MainViewModel _mainVm;
         private string _username;
-        private string _errorMessage;
 
         public LoginViewModel()
         {
@@ -35,7 +35,11 @@ namespace EvotoClient.ViewModel
         public bool Loading
         {
             get { return _loading; }
-            set { Set(ref _loading, value); }
+            set
+            {
+                Set(ref _loading, value);
+                LoginCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public string ErrorMessage
@@ -69,6 +73,7 @@ namespace EvotoClient.ViewModel
                 {
                     try
                     {
+                        ErrorMessage = "";
                         await _loginClient.Login(Username, ConvertToUnsecureString(passwordContainer.SecurePassword));
                     }
                     catch (ApiException e)
