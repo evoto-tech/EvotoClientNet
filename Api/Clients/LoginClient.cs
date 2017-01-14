@@ -12,15 +12,15 @@ namespace Api.Clients
         {
         }
 
-        public async Task<UserDetails> Login(string email, string password)
+        public async Task<UserDetails> Login(LoginModel loginModel)
         {
-            var res = await Exec<UserDetailsResponse>("", Method.POST, new {email, password});
+            var res = await Exec<UserDetailsResponse>("", Method.POST, loginModel);
             return res.MapToModel();
         }
 
-        public async Task<UserDetails> Register(object details)
+        public async Task<UserDetails> Register(RegisterModel registerModel)
         {
-            var res = await Exec<UserDetailsResponse>("", Method.PUT, details);
+            var res = await Exec<UserDetailsResponse>("", Method.PUT, registerModel);
             return res.MapToModel();
         }
     }

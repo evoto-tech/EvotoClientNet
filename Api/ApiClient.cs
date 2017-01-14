@@ -12,7 +12,7 @@ namespace Api
 
         public ApiClient(string controller)
         {
-            var apiBase = ConfigurationManager.AppSettings["apiBase"];
+            var apiBase = ConfigurationManager.AppSettings["ApiBase"];
             _client = new RestClient($"{apiBase}/{controller}");
 
 #if DEBUG

@@ -1,33 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Api;
 using Api.Clients;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Practices.ServiceLocation;
 using Models;
+using Models.Validate;
 
 namespace EvotoClient.ViewModel
 {
     public class LoginViewModel : ViewModelBase
     {
         private readonly LoginClient _loginClient;
+        private readonly LoginModelValidator _validator;
+        private string _email;
+
         private string _errorMessage;
         private bool _loading;
         private MainViewModel _mainVm;
-        private string _email;
 
         public LoginViewModel()
         {
             _loginClient = new LoginClient();
+            _validator = new LoginModelValidator();
 
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
-            LoginCommand = new RelayCommand<object>(DoLogin, CanLogin);
-            CanSubmit = CanExecuteChanged;
+            LoginCommand = new RelayCommand<object>(DoLogin);
         }
 
         private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
@@ -62,27 +66,52 @@ namespace EvotoClient.ViewModel
             }
         }
 
-        public KeyEventHandler CanSubmit { get; }
+        //TODO: Pull from registrar
+        public bool RegisterEnabled => true;
+
+        private bool IsFormValid(object parameter, bool updateErrorMessage, out LoginModel loginModel)
+        {
+            loginModel = null;
+            var valid = true;
+            var errorMessages = new List<string>();
+
+            var passwordContainer = parameter as IHavePassword;
+            if (passwordContainer == null)
+                return false;
+
+            loginModel = new LoginModel(Email, ConvertToUnsecureString(passwordContainer.SecurePassword));
+            var v = _validator.Validate(loginModel);
+            if (!v.IsValid)
+            {
+                errorMessages.AddRange(v.Errors.Select(e => e.ErrorMessage));
+                valid = false;
+            }
+
+            if (updateErrorMessage && !valid)
+                ErrorMessage = string.Join("\n", errorMessages);
+            return valid;
+        }
 
         private void DoLogin(object parameter)
         {
-            var passwordContainer = parameter as IHavePassword;
-            if (passwordContainer == null)
+            LoginModel loginModel;
+            if (!IsFormValid(parameter, true, out loginModel))
                 return;
-
-            Loading = true;
 
             Task.Factory.StartNew(
                 async () =>
                 {
                     try
                     {
+                        Loading = true;
                         ErrorMessage = "";
-                        await _loginClient.Login(Email, ConvertToUnsecureString(passwordContainer.SecurePassword));
+                        await _loginClient.Login(loginModel);
                     }
                     catch (ApiException e)
                     {
-                        ErrorMessage = e.StatusCode == HttpStatusCode.Forbidden ? "Invalid Username or Password" : "An Unknown Error Occurred";
+                        ErrorMessage = e.StatusCode == HttpStatusCode.Forbidden
+                            ? "Invalid Username or Password"
+                            : "An Unknown Error Occurred";
                         Loading = false;
                     }
                 });
@@ -94,22 +123,12 @@ namespace EvotoClient.ViewModel
             MainVm.ChangeView(EvotoView.Register);
         }
 
-        private bool CanLogin(object data)
-        {
-            return (Email?.Length > 0) && !Loading;
-        }
-
         private bool CanRegister()
         {
             return RegisterEnabled;
         }
 
-        private void CanExecuteChanged(object sender, KeyEventArgs e)
-        {
-            LoginCommand.RaiseCanExecuteChanged();
-        }
-
-        public string ConvertToUnsecureString(SecureString securePassword)
+        public static string ConvertToUnsecureString(SecureString securePassword)
         {
             if (securePassword == null) return string.Empty;
 
@@ -124,8 +143,5 @@ namespace EvotoClient.ViewModel
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
-
-        //TODO: Pull from registrar
-        public bool RegisterEnabled => true;
     }
 }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:EvotoClient.Converters"
+             x:Name="This"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
 
@@ -44,12 +45,18 @@
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
 
         <Label Grid.Row="4" Grid.Column="0">Password</Label>
-        <PasswordBox Grid.Row="4" Grid.Column="1" Name="Password" />
+        <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="Password" />
 
         <Label Grid.Row="5" Grid.Column="0">Confirm Password</Label>
-        <PasswordBox Grid.Row="5" Grid.Column="1" Name="ConfirmPassword" />
+        <PasswordBox Grid.Row="5" Grid.Column="1" x:Name="PasswordConfirm" />
 
-        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px" Command="{Binding RegisterCommand}">Register</Button>
+        <Button
+            Grid.Row="6"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="0 5px"
+            Command="{Binding RegisterCommand}"
+            CommandParameter="{Binding ElementName=This}">Register</Button>
         
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"

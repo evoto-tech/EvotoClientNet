@@ -14,7 +14,7 @@ namespace EvotoClient.ViewModel
 
     public class MainViewModel : ViewModelBase
     {
-        private readonly LoginViewModel _loginVm = new LoginViewModel();
+        private readonly LoginViewModel _loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
         private ViewModelBase _currentView;
 
         public MainViewModel()
