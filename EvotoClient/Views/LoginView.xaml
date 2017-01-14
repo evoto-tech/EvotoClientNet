@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:c="clr-namespace:EvotoClient.Converters"
              mc:Ignorable="d"
+             x:Name="This"
              d:DesignHeight="300" d:DesignWidth="300"
 
              DataContext="{Binding Login, Source={StaticResource Locator}}">
@@ -32,7 +33,14 @@
         <Label Grid.Row="1" Grid.Column="0">Password</Label>
         <PasswordBox Grid.Row="1" Grid.Column="1" x:Name="Password" />
 
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px" Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=This}">Login</Button>
+        <Button Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0 5px"
+                Command="{Binding LoginCommand}"
+                CommandParameter="{Binding ElementName=This}">
+            Login
+        </Button>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"

@@ -1,26 +1,25 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Api;
 using Api.Clients;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Practices.ServiceLocation;
+using Models;
 
 namespace EvotoClient.ViewModel
 {
-    public interface IHavePassword
-    {
-        SecureString Password { get; }
-    }
-
     public class LoginViewModel : ViewModelBase
     {
         private readonly LoginClient _loginClient;
         private bool _loading;
         private MainViewModel _mainVm;
         private string _username;
+        private string _errorMessage;
 
         public LoginViewModel()
         {
@@ -37,6 +36,12 @@ namespace EvotoClient.ViewModel
         {
             get { return _loading; }
             set { Set(ref _loading, value); }
+        }
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set { Set(ref _errorMessage, value); }
         }
 
         public string Username
@@ -60,7 +65,21 @@ namespace EvotoClient.ViewModel
             Loading = true;
 
             Task.Factory.StartNew(
-                async () => { await _loginClient.Login(Username, ConvertToUnsecureString(passwordContainer.Password)); });
+                async () =>
+                {
+                    try
+                    {
+                        await _loginClient.Login(Username, ConvertToUnsecureString(passwordContainer.SecurePassword));
+                    }
+                    catch (ApiException e)
+                    {
+                        if (e.StatusCode == HttpStatusCode.Forbidden)
+                            ErrorMessage = "Invalid Username or Password";
+                        else
+                            ErrorMessage = "An Unknown Error Occurred";
+                        Loading = false;
+                    }
+                });
         }
 
         private bool CanLogin(object data)

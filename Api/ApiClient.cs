@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 using RestSharp;
 
@@ -8,9 +10,10 @@ namespace Api
     {
         private readonly RestClient _client;
 
-        public ApiClient(string apiUrl)
+        public ApiClient(string controller)
         {
-            _client = new RestClient(apiUrl);
+            var apiBase = ConfigurationManager.AppSettings["apiBase"];
+            _client = new RestClient($"{apiBase}/{controller}");
 
 #if DEBUG
             // Ignore self-signed certs in DEBUG
@@ -34,10 +37,12 @@ namespace Api
                 req.AddParameter("application/json", data, ParameterType.RequestBody);
 
             var res = await _client.ExecuteTaskAsync<T>(req);
-            if (!IsSuccessCode(res.StatusCode))
-                throw new ApiException(res.StatusCode, res.ErrorMessage);
+            if (IsSuccessCode(res.StatusCode))
+                return res.Data;
 
-            return res.Data;
+            var e = new ApiException(res.StatusCode, res.ErrorMessage);
+            Debug.WriteLine(e.Message);
+            throw e;
         }
 
         private static bool IsSuccessCode(HttpStatusCode statusCode)
