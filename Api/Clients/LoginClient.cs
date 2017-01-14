@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Api.Properties;
 using Api.Responses;
 using Models;
@@ -13,9 +12,9 @@ namespace Api.Clients
         {
         }
 
-        public async Task<UserDetails> Login(string username, string password)
+        public async Task<UserDetails> Login(string email, string password)
         {
-            var res = await Exec<UserDetailsResponse>("", Method.POST, new {username, password});
+            var res = await Exec<UserDetailsResponse>("", Method.POST, new {email, password});
             return res.MapToModel();
         }
 

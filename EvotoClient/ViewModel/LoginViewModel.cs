@@ -25,7 +25,7 @@ namespace EvotoClient.ViewModel
         {
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             _loginClient = new LoginClient();
-            LoginCommand = new RelayCommand<object>(Login, CanLogin);
+            LoginCommand = new RelayCommand<object>(DoLogin, CanLogin);
             CanSubmit = CanExecuteChanged;
         }
 
@@ -63,7 +63,7 @@ namespace EvotoClient.ViewModel
 
         public KeyEventHandler CanSubmit { get; }
 
-        private void DoLogin()
+        private void DoLogin(object parameter)
         {
             var passwordContainer = parameter as IHavePassword;
             if (passwordContainer == null)
@@ -77,7 +77,7 @@ namespace EvotoClient.ViewModel
                     try
                     {
                         ErrorMessage = "";
-                        await _loginClient.Login(Username, ConvertToUnsecureString(passwordContainer.SecurePassword));
+                        await _loginClient.Login(Email, ConvertToUnsecureString(passwordContainer.SecurePassword));
                     }
                     catch (ApiException e)
                     {
