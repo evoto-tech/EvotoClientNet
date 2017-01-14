@@ -40,7 +40,7 @@ namespace Api
             if (IsSuccessCode(res.StatusCode))
                 return res.Data;
 
-            var e = new ApiException(res.StatusCode, res.ErrorMessage);
+            var e = new ApiException(res.StatusCode, req.Method.ToString(), res.ResponseUri.ToString(), res.ErrorMessage);
             Debug.WriteLine(e.Message);
             throw e;
         }

@@ -5,10 +5,12 @@ namespace Api
 {
     public class ApiException : Exception
     {
-        public HttpStatusCode StatusCode { get; }
-        public ApiException(HttpStatusCode code, string err) : base($"API Error ({code}) - {err}")
+        public ApiException(HttpStatusCode code, string method, string uri, string err)
+            : base($"API Error {method}: {uri} ({code}) - {err}")
         {
             StatusCode = code;
         }
+
+        public HttpStatusCode StatusCode { get; }
     }
 }

@@ -23,8 +23,9 @@ namespace EvotoClient.ViewModel
 
         public LoginViewModel()
         {
-            RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             _loginClient = new LoginClient();
+
+            RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             LoginCommand = new RelayCommand<object>(DoLogin, CanLogin);
             CanSubmit = CanExecuteChanged;
         }
@@ -81,10 +82,7 @@ namespace EvotoClient.ViewModel
                     }
                     catch (ApiException e)
                     {
-                        if (e.StatusCode == HttpStatusCode.Forbidden)
-                            ErrorMessage = "Invalid Username or Password";
-                        else
-                            ErrorMessage = "An Unknown Error Occurred";
+                        ErrorMessage = e.StatusCode == HttpStatusCode.Forbidden ? "Invalid Username or Password" : "An Unknown Error Occurred";
                         Loading = false;
                     }
                 });
@@ -92,6 +90,7 @@ namespace EvotoClient.ViewModel
 
         private void DoRegister()
         {
+            ErrorMessage = "";
             MainVm.ChangeView(EvotoView.Register);
         }
 
