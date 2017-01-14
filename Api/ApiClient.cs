@@ -19,7 +19,7 @@ namespace Api
 #endif
         }
 
-        public async Task Exec(string uri, Method method, string data)
+        public async Task Exec(string uri, Method method, object data)
         {
             await Exec<dynamic>(uri, method, data);
         }

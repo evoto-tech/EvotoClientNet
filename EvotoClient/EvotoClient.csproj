@@ -192,6 +192,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Config\App.Debug.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -202,7 +203,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Config\App.Release.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\multichain-cli.exe">
@@ -234,7 +235,10 @@
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
-  <Target Name="AfterBuild">
-  </Target>
   -->
+  <Target Name="AfterBuild">
+    <Delete Files="$(TargetDir)$(TargetFileName).config" />
+    <Copy SourceFiles="$(ProjectDir)\Config\App.$(Configuration).config"
+          DestinationFiles="$(TargetDir)$(TargetFileName).config" />
+  </Target>
 </Project>
