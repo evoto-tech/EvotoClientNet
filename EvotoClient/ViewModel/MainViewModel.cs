@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 
@@ -7,7 +8,8 @@ namespace EvotoClient.ViewModel
     public enum EvotoView
     {
         Login,
-        Home
+        Home,
+        Register
     }
 
     public class MainViewModel : ViewModelBase
@@ -30,6 +32,7 @@ namespace EvotoClient.ViewModel
 
         public void ChangeView(EvotoView view)
         {
+            Debug.WriteLine($"Changing view to: {view}");
             switch (view)
             {
                 case EvotoView.Login:
@@ -37,6 +40,9 @@ namespace EvotoClient.ViewModel
                     break;
                 case EvotoView.Home:
                     CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
+                    break;
+                case EvotoView.Register:
+                    CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(view), view, null);

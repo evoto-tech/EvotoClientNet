@@ -19,10 +19,11 @@ namespace EvotoClient.ViewModel
         private string _errorMessage;
         private bool _loading;
         private MainViewModel _mainVm;
-        private string _username;
+        private string _email;
 
         public LoginViewModel()
         {
+            RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             _loginClient = new LoginClient();
             LoginCommand = new RelayCommand<object>(Login, CanLogin);
             CanSubmit = CanExecuteChanged;
@@ -31,6 +32,8 @@ namespace EvotoClient.ViewModel
         private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
 
         public RelayCommand<object> LoginCommand { get; }
+
+        public RelayCommand RegisterCommand { get; }
 
         public bool Loading
         {
@@ -48,19 +51,19 @@ namespace EvotoClient.ViewModel
             set { Set(ref _errorMessage, value); }
         }
 
-        public string Username
+        public string Email
         {
-            get { return _username; }
+            get { return _email; }
             set
             {
-                Set(ref _username, value);
+                Set(ref _email, value);
                 LoginCommand.RaiseCanExecuteChanged();
             }
         }
 
         public KeyEventHandler CanSubmit { get; }
 
-        private void Login(object parameter)
+        private void DoLogin()
         {
             var passwordContainer = parameter as IHavePassword;
             if (passwordContainer == null)
@@ -87,9 +90,19 @@ namespace EvotoClient.ViewModel
                 });
         }
 
+        private void DoRegister()
+        {
+            MainVm.ChangeView(EvotoView.Register);
+        }
+
         private bool CanLogin(object data)
         {
-            return (Username?.Length > 0) && !Loading;
+            return (Email?.Length > 0) && !Loading;
+        }
+
+        private bool CanRegister()
+        {
+            return RegisterEnabled;
         }
 
         private void CanExecuteChanged(object sender, KeyEventArgs e)
@@ -112,5 +125,8 @@ namespace EvotoClient.ViewModel
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
+
+        //TODO: Pull from registrar
+        public bool RegisterEnabled => true;
     }
 }

@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="EvotoClient.Views.RegisterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="clr-namespace:EvotoClient.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300"
+
+             DataContext="{Binding Register, Source={StaticResource Locator}}">
+
+    <UserControl.Resources>
+        <c:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
+    </UserControl.Resources>
+
+    <Grid
+        Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0">First Name</Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label Grid.Row="1" Grid.Column="0">Last Name</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label Grid.Row="2" Grid.Column="0">ID Number</Label>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding IdNumber, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label Grid.Row="3" Grid.Column="0">Email</Label>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Label Grid.Row="4" Grid.Column="0">Password</Label>
+        <PasswordBox Grid.Row="4" Grid.Column="1" Name="Password" />
+
+        <Label Grid.Row="5" Grid.Column="0">Confirm Password</Label>
+        <PasswordBox Grid.Row="5" Grid.Column="1" Name="ConfirmPassword" />
+
+        <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="0 5px" Command="{Binding RegisterCommand}">Register</Button>
+        
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                     IsIndeterminate="True"
+                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                     VerticalAlignment="Center" HorizontalAlignment="Center"
+                     Margin="5 5 5 5" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2">
+            <Hyperlink Command="{Binding ReturnToLoginCommand}">Login</Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>
