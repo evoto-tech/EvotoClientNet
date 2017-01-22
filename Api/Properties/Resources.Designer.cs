@@ -61,11 +61,38 @@ namespace Api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to login/.
+        ///   Looks up a localized string similar to account/.
         /// </summary>
-        internal static string LoginController {
+        internal static string AccountController {
             get {
-                return ResourceManager.GetString("LoginController", resourceCulture);
+                return ResourceManager.GetString("AccountController", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to details/{0}.
+        /// </summary>
+        internal static string DetailsAction {
+            get {
+                return ResourceManager.GetString("DetailsAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to login.
+        /// </summary>
+        internal static string LoginAction {
+            get {
+                return ResourceManager.GetString("LoginAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to register.
+        /// </summary>
+        internal static string RegisterAction {
+            get {
+                return ResourceManager.GetString("RegisterAction", resourceCulture);
             }
         }
     }

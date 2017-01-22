@@ -17,7 +17,7 @@ namespace EvotoClient.ViewModel
 {
     public class LoginViewModel : ViewModelBase
     {
-        private readonly LoginClient _loginClient;
+        private readonly UserClient _userClient;
         private readonly LoginModelValidator _validator;
         private string _email;
 
@@ -27,7 +27,7 @@ namespace EvotoClient.ViewModel
 
         public LoginViewModel()
         {
-            _loginClient = new LoginClient();
+            _userClient = new UserClient();
             _validator = new LoginModelValidator();
 
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
@@ -105,7 +105,8 @@ namespace EvotoClient.ViewModel
                     {
                         Loading = true;
                         ErrorMessage = "";
-                        await _loginClient.Login(loginModel);
+                        await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
+                        MainVm.ChangeView(EvotoView.Home);
                     }
                     catch (ApiException e)
                     {

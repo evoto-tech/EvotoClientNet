@@ -14,7 +14,7 @@ namespace EvotoClient.ViewModel
 {
     public class RegisterViewModel : ViewModelBase
     {
-        private readonly LoginClient _loginClient;
+        private readonly UserClient _userClient;
         private readonly RegisterModelValidator _validator;
 
         private string _email;
@@ -29,7 +29,7 @@ namespace EvotoClient.ViewModel
         public RegisterViewModel()
         {
             _validator = new RegisterModelValidator();
-            _loginClient = new LoginClient();
+            _userClient = new UserClient();
             RegisterCommand = new RelayCommand<object>(Register);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
         }
@@ -141,7 +141,7 @@ namespace EvotoClient.ViewModel
                 {
                     Loading = true;
                     ErrorMessage = "";
-                    await _loginClient.Register(registerModel);
+                    await _userClient.Register(registerModel);
                 }
                 catch (ApiException e)
                 {

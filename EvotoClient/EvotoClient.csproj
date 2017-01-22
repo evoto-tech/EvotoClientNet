@@ -151,6 +151,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Compile>
     <Compile Include="ViewModel\RegisterViewModel.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
@@ -204,6 +205,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Config\App.Debug.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
