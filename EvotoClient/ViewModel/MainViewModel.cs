@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
+using Models;
 
 namespace EvotoClient.ViewModel
 {
@@ -12,7 +13,7 @@ namespace EvotoClient.ViewModel
         Register
     }
 
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : EvotoViewModelBase
     {
         private readonly LoginViewModel _loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
         private ViewModelBase _currentView;
@@ -33,20 +34,23 @@ namespace EvotoClient.ViewModel
         public void ChangeView(EvotoView view)
         {
             Debug.WriteLine($"Changing view to: {view}");
-            switch (view)
+            Ui(() =>
             {
-                case EvotoView.Login:
-                    CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
-                    break;
-                case EvotoView.Home:
-                    CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
-                    break;
-                case EvotoView.Register:
-                    CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(view), view, null);
-            }
+                switch (view)
+                {
+                    case EvotoView.Login:
+                        CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
+                        break;
+                    case EvotoView.Home:
+                        CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
+                        break;
+                    case EvotoView.Register:
+                        CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(view), view, null);
+                }
+            });
         }
     }
 }

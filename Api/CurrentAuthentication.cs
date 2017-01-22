@@ -9,7 +9,15 @@ namespace Api
         public string RefreshToken { get; private set; }
         public DateTime Expires { get; private set; }
 
-        public bool Expired => AuthenticationToken == "" || Expires <= DateTime.Now;
+        public bool Expired
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(AuthenticationToken))
+                    return false;
+                return Expires <= DateTime.Now;
+            }
+        }
 
         public void Update(TokenUpdate response)
         {

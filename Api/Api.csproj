@@ -59,6 +59,7 @@
     <Compile Include="ApiException.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="CurrentAuthentication.cs" />
+    <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ApiErrorException.cs" />
     <Compile Include="Exceptions\IncorrectLoginException.cs" />
     <Compile Include="Exceptions\TokenUpdateEventArgs.cs" />
@@ -70,6 +71,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
+    <Compile Include="Requests\RegisterRequestModel.cs" />
+    <Compile Include="Responses\ModelStateResponse.cs" />
     <Compile Include="Responses\UserDetailsResponse.cs" />
     <Compile Include="TokenUpdate.cs" />
     <Compile Include="Exceptions\UnableToObtainTokenException.cs" />

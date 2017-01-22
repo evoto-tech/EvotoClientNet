@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Api.Properties;
+using Api.Requests;
 using Api.Responses;
 using Models;
 
@@ -13,7 +14,8 @@ namespace Api.Clients
 
         public async Task Register(RegisterModel registerModel)
         {
-            await PostAsync<TokenUpdate>(Resources.RegisterAction, registerModel);
+            var requestModel = new RegisterRequestModel(registerModel);
+            await PostAsync<TokenUpdate>(Resources.RegisterAction, requestModel);
             await LoginAsync(registerModel.Email, registerModel.Password);
         }
 

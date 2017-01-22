@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Api.Exceptions;
+using Api.Responses;
 using Jil;
 using Polly;
 
@@ -127,6 +128,7 @@ namespace Api
         public async Task<T> PostAsync<T>(string uri, object body, params object[] args) where T : class
         {
             HttpResponseMessage response = null;
+
             var content = new StringContent(JSON.SerializeDynamic(body));
             content.Headers.Remove("Content-Type");
             content.Headers.Add("Content-Type", "application/json");
@@ -141,6 +143,8 @@ namespace Api
 
                 if (IsUnauthorized(response))
                     throw new UnauthorizedException();
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    await HandleBadRequest(response);
                 if (!response.IsSuccessStatusCode)
                     throw new ApiErrorException();
             });
@@ -150,6 +154,13 @@ namespace Api
 
             var json = await response.Content.ReadAsStringAsync();
             return json.Length == 0 ? null : JSON.Deserialize<T>(json, JilOptions);
+        }
+
+        private static async Task HandleBadRequest(HttpResponseMessage response)
+        {
+            var message = await response.Content.ReadAsStringAsync();
+            var badReq = JSON.Deserialize<ModelStateResponse>(message);
+            throw new BadRequestException(badReq);
         }
 
         /// <summary>
@@ -173,6 +184,8 @@ namespace Api
 
                 if (IsUnauthorized(response))
                     throw new UnauthorizedException();
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    await HandleBadRequest(response);
                 if (!response.IsSuccessStatusCode)
                     throw new ApiErrorException();
             });

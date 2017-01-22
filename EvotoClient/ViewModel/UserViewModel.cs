@@ -1,8 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
+using Models;
 
 namespace EvotoClient.ViewModel
 {
-    public class UserViewModel : ViewModelBase
+    public class UserViewModel : EvotoViewModelBase
     {
         
     }

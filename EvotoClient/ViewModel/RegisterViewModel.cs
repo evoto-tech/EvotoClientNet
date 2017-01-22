@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Api;
 using Api.Clients;
-using GalaSoft.MvvmLight;
+using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -12,7 +11,7 @@ using Models.Validate;
 
 namespace EvotoClient.ViewModel
 {
-    public class RegisterViewModel : ViewModelBase
+    public class RegisterViewModel : EvotoViewModelBase
     {
         private readonly UserClient _userClient;
         private readonly RegisterModelValidator _validator;
@@ -108,7 +107,7 @@ namespace EvotoClient.ViewModel
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
 
-            if (p1 == p2)
+            if (p1 != p2)
             {
                 errorMessages.Add("Passwords do not match");
                 valid = false;
@@ -116,7 +115,8 @@ namespace EvotoClient.ViewModel
                     return false;
             }
 
-            registerModel = new RegisterModel(Email, FirstName, LastName, IdNumber, p1);
+            registerModel = new RegisterModel(Email, FirstName, LastName, IdNumber, p1, p2);
+            return true;
             var v = _validator.Validate(registerModel);
             if (!v.IsValid)
             {
@@ -135,20 +135,30 @@ namespace EvotoClient.ViewModel
             if (!IsFormValid(parameter, true, out registerModel))
                 return;
 
+            Loading = true;
+            ErrorMessage = "";
             Task.Factory.StartNew(async () =>
             {
                 try
                 {
-                    Loading = true;
-                    ErrorMessage = "";
                     await _userClient.Register(registerModel);
+                    MainVm.ChangeView(EvotoView.Home);
                 }
-                catch (ApiException e)
+                catch (BadRequestException e)
                 {
-                    ErrorMessage = e.StatusCode == HttpStatusCode.Forbidden
-                        ? "Invalid Username or Password"
-                        : "An Unknown Error Occurred";
-                    Loading = false;
+                    Ui(() =>
+                    {
+                        ErrorMessage = e.Message;
+                        Loading = false;
+                    });
+                }
+                catch (ApiException)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = "An Unknown Error Occurred";
+                        Loading = false;
+                    });
                 }
             });
         }

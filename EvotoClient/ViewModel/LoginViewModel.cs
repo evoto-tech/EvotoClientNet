@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
 using Api;
 using Api.Clients;
-using GalaSoft.MvvmLight;
+using Api.Exceptions;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -15,7 +14,7 @@ using Models.Validate;
 
 namespace EvotoClient.ViewModel
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : EvotoViewModelBase
     {
         private readonly UserClient _userClient;
         private readonly LoginModelValidator _validator;
@@ -98,22 +97,30 @@ namespace EvotoClient.ViewModel
             if (!IsFormValid(parameter, true, out loginModel))
                 return;
 
+            Loading = true;
+            ErrorMessage = "";
             Task.Factory.StartNew(
                 async () =>
                 {
                     try
                     {
-                        Loading = true;
-                        ErrorMessage = "";
                         await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
                         MainVm.ChangeView(EvotoView.Home);
                     }
-                    catch (ApiException e)
+                    catch (IncorrectLoginException)
                     {
-                        ErrorMessage = e.StatusCode == HttpStatusCode.Forbidden
-                            ? "Invalid Username or Password"
-                            : "An Unknown Error Occurred";
-                        Loading = false;
+                        Ui(() => {
+                            ErrorMessage = "Invalid Username or Password";
+                            Loading = false;
+                        });
+                    }
+                    catch (ApiException)
+                    {
+                        Ui(() =>
+                        {
+                            ErrorMessage = "An Unknown Error Occurred";
+                            Loading = false;
+                        });
                     }
                 });
         }
