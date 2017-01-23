@@ -35,6 +35,7 @@ namespace EvotoClient.ViewModel
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<TitleBarViewModel>();
+            SimpleIoc.Default.Register<RegisterViewModel>();
         }
 
         /// <summary>
@@ -58,6 +59,10 @@ namespace EvotoClient.ViewModel
         public TitleBarViewModel TitleBar
         {
             get { return ServiceLocator.Current.GetInstance<TitleBarViewModel>(); }
+        }
+        public RegisterViewModel Register
+        {
+            get { return ServiceLocator.Current.GetInstance<RegisterViewModel>(); }
         }
 
         /// <summary>

@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Diagnostics;
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
+using Models;
 
 namespace EvotoClient.ViewModel
 {
     public enum EvotoView
     {
         Login,
-        Home
+        Home,
+        Register
     }
 
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : EvotoViewModelBase
     {
-        private readonly LoginViewModel _loginVm = new LoginViewModel();
-        private readonly TitleBarViewModel _titleVm = new TitleBarViewModel();
+        private readonly LoginViewModel _loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
+        private readonly TitleBarViewModel _titleVm = ServiceLocator.Current.GetInstance<TitleBarViewModel>();
+        
         private ViewModelBase _currentView;
 
         public MainViewModel()
@@ -31,17 +35,24 @@ namespace EvotoClient.ViewModel
 
         public void ChangeView(EvotoView view)
         {
-            switch (view)
+            Debug.WriteLine($"Changing view to: {view}");
+            Ui(() =>
             {
-                case EvotoView.Login:
-                    CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
-                    break;
-                case EvotoView.Home:
-                    CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(view), view, null);
-            }
+                switch (view)
+                {
+                    case EvotoView.Login:
+                        CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
+                        break;
+                    case EvotoView.Home:
+                        CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
+                        break;
+                    case EvotoView.Register:
+                        CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(view), view, null);
+                }
+            });
         }
     }
 }

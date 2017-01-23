@@ -2,10 +2,11 @@
 using Blockchain;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using Models;
 
 namespace EvotoClient.ViewModel
 {
-    public class MultiChainViewModel : ViewModelBase
+    public class MultiChainViewModel : EvotoViewModelBase
     {
         private readonly IMultiChainHandler _multiChainHandler;
         private bool _connected;

@@ -1,19 +1,20 @@
 ﻿using System.Windows.Controls;
-using EvotoClient.ViewModel;
 using Models;
 
 namespace EvotoClient.Views
 {
     /// <summary>
-    ///     Interaction logic for LoginView.xaml
+    ///     Interaction logic for RegisterView.xaml
     /// </summary>
-    public partial class LoginView : UserControl, IHavePassword
+    public partial class RegisterView : UserControl, IHavePasswords
     {
-        public LoginView()
+        public RegisterView()
         {
             InitializeComponent();
         }
 
         public System.Security.SecureString SecurePassword => Password.SecurePassword;
+
+        public System.Security.SecureString SecurePasswordConfirm => PasswordConfirm.SecurePassword;
     }
 }
