@@ -11,5 +11,10 @@
             Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
         <ResourceDictionary
             Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+        <ResourceDictionary Source="TitleBar/Icons/WindowCloseIcon.xaml" />
+        <ResourceDictionary Source="TitleBar/Icons/WindowMaximizeIcon.xaml" />
+        <ResourceDictionary Source="TitleBar/Icons/WindowMinimizeIcon.xaml" />
+        <ResourceDictionary Source="TitleBar/Icons/WindowRestoreIcon.xaml" />
+        <ResourceDictionary Source="TitleBar/Brushes.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

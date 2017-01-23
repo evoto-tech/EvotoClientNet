@@ -13,6 +13,7 @@ namespace EvotoClient.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly LoginViewModel _loginVm = new LoginViewModel();
+        private readonly TitleBarViewModel _titleVm = new TitleBarViewModel();
         private ViewModelBase _currentView;
 
         public MainViewModel()

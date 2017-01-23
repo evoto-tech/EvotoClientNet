@@ -34,14 +34,12 @@ namespace EvotoClient.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
+            SimpleIoc.Default.Register<TitleBarViewModel>();
         }
 
         /// <summary>
         ///     Gets the Main property.
         /// </summary>
-        [SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
         public MainViewModel Main
         {
             get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
@@ -55,6 +53,11 @@ namespace EvotoClient.ViewModel
         public HomeViewModel Home
         {
             get { return ServiceLocator.Current.GetInstance<HomeViewModel>(); }
+        }
+
+        public TitleBarViewModel TitleBar
+        {
+            get { return ServiceLocator.Current.GetInstance<TitleBarViewModel>(); }
         }
 
         /// <summary>
