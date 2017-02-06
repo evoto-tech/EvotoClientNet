@@ -209,6 +209,10 @@
     <None Include="Config\App.Release.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Api\Api.csproj">
+      <Project>{f91f9ab4-49b2-4284-8b40-be665388dea9}</Project>
+      <Name>Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EvotoBlockchain\Blockchain\Blockchain.csproj">
       <Project>{28880810-9210-4b1b-a320-feb6f91a6745}</Project>
       <Name>Blockchain</Name>
