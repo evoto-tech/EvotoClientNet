@@ -191,22 +191,11 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="Config\App.Debug.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -220,26 +209,7 @@
     <None Include="Config\App.Release.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\multichain-cli.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\multichaind.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\multichain-util.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Api\Api.csproj">
-      <Project>{f91f9ab4-49b2-4284-8b40-be665388dea9}</Project>
-      <Name>Api</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Blockchain\Blockchain.csproj">
+    <ProjectReference Include="..\EvotoBlockchain\Blockchain\Blockchain.csproj">
       <Project>{28880810-9210-4b1b-a320-feb6f91a6745}</Project>
       <Name>Blockchain</Name>
     </ProjectReference>
