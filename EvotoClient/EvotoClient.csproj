@@ -196,7 +196,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Blockchain\Blockchain.csproj">
+    <ProjectReference Include="..\EvotoBlockchain\Blockchain\Blockchain.csproj">
       <Project>{28880810-9210-4b1b-a320-feb6f91a6745}</Project>
       <Name>Blockchain</Name>
     </ProjectReference>
