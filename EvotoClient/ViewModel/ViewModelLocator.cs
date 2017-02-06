@@ -34,6 +34,7 @@ namespace EvotoClient.ViewModel
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
+            SimpleIoc.Default.Register<RegisterViewModel>();
         }
 
         /// <summary>
@@ -55,6 +56,11 @@ namespace EvotoClient.ViewModel
         public HomeViewModel Home
         {
             get { return ServiceLocator.Current.GetInstance<HomeViewModel>(); }
+        }
+
+        public RegisterViewModel Register
+        {
+            get { return ServiceLocator.Current.GetInstance<RegisterViewModel>(); }
         }
 
         /// <summary>
