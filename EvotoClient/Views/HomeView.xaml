@@ -9,10 +9,19 @@
 
              DataContext="{Binding Home, Source={StaticResource Locator}}">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <TextBlock>You are home</TextBlock>
 
-        <ListBox SelectedItem="{Binding SelectedVote}" ItemsSource="{Binding Votes}" />
-        <Button Command="{Binding Proceed}">Proceed</Button>
-
+        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedVote}" ItemsSource="{Binding Votes}" />
+        <Button Grid.Row="2" Command="{Binding ProceedCommand}">Proceed</Button>
+        <Button Grid.Row="3" Command="{Binding RefreshCommand}">Refresh</Button>
     </Grid>
 </UserControl>

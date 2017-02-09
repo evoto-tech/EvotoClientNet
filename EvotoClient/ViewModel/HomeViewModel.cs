@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Api.Clients;
+using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -14,15 +15,17 @@ namespace EvotoClient.ViewModel
         private BlockchainDetails _selectedVote;
 
         public RelayCommand ProceedCommand { get; }
+        public RelayCommand RefreshCommand { get; }
 
         public HomeViewModel()
         {
             _homeApiClient = new HomeClient();
 
             var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
-            mainVm.OnLogin += async (e, u) => await GetVotes(e, u);
+            mainVm.OnLogin += async (e, u) => await GetVotes();
 
             ProceedCommand = new RelayCommand(DoProceed);
+            RefreshCommand = new RelayCommand(async() => await GetVotes());
 
             Votes = new ObservableRangeCollection<BlockchainDetails>();
         }
@@ -41,14 +44,23 @@ namespace EvotoClient.ViewModel
             set { Set(ref _selectedVote, value); }
         }
 
-        private async Task GetVotes(object sender, UserDetails details)
+        private async Task GetVotes()
         {
-            var votes = await _homeApiClient.GetCurrentVotes();
-            Ui(() =>
+            try
             {
-                Votes.Clear();
-                Votes.AddRange(votes);
-            });
+                var votes = await _homeApiClient.GetCurrentVotes();
+                Debug.WriteLine("Votes:");
+                Debug.WriteLine(votes);
+                Ui(() =>
+                {
+                    Votes.Clear();
+                    Votes.AddRange(votes);
+                });
+            }
+            catch (ApiException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         private void DoProceed()

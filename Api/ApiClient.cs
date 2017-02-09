@@ -146,11 +146,11 @@ namespace Api
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                     await HandleBadRequest(response);
                 if (!response.IsSuccessStatusCode)
-                    throw new ApiErrorException();
+                    throw new ApiErrorException("Invalid Response Code");
             });
 
             if (response == null)
-                throw new ApiErrorException();
+                throw new ApiErrorException("No Response");
 
             var json = await response.Content.ReadAsStringAsync();
             return json.Length == 0 ? null : JSON.Deserialize<T>(json, JilOptions);
@@ -210,7 +210,17 @@ namespace Api
                 {"username", username},
                 {"password", password}
             });
-            var response = await _client.PostAsync(TOKEN_ENDPOINT, data);
+
+            HttpResponseMessage response;
+            try
+            {
+                response = await _client.PostAsync(TOKEN_ENDPOINT, data);
+            }
+            catch (HttpRequestException e)
+            {
+                throw new ApiErrorException(e.Message, e);
+            }
+
             if (response.StatusCode == HttpStatusCode.BadRequest)
                 throw new IncorrectLoginException(await response.Content.ReadAsStringAsync());
             if (!response.IsSuccessStatusCode)

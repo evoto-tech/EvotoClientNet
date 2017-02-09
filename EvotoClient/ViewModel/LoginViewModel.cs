@@ -116,11 +116,15 @@ namespace EvotoClient.ViewModel
                             Loading = false;
                         });
                     }
-                    catch (ApiException)
+                    catch (ApiException e)
                     {
                         Ui(() =>
                         {
                             ErrorMessage = "An Unknown Error Occurred";
+#if DEBUG
+                            // Just override debug message, as ELSE gives annoying compiler warnings
+                            ErrorMessage = e.Message;
+#endif
                             Loading = false;
                         });
                     }
