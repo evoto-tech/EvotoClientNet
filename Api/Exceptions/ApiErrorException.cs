@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Api.Exceptions
 {
     [Serializable]
-    public class ApiErrorException : Exception
+    public class ApiErrorException : ApiException
     {
         public ApiErrorException()
         {

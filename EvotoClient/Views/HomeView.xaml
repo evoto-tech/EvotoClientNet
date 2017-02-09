@@ -7,8 +7,12 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
 
-             DataContext="{Binding Main, Source={StaticResource Locator}}">
+             DataContext="{Binding Home, Source={StaticResource Locator}}">
     <Grid>
         <TextBlock>You are home</TextBlock>
+
+        <ListBox SelectedItem="{Binding SelectedVote}" ItemsSource="{Binding Votes}" />
+        <Button Command="{Binding Proceed}">Proceed</Button>
+
     </Grid>
 </UserControl>

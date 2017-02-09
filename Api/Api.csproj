@@ -60,6 +60,7 @@
     <Compile Include="Clients\HomeClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="CurrentAuthentication.cs" />
+    <Compile Include="Exceptions\ApiException.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ApiErrorException.cs" />
     <Compile Include="Exceptions\IncorrectLoginException.cs" />

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Api.Clients;
+using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
 using Models;
 
@@ -10,8 +10,10 @@ namespace EvotoClient.ViewModel
     public class HomeViewModel : EvotoViewModelBase
     {
         private readonly HomeClient _homeApiClient;
-
         private bool _loading;
+        private BlockchainDetails _selectedVote;
+
+        public RelayCommand ProceedCommand { get; }
 
         public HomeViewModel()
         {
@@ -19,6 +21,8 @@ namespace EvotoClient.ViewModel
 
             var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
             mainVm.OnLogin += async (e, u) => await GetVotes(e, u);
+
+            ProceedCommand = new RelayCommand(DoProceed);
 
             Votes = new ObservableRangeCollection<BlockchainDetails>();
         }
@@ -29,7 +33,13 @@ namespace EvotoClient.ViewModel
             set { Set(ref _loading, value); }
         }
 
-        public ObservableRangeCollection<BlockchainDetails> Votes;
+        public ObservableRangeCollection<BlockchainDetails> Votes { get; }
+
+        public BlockchainDetails SelectedVote
+        {
+            get { return _selectedVote; }
+            set { Set(ref _selectedVote, value); }
+        }
 
         private async Task GetVotes(object sender, UserDetails details)
         {
@@ -39,6 +49,11 @@ namespace EvotoClient.ViewModel
                 Votes.Clear();
                 Votes.AddRange(votes);
             });
+        }
+
+        private void DoProceed()
+        {
+            Debug.WriteLine(SelectedVote);
         }
     }
 }

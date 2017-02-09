@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Api
+namespace Api.Exceptions
 {
     [Serializable]
-    public class UnableToObtainTokenException : Exception
+    public class UnableToObtainTokenException : ApiException
     {
         public UnableToObtainTokenException()
         {
