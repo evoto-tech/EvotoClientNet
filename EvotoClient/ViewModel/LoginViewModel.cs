@@ -106,8 +106,8 @@ namespace EvotoClient.ViewModel
                     {
                         await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
                         var userDetails = await _userClient.GetCurrentUserDetails();
-                        MainVm.InvokeLogin(this, userDetails);
                         MainVm.ChangeView(EvotoView.Home);
+                        MainVm.InvokeLogin(this, userDetails);
                     }
                     catch (IncorrectLoginException)
                     {

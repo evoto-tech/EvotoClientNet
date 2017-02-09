@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
@@ -11,5 +7,10 @@ namespace Models
         public string Name { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string ChainString { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }
