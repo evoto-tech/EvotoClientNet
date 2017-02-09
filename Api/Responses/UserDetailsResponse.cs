@@ -8,13 +8,13 @@ namespace Api.Responses
     internal class UserDetailsResponse
     {
         [DataMember]
-        public int UserId { get; }
+        public int UserId { get; private set; }
 
         [DataMember]
-        public string Email { get; }
+        public string Email { get; private set; }
 
         [DataMember]
-        public string CompanyId { get; }
+        public string CompanyId { get; private set; }
 
         public UserDetails MapToModel()
         {

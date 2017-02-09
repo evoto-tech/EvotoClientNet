@@ -70,11 +70,29 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to votes.
+        /// </summary>
+        internal static string CurrentVotesAction {
+            get {
+                return ResourceManager.GetString("CurrentVotesAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to details/{0}.
         /// </summary>
         internal static string DetailsAction {
             get {
                 return ResourceManager.GetString("DetailsAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to home/.
+        /// </summary>
+        internal static string HomeController {
+            get {
+                return ResourceManager.GetString("HomeController", resourceCulture);
             }
         }
         

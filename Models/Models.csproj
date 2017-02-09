@@ -64,10 +64,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlockchainDetails.cs" />
     <Compile Include="EvotoViewModelBase.cs" />
     <Compile Include="IHavePasswords.cs" />
     <Compile Include="IHavePassword.cs" />
     <Compile Include="LoginModel.cs" />
+    <Compile Include="ObservableRangeCollection.cs" />
     <Compile Include="RegisterModel.cs" />
     <Compile Include="UserDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

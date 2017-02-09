@@ -120,8 +120,14 @@
   <data name="AccountController" xml:space="preserve">
     <value>account/</value>
   </data>
+  <data name="CurrentVotesAction" xml:space="preserve">
+    <value>votes</value>
+  </data>
   <data name="DetailsAction" xml:space="preserve">
     <value>details/{0}</value>
+  </data>
+  <data name="HomeController" xml:space="preserve">
+    <value>home/</value>
   </data>
   <data name="LoginAction" xml:space="preserve">
     <value>login</value>

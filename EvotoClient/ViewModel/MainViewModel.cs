@@ -31,6 +31,13 @@ namespace EvotoClient.ViewModel
             set { Set(ref _currentView, value); }
         }
 
+        public void InvokeLogin(object caller, UserDetails details)
+        {
+            OnLogin?.Invoke(caller, details);
+        }
+
+        public event EventHandler<UserDetails> OnLogin;
+
         public void ChangeView(EvotoView view)
         {
             Debug.WriteLine($"Changing view to: {view}");

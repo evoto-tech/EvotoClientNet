@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="ApiClient.cs" />
     <Compile Include="ApiException.cs" />
+    <Compile Include="Clients\HomeClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="CurrentAuthentication.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
@@ -71,6 +72,7 @@
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />
+    <Compile Include="Responses\BlockchainResponse.cs" />
     <Compile Include="Responses\ModelStateResponse.cs" />
     <Compile Include="Responses\UserDetailsResponse.cs" />
     <Compile Include="TokenUpdate.cs" />
