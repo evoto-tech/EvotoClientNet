@@ -1,3 +1,4 @@
 [submodule "EvotoBlockchain"]
 	path = EvotoBlockchain
 	url = https://github.com/evoto-tech/EvotoBlockchain.git
+	branch = master

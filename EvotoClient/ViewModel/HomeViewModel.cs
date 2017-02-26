@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
-using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -12,10 +12,8 @@ namespace EvotoClient.ViewModel
     {
         private readonly HomeClient _homeApiClient;
         private bool _loading;
+        private bool _noVotes;
         private BlockchainDetails _selectedVote;
-
-        public RelayCommand ProceedCommand { get; }
-        public RelayCommand RefreshCommand { get; }
 
         public HomeViewModel()
         {
@@ -25,16 +23,29 @@ namespace EvotoClient.ViewModel
             mainVm.OnLogin += async (e, u) => await GetVotes();
 
             ProceedCommand = new RelayCommand(DoProceed);
-            RefreshCommand = new RelayCommand(async() => await GetVotes());
+            RefreshCommand = new RelayCommand(async () => await GetVotes());
 
             Votes = new ObservableRangeCollection<BlockchainDetails>();
         }
+
+        public RelayCommand ProceedCommand { get; }
+        public RelayCommand RefreshCommand { get; }
 
         public bool Loading
         {
             get { return _loading; }
             set { Set(ref _loading, value); }
         }
+
+        public bool NoVotes
+        {
+            get { return _noVotes; }
+            set { Set(ref _noVotes, value); }
+        }
+
+        public bool NoVotesMessageVisible => !Loading && NoVotes;
+
+        public bool VotesVisible => !Loading && !NoVotes;
 
         public ObservableRangeCollection<BlockchainDetails> Votes { get; }
 
@@ -46,21 +57,24 @@ namespace EvotoClient.ViewModel
 
         private async Task GetVotes()
         {
-            try
+            Ui(() => { Loading = true; });
+
+            var votes = (await _homeApiClient.GetCurrentVotes()).ToList();
+            Debug.WriteLine("Votes:");
+            Ui(() =>
             {
-                var votes = await _homeApiClient.GetCurrentVotes();
-                Debug.WriteLine("Votes:");
-                Debug.WriteLine(votes);
-                Ui(() =>
+                Loading = false;
+                if (votes.Any())
                 {
                     Votes.Clear();
                     Votes.AddRange(votes);
-                });
-            }
-            catch (ApiException e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+                    NoVotes = false;
+                }
+                else
+                {
+                    NoVotes = true;
+                }
+            });
         }
 
         private void DoProceed()

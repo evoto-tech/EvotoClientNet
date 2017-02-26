@@ -4,10 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EvotoClient.Views"
+             xmlns:converters="clr-namespace:EvotoClient.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
 
              DataContext="{Binding Home, Source={StaticResource Locator}}">
+    
+    <UserControl.Resources>
+        <converters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -20,7 +26,24 @@
         </Grid.RowDefinitions>
         <TextBlock>You are home</TextBlock>
 
-        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedVote}" ItemsSource="{Binding Votes}" />
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Grid.Row="1" Grid.Column="0"
+                     IsIndeterminate="True"
+                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                     VerticalAlignment="Center" HorizontalAlignment="Center"
+                     Margin="5 5 5 5" />
+
+        <ListBox
+            Grid.Row="1"
+            SelectedItem="{Binding SelectedVote}"
+            ItemsSource="{Binding Votes}"
+            Visibility="{Binding VotesVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
+
+        <TextBlock
+            Grid.Row="1"
+            Visibility="{Binding NoVotesMessageVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+            Text="No Votes Available :("/>
+
         <Button Grid.Row="2" Command="{Binding ProceedCommand}">Proceed</Button>
         <Button Grid.Row="3" Command="{Binding RefreshCommand}">Refresh</Button>
     </Grid>
