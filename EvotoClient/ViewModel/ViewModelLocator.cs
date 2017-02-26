@@ -29,7 +29,7 @@ namespace EvotoClient.ViewModel
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
-            SimpleIoc.Default.Register<IMultiChainHandler, MultiChainHandler>();
+            SimpleIoc.Default.Register<MultiChainHandler>();
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();

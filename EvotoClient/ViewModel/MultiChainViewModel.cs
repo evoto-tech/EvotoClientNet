@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Blockchain;
-using GalaSoft.MvvmLight;
+using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
 using Models;
 
@@ -8,47 +9,52 @@ namespace EvotoClient.ViewModel
 {
     public class MultiChainViewModel : EvotoViewModelBase
     {
-        private readonly IMultiChainHandler _multiChainHandler;
-        private bool _connected;
+        private readonly MultiChainHandler _multiChainHandler;
+
+        private MultichainModel _multichain;
 
         private string _status = "Not Connected";
 
         public MultiChainViewModel()
         {
-            _multiChainHandler = SimpleIoc.Default.GetInstance<IMultiChainHandler>();
+            _multiChainHandler = SimpleIoc.Default.GetInstance<MultiChainHandler>();
 
             _multiChainHandler.OnConnect += (sender, args) =>
             {
-                _connected = true;
                 UpdateStatus();
             };
             UpdateStatus();
-
-            // Connect in background thread
-            // TODO: This is annoying
-            //Task.Factory.StartNew(() => { _multiChainHandler.Connect().Wait(); });
         }
 
-        /// <summary>
-        ///     Gets the Status property.
-        ///     Changes to that property's value raise the PropertyChanged event.
-        /// </summary>
+        public void Connect(string hostname, int port, string blockchainName)
+        {
+            // Connect in background thread
+            Task.Factory.StartNew(async () =>
+            {
+                _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port);
+            });
+        }
+
         public string Status
         {
             get { return _status; }
             set { Set(ref _status, value); }
         }
 
+        public bool Connected => _multichain != null && _multichain.Connected;
+
         private void UpdateStatus()
         {
-            Status = _connected ? "Connected" : "Not Connected";
+            Ui(() => {
+                Status = Connected ? "Connected" : "Not Connected";
+            });
         }
 
         public override void Cleanup()
         {
             Debug.WriteLine("Cleaning Up");
-            if (_connected) _multiChainHandler.DisconnectAndClose();
-            else _multiChainHandler.Close();
+            if (_multichain != null)
+                _multiChainHandler.DisconnectAndClose(_multichain).Wait();
 
             base.Cleanup();
         }
