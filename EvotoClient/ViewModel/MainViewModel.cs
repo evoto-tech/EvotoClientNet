@@ -25,20 +25,21 @@ namespace EvotoClient.ViewModel
             CurrentView = _loginVm;
         }
 
+        #region Events
+
+        public event EventHandler<UserDetails> OnLogin;
+
+        #endregion
+
         #region Properties
 
         private ViewModelBase _currentView;
+
         public ViewModelBase CurrentView
         {
             get { return _currentView; }
             set { Set(ref _currentView, value); }
         }
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler<UserDetails> OnLogin;
 
         #endregion
 

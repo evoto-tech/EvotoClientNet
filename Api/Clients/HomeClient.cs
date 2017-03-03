@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Properties;
-using Api.Requests;
 using Api.Responses;
 using Models;
 

@@ -32,6 +32,7 @@ namespace EvotoClient.ViewModel
         #region Properties
 
         private bool _loading;
+
         public bool Loading
         {
             get { return _loading; }
@@ -43,6 +44,7 @@ namespace EvotoClient.ViewModel
         }
 
         private string _errorMessage;
+
         public string ErrorMessage
         {
             get { return _errorMessage; }
@@ -50,6 +52,7 @@ namespace EvotoClient.ViewModel
         }
 
         private string _firstName;
+
         public string FirstName
         {
             get { return _firstName; }
@@ -61,6 +64,7 @@ namespace EvotoClient.ViewModel
         }
 
         private string _lastName;
+
         public string LastName
         {
             get { return _lastName; }
@@ -72,6 +76,7 @@ namespace EvotoClient.ViewModel
         }
 
         private string _email;
+
         public string Email
         {
             get { return _email; }
@@ -83,6 +88,7 @@ namespace EvotoClient.ViewModel
         }
 
         private string _idNumber;
+
         public string IdNumber
         {
             get { return _idNumber; }

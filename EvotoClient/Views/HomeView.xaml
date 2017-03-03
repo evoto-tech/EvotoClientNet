@@ -9,11 +9,11 @@
              d:DesignHeight="300" d:DesignWidth="300"
 
              DataContext="{Binding Home, Source={StaticResource Locator}}">
-    
+
     <UserControl.Resources>
         <converters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -42,7 +42,7 @@
         <TextBlock
             Grid.Row="1"
             Visibility="{Binding NoVotesMessageVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-            Text="No Votes Available :("/>
+            Text="No Votes Available :(" />
 
         <Button Grid.Row="2" Command="{Binding ProceedCommand}">Proceed</Button>
         <Button Grid.Row="3" Command="{Binding RefreshCommand}">Refresh</Button>

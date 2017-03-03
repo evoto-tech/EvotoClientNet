@@ -27,12 +27,13 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
-        
+
         <Label Grid.Row="0" Grid.Column="0">Email</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding Loading}">
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding Loading}">
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
-            </TextBox.InputBindings>    
+            </TextBox.InputBindings>
         </TextBox>
 
         <Label Grid.Row="1" Grid.Column="0">Password</Label>
@@ -57,12 +58,12 @@
                      Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
-        
+
         <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" />
-        
+
         <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
-            Visibility="{Binding RegisterEnabled, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
-            <Hyperlink Command="{Binding RegisterCommand}">Register</Hyperlink>    
+                   Visibility="{Binding RegisterEnabled, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            <Hyperlink Command="{Binding RegisterCommand}">Register</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>

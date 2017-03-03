@@ -43,8 +43,8 @@ namespace EvotoClient.ViewModel
         ///     Gets the Main property.
         /// </summary>
         [SuppressMessage("Microsoft.Performance",
-            "CA1822:MarkMembersAsStatic",
-            Justification = "This non-static member is needed for data binding purposes.")]
+             "CA1822:MarkMembersAsStatic",
+             Justification = "This non-static member is needed for data binding purposes.")]
         public MainViewModel Main
         {
             get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }

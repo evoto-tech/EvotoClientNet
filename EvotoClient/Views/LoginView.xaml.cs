@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using EvotoClient.ViewModel;
+﻿using System.Security;
+using System.Windows.Controls;
 using Models;
 
 namespace EvotoClient.Views
@@ -14,6 +14,6 @@ namespace EvotoClient.Views
             InitializeComponent();
         }
 
-        public System.Security.SecureString SecurePassword => Password.SecurePassword;
+        public SecureString SecurePassword => Password.SecurePassword;
     }
 }
