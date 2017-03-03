@@ -4,11 +4,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Threading.Tasks;
-using Api;
 using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.CommandWpf;
-using Microsoft.Practices.ServiceLocation;
 using Models;
 using Models.Validate;
 
@@ -22,7 +20,6 @@ namespace EvotoClient.ViewModel
 
         private string _errorMessage;
         private bool _loading;
-        private MainViewModel _mainVm;
 
         public LoginViewModel()
         {
@@ -32,8 +29,6 @@ namespace EvotoClient.ViewModel
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             LoginCommand = new RelayCommand<object>(DoLogin);
         }
-
-        private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
 
         public RelayCommand<object> LoginCommand { get; }
 

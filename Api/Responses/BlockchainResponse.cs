@@ -17,13 +17,17 @@ namespace Api.Responses
         [DataMember]
         public string ChainString { get; private set; }
 
+        [DataMember]
+        public int Port { get; private set; }
+
         public BlockchainDetails ToModel()
         {
             return new BlockchainDetails
             {
                 Name = Name,
                 ExpiryDate = ExpiryDate,
-                ChainString = ChainString
+                ChainString = ChainString,
+                Port = Port
             };
         }
     }

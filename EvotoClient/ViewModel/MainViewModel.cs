@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Blockchain;
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -10,7 +11,8 @@ namespace EvotoClient.ViewModel
     {
         Login,
         Home,
-        Register
+        Register,
+        Vote
     }
 
     public class MainViewModel : EvotoViewModelBase
@@ -20,10 +22,9 @@ namespace EvotoClient.ViewModel
 
         public MainViewModel()
         {
+            MultiChainTools.SubDirectory = "client";
             CurrentView = _loginVm;
         }
-
-        public MultiChainViewModel MultiChainVm { get; } = new MultiChainViewModel();
 
         public ViewModelBase CurrentView
         {
@@ -53,6 +54,9 @@ namespace EvotoClient.ViewModel
                         break;
                     case EvotoView.Register:
                         CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        break;
+                    case EvotoView.Vote:
+                        CurrentView = ServiceLocator.Current.GetInstance<VoteViewModel>();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(view), view, null);

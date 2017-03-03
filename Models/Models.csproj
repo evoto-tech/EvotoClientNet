@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockchainDetails.cs" />
-    <Compile Include="EvotoViewModelBase.cs" />
     <Compile Include="IHavePasswords.cs" />
     <Compile Include="IHavePassword.cs" />
     <Compile Include="LoginModel.cs" />

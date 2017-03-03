@@ -23,8 +23,6 @@ namespace EvotoClient.ViewModel
         private string _lastName;
         private bool _loading;
 
-        private MainViewModel _mainVm;
-
         public RegisterViewModel()
         {
             _validator = new RegisterModelValidator();
@@ -32,8 +30,6 @@ namespace EvotoClient.ViewModel
             RegisterCommand = new RelayCommand<object>(Register);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
         }
-
-        private MainViewModel MainVm => _mainVm ?? (_mainVm = ServiceLocator.Current.GetInstance<MainViewModel>());
 
         public RelayCommand<object> RegisterCommand { get; }
         public RelayCommand ReturnToLoginCommand { get; }

@@ -30,11 +30,13 @@ namespace EvotoClient.ViewModel
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
 
             SimpleIoc.Default.Register<MultiChainHandler>();
+            SimpleIoc.Default.Register<MultiChainViewModel>();
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<LoginViewModel>();
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<RegisterViewModel>();
+            SimpleIoc.Default.Register<VoteViewModel>();
         }
 
         /// <summary>
@@ -61,6 +63,11 @@ namespace EvotoClient.ViewModel
         public RegisterViewModel Register
         {
             get { return ServiceLocator.Current.GetInstance<RegisterViewModel>(); }
+        }
+
+        public VoteViewModel Vote
+        {
+            get { return ServiceLocator.Current.GetInstance<VoteViewModel>(); }
         }
 
         /// <summary>

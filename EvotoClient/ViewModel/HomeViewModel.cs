@@ -79,7 +79,9 @@ namespace EvotoClient.ViewModel
 
         private void DoProceed()
         {
-            Debug.WriteLine(SelectedVote);
+            var voteView = GetVm<VoteViewModel>();
+            voteView.SelectVote(SelectedVote);
+            MainVm.ChangeView(EvotoView.Vote);
         }
     }
 }
