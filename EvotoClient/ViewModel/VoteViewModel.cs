@@ -15,8 +15,47 @@ namespace EvotoClient.ViewModel
             BackCommand = new RelayCommand(DoBack);
         }
 
+        #region Commands
+
         public RelayCommand VoteCommand { get; }
         public RelayCommand BackCommand { get; }
+
+        #endregion
+
+        #region Properties
+
+        private MultiChainViewModel _multiChainVm;
+        public MultiChainViewModel MultiChainVm => _multiChainVm ?? (_multiChainVm = GetVm<MultiChainViewModel>());
+
+        private bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set { Set(ref _loading, value); }
+        }
+
+        public bool VoteVisble => !Loading;
+
+        private BlockchainQuestionModel _question;
+
+        public BlockchainQuestionModel Question
+        {
+            get { return _question; }
+            set { Set(ref _question, value); }
+        }
+
+        private string _selectedAnswer;
+
+        public string SelectedAnswer
+        {
+            get { return _selectedAnswer; }
+            set { Set(ref _selectedAnswer, value); }
+        }
+
+        #endregion
+
+        #region Methods
 
         public void SelectVote(BlockchainDetails blockchain)
         {
@@ -55,37 +94,6 @@ namespace EvotoClient.ViewModel
         private void DoBack()
         {
             MainVm.ChangeView(EvotoView.Home);
-        }
-
-        #region Properties
-
-        private MultiChainViewModel _multiChainVm;
-        public MultiChainViewModel MultiChainVm => _multiChainVm ?? (_multiChainVm = GetVm<MultiChainViewModel>());
-
-        private bool _loading;
-
-        public bool Loading
-        {
-            get { return _loading; }
-            set { Set(ref _loading, value); }
-        }
-
-        public bool VoteVisble => !Loading;
-
-        private BlockchainQuestionModel _question;
-
-        public BlockchainQuestionModel Question
-        {
-            get { return _question; }
-            set { Set(ref _question, value); }
-        }
-
-        private string _selectedAnswer;
-
-        public string SelectedAnswer
-        {
-            get { return _selectedAnswer; }
-            set { Set(ref _selectedAnswer, value); }
         }
 
         #endregion

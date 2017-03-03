@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api;
 using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Practices.ServiceLocation;
 using Models;
 using Models.Validate;
 
@@ -16,13 +14,6 @@ namespace EvotoClient.ViewModel
         private readonly UserClient _userClient;
         private readonly RegisterModelValidator _validator;
 
-        private string _email;
-        private string _errorMessage;
-        private string _firstName;
-        private string _idNumber;
-        private string _lastName;
-        private bool _loading;
-
         public RegisterViewModel()
         {
             _validator = new RegisterModelValidator();
@@ -31,9 +22,16 @@ namespace EvotoClient.ViewModel
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
         }
 
+        #region Commands
+
         public RelayCommand<object> RegisterCommand { get; }
         public RelayCommand ReturnToLoginCommand { get; }
 
+        #endregion
+
+        #region Properties
+
+        private bool _loading;
         public bool Loading
         {
             get { return _loading; }
@@ -44,12 +42,14 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _errorMessage;
         public string ErrorMessage
         {
             get { return _errorMessage; }
             set { Set(ref _errorMessage, value); }
         }
 
+        private string _firstName;
         public string FirstName
         {
             get { return _firstName; }
@@ -60,6 +60,7 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _lastName;
         public string LastName
         {
             get { return _lastName; }
@@ -70,6 +71,7 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _email;
         public string Email
         {
             get { return _email; }
@@ -80,6 +82,7 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _idNumber;
         public string IdNumber
         {
             get { return _idNumber; }
@@ -89,6 +92,10 @@ namespace EvotoClient.ViewModel
                 RegisterCommand.RaiseCanExecuteChanged();
             }
         }
+
+        #endregion
+
+        #region Methods
 
         private bool IsFormValid(object parameter, bool updateErrorMessage, out RegisterModel registerModel)
         {
@@ -112,7 +119,6 @@ namespace EvotoClient.ViewModel
             }
 
             registerModel = new RegisterModel(Email, FirstName, LastName, IdNumber, p1, p2);
-            return true;
             var v = _validator.Validate(registerModel);
             if (!v.IsValid)
             {
@@ -163,5 +169,7 @@ namespace EvotoClient.ViewModel
         {
             MainVm.ChangeView(EvotoView.Login);
         }
+
+        #endregion
     }
 }

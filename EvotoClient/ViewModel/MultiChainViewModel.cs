@@ -17,8 +17,6 @@ namespace EvotoClient.ViewModel
 
         private MultichainModel _multichain;
 
-        private string _status = "Not Connected";
-
         public MultiChainViewModel()
         {
             _multiChainHandler = SimpleIoc.Default.GetInstance<MultiChainHandler>();
@@ -26,6 +24,8 @@ namespace EvotoClient.ViewModel
             _multiChainHandler.OnConnect += (sender, args) => { UpdateStatus(); };
             UpdateStatus();
         }
+
+        #region Properties
 
         public MultichainModel Model
         {
@@ -37,6 +37,8 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _status = "Not Connected";
+
         public string Status
         {
             get { return _status; }
@@ -44,6 +46,10 @@ namespace EvotoClient.ViewModel
         }
 
         public bool Connected => (_multichain != null) && _multichain.Connected;
+
+        #endregion
+
+        #region Methods
 
         public async Task Connect(string hostname, int port, string blockchainName)
         {
@@ -93,5 +99,7 @@ namespace EvotoClient.ViewModel
                 JsonConvert.DeserializeObject<BlockchainQuestionModel>(text)
             };
         }
+
+        #endregion
     }
 }

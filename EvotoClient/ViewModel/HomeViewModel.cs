@@ -11,9 +11,6 @@ namespace EvotoClient.ViewModel
     public class HomeViewModel : EvotoViewModelBase
     {
         private readonly HomeClient _homeApiClient;
-        private bool _loading;
-        private bool _noVotes;
-        private BlockchainDetails _selectedVote;
 
         public HomeViewModel()
         {
@@ -28,14 +25,24 @@ namespace EvotoClient.ViewModel
             Votes = new ObservableRangeCollection<BlockchainDetails>();
         }
 
+        #region Commands
+
         public RelayCommand ProceedCommand { get; }
         public RelayCommand RefreshCommand { get; }
+
+        #endregion
+
+        #region Properties
+
+        private bool _loading;
 
         public bool Loading
         {
             get { return _loading; }
             set { Set(ref _loading, value); }
         }
+
+        private bool _noVotes;
 
         public bool NoVotes
         {
@@ -49,10 +56,23 @@ namespace EvotoClient.ViewModel
 
         public ObservableRangeCollection<BlockchainDetails> Votes { get; }
 
+        private BlockchainDetails _selectedVote;
+
         public BlockchainDetails SelectedVote
         {
             get { return _selectedVote; }
             set { Set(ref _selectedVote, value); }
+        }
+
+        #endregion
+
+        #region Methods
+
+        private void DoProceed()
+        {
+            var voteView = GetVm<VoteViewModel>();
+            voteView.SelectVote(SelectedVote);
+            MainVm.ChangeView(EvotoView.Vote);
         }
 
         private async Task GetVotes()
@@ -77,11 +97,6 @@ namespace EvotoClient.ViewModel
             });
         }
 
-        private void DoProceed()
-        {
-            var voteView = GetVm<VoteViewModel>();
-            voteView.SelectVote(SelectedVote);
-            MainVm.ChangeView(EvotoView.Vote);
-        }
+        #endregion
     }
 }

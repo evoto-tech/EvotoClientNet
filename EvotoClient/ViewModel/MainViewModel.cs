@@ -18,7 +18,6 @@ namespace EvotoClient.ViewModel
     public class MainViewModel : EvotoViewModelBase
     {
         private readonly LoginViewModel _loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
-        private ViewModelBase _currentView;
 
         public MainViewModel()
         {
@@ -26,18 +25,29 @@ namespace EvotoClient.ViewModel
             CurrentView = _loginVm;
         }
 
+        #region Properties
+
+        private ViewModelBase _currentView;
         public ViewModelBase CurrentView
         {
             get { return _currentView; }
             set { Set(ref _currentView, value); }
         }
 
+        #endregion
+
+        #region Events
+
+        public event EventHandler<UserDetails> OnLogin;
+
+        #endregion
+
+        #region Methods
+
         public void InvokeLogin(object caller, UserDetails details)
         {
             OnLogin?.Invoke(caller, details);
         }
-
-        public event EventHandler<UserDetails> OnLogin;
 
         public void ChangeView(EvotoView view)
         {
@@ -63,5 +73,7 @@ namespace EvotoClient.ViewModel
                 }
             });
         }
+
+        #endregion
     }
 }

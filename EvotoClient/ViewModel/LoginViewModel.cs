@@ -16,10 +16,6 @@ namespace EvotoClient.ViewModel
     {
         private readonly UserClient _userClient;
         private readonly LoginModelValidator _validator;
-        private string _email;
-
-        private string _errorMessage;
-        private bool _loading;
 
         public LoginViewModel()
         {
@@ -30,9 +26,17 @@ namespace EvotoClient.ViewModel
             LoginCommand = new RelayCommand<object>(DoLogin);
         }
 
+        #region Commands 
+
         public RelayCommand<object> LoginCommand { get; }
 
         public RelayCommand RegisterCommand { get; }
+
+        #endregion
+
+        #region Properties
+
+        private bool _loading;
 
         public bool Loading
         {
@@ -44,11 +48,15 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _errorMessage;
+
         public string ErrorMessage
         {
             get { return _errorMessage; }
             set { Set(ref _errorMessage, value); }
         }
+
+        private string _email;
 
         public string Email
         {
@@ -62,6 +70,10 @@ namespace EvotoClient.ViewModel
 
         //TODO: Pull from registrar
         public bool RegisterEnabled => true;
+
+        #endregion
+
+        #region Methods
 
         private bool IsFormValid(object parameter, bool updateErrorMessage, out LoginModel loginModel)
         {
@@ -106,7 +118,8 @@ namespace EvotoClient.ViewModel
                     }
                     catch (IncorrectLoginException)
                     {
-                        Ui(() => {
+                        Ui(() =>
+                        {
                             ErrorMessage = "Invalid Username or Password";
                             Loading = false;
                         });
@@ -152,5 +165,7 @@ namespace EvotoClient.ViewModel
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
         }
+
+        #endregion
     }
 }
