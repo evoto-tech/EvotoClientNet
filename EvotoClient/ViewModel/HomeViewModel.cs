@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
-using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -11,11 +11,6 @@ namespace EvotoClient.ViewModel
     public class HomeViewModel : EvotoViewModelBase
     {
         private readonly HomeClient _homeApiClient;
-        private bool _loading;
-        private BlockchainDetails _selectedVote;
-
-        public RelayCommand ProceedCommand { get; }
-        public RelayCommand RefreshCommand { get; }
 
         public HomeViewModel()
         {
@@ -25,10 +20,21 @@ namespace EvotoClient.ViewModel
             mainVm.OnLogin += async (e, u) => await GetVotes();
 
             ProceedCommand = new RelayCommand(DoProceed);
-            RefreshCommand = new RelayCommand(async() => await GetVotes());
+            RefreshCommand = new RelayCommand(async () => await GetVotes());
 
             Votes = new ObservableRangeCollection<BlockchainDetails>();
         }
+
+        #region Commands
+
+        public RelayCommand ProceedCommand { get; }
+        public RelayCommand RefreshCommand { get; }
+
+        #endregion
+
+        #region Properties
+
+        private bool _loading;
 
         public bool Loading
         {
@@ -36,7 +42,21 @@ namespace EvotoClient.ViewModel
             set { Set(ref _loading, value); }
         }
 
+        private bool _noVotes;
+
+        public bool NoVotes
+        {
+            get { return _noVotes; }
+            set { Set(ref _noVotes, value); }
+        }
+
+        public bool NoVotesMessageVisible => !Loading && NoVotes;
+
+        public bool VotesVisible => !Loading && !NoVotes;
+
         public ObservableRangeCollection<BlockchainDetails> Votes { get; }
+
+        private BlockchainDetails _selectedVote;
 
         public BlockchainDetails SelectedVote
         {
@@ -44,28 +64,39 @@ namespace EvotoClient.ViewModel
             set { Set(ref _selectedVote, value); }
         }
 
-        private async Task GetVotes()
-        {
-            try
-            {
-                var votes = await _homeApiClient.GetCurrentVotes();
-                Debug.WriteLine("Votes:");
-                Debug.WriteLine(votes);
-                Ui(() =>
-                {
-                    Votes.Clear();
-                    Votes.AddRange(votes);
-                });
-            }
-            catch (ApiException e)
-            {
-                Debug.WriteLine(e.Message);
-            }
-        }
+        #endregion
+
+        #region Methods
 
         private void DoProceed()
         {
-            Debug.WriteLine(SelectedVote);
+            var voteView = GetVm<VoteViewModel>();
+            voteView.SelectVote(SelectedVote);
+            MainVm.ChangeView(EvotoView.Vote);
         }
+
+        private async Task GetVotes()
+        {
+            Ui(() => { Loading = true; });
+
+            var votes = (await _homeApiClient.GetCurrentVotes()).ToList();
+            Debug.WriteLine("Votes:");
+            Ui(() =>
+            {
+                Loading = false;
+                if (votes.Any())
+                {
+                    Votes.Clear();
+                    Votes.AddRange(votes);
+                    NoVotes = false;
+                }
+                else
+                {
+                    NoVotes = true;
+                }
+            });
+        }
+
+        #endregion
     }
 }

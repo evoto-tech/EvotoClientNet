@@ -1,5 +1,7 @@
 ﻿using System.Windows;
+using EvotoClient.ViewModel;
 using GalaSoft.MvvmLight.Threading;
+using Microsoft.Practices.ServiceLocation;
 
 namespace EvotoClient
 {
@@ -11,6 +13,13 @@ namespace EvotoClient
         static App()
         {
             DispatcherHelper.Initialize();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            var vm = ServiceLocator.Current.GetInstance<MultiChainViewModel>();
+            if (vm.Connected)
+                vm.Cleanup();
         }
     }
 }

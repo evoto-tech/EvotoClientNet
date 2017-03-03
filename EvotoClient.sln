@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blockchain", "EvotoBlockchain\Blockchain\Blockchain.csproj", "{28880810-9210-4B1B-A320-FEB6F91A6745}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiChainLib", "EvotoBlockchain\MultiChainLib\MultiChainLib\MultiChainLib.csproj", "{F7C35562-FDD5-4124-86DF-B8BE94CF816D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{28880810-9210-4B1B-A320-FEB6F91A6745}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28880810-9210-4B1B-A320-FEB6F91A6745}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28880810-9210-4B1B-A320-FEB6F91A6745}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7C35562-FDD5-4124-86DF-B8BE94CF816D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7C35562-FDD5-4124-86DF-B8BE94CF816D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7C35562-FDD5-4124-86DF-B8BE94CF816D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7C35562-FDD5-4124-86DF-B8BE94CF816D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

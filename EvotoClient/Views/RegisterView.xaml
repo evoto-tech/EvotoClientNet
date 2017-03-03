@@ -36,42 +36,48 @@
         <Label Grid.Row="0" Grid.Column="0">First Name</Label>
         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
             </TextBox.InputBindings>
         </TextBox>
 
         <Label Grid.Row="1" Grid.Column="0">Last Name</Label>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
             </TextBox.InputBindings>
         </TextBox>
 
         <Label Grid.Row="2" Grid.Column="0">ID Number</Label>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding IdNumber, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
             </TextBox.InputBindings>
         </TextBox>
 
         <Label Grid.Row="3" Grid.Column="0">Email</Label>
         <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
             </TextBox.InputBindings>
         </TextBox>
 
         <Label Grid.Row="4" Grid.Column="0">Password</Label>
         <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="Password">
             <PasswordBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
             </PasswordBox.InputBindings>
         </PasswordBox>
 
         <Label Grid.Row="5" Grid.Column="0">Confirm Password</Label>
         <PasswordBox Grid.Row="5" Grid.Column="1" x:Name="PasswordConfirm">
             <PasswordBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
             </PasswordBox.InputBindings>
         </PasswordBox>
 
@@ -81,8 +87,10 @@
             Grid.ColumnSpan="2"
             Margin="0 5px"
             Command="{Binding RegisterCommand}"
-            CommandParameter="{Binding ElementName=This}">Register</Button>
-        
+            CommandParameter="{Binding ElementName=This}">
+            Register
+        </Button>
+
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
                      IsIndeterminate="True"

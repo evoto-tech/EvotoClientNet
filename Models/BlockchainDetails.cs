@@ -7,6 +7,7 @@ namespace Models
         public string Name { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string ChainString { get; set; }
+        public int Port { get; set; }
 
         public override string ToString()
         {

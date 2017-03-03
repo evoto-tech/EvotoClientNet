@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EvotoClient.Views.HomeView"
+﻿<UserControl x:Class="EvotoClient.Views.VoteView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
 
-             DataContext="{Binding Home, Source={StaticResource Locator}}">
+             DataContext="{Binding Vote, Source={StaticResource Locator}}">
 
     <UserControl.Resources>
         <converters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
@@ -24,7 +24,6 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock>You are home</TextBlock>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="1" Grid.Column="0"
@@ -33,18 +32,15 @@
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
 
-        <ListBox
-            Grid.Row="1"
-            SelectedItem="{Binding SelectedVote}"
-            ItemsSource="{Binding Votes}"
-            Visibility="{Binding VotesVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Text="{Binding Question.Question}"
+                   Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
-        <TextBlock
-            Grid.Row="1"
-            Visibility="{Binding NoVotesMessageVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-            Text="No Votes Available :(" />
+        <ListBox Grid.Row="1" Grid.Column="0"
+                 ItemsSource="{Binding Question.Answers}"
+                 Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
-        <Button Grid.Row="2" Command="{Binding ProceedCommand}">Proceed</Button>
-        <Button Grid.Row="3" Command="{Binding RefreshCommand}">Refresh</Button>
+        <Button Grid.Row="2" Command="{Binding VoteCommand}">Vote</Button>
+        <Button Grid.Row="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>

@@ -158,6 +158,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Converters\BoolToVisibilityHiddenConverter.cs" />
+    <Compile Include="ViewModel\EvotoViewModelBase.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -168,6 +169,10 @@
     <Compile Include="ViewModel\RegisterViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Views\VoteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\HomeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -187,6 +192,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModel\VoteViewModel.cs" />
+    <Compile Include="Views\VoteView.xaml.cs">
+      <DependentUpon>VoteView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -231,6 +240,10 @@
     <ProjectReference Include="..\EvotoBlockchain\Blockchain\Blockchain.csproj">
       <Project>{28880810-9210-4b1b-a320-feb6f91a6745}</Project>
       <Name>Blockchain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EvotoBlockchain\MultiChainLib\MultiChainLib\MultiChainLib.csproj">
+      <Project>{F7C35562-FDD5-4124-86DF-B8BE94CF816D}</Project>
+      <Name>MultiChainLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{611449cd-3ed2-4bdd-a8f1-a465de6a2376}</Project>
