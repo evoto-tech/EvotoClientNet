@@ -51,7 +51,7 @@ namespace EvotoClient.ViewModel
             if (Connected)
                 throw new Exception("Must disconnect from blockchain before connecting to a new one");
 
-            var localPort = MultiChainTools.GetNewPort(EPortType.MultichainD);
+            var localPort = MultiChainTools.GetNewPort(EPortType.ClientMultichainD);
             _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort);
         }
 

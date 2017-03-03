@@ -30,7 +30,12 @@ namespace EvotoClient.ViewModel
         private async Task ConnectToBlockchain(BlockchainDetails blockchain)
         {
             if (MultiChainVm.Connected)
-                await MultiChainVm.Disconnect();
+            {
+                if (MultiChainVm.Model.Name != blockchain.Name)
+                    await MultiChainVm.Disconnect();
+                else
+                    return;
+            }
 
             // TODO: Varied host
             await MultiChainVm.Connect("localhost", blockchain.Port, blockchain.ChainString);
