@@ -90,7 +90,7 @@ namespace EvotoClient.ViewModel
 
         private async Task GetVoteDetails()
         {
-            var questions = await MultiChainVm.GetQuestions();
+            var questions = await MultiChainVm.Model.GetQuestions();
             Ui(() =>
             {
                 Loading = false;

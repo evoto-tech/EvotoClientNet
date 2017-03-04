@@ -8,6 +8,7 @@ using Api.Clients;
 using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
+using MultiChainLib.Client;
 using MultiChainLib.Model;
 using Newtonsoft.Json;
 
@@ -86,23 +87,6 @@ namespace EvotoClient.ViewModel
             base.Cleanup();
         }
 
-        public async Task<List<BlockchainQuestionModel>> GetQuestions()
-        {
-            // TODO: Handle multiple questions. For now assume exactly 1
-            var result = await Model.GetStreamKeyItems(MultiChainTools.ROOT_STREAM_NAME, MultiChainTools.QUESTIONS_KEY);
-            var hex = result.First().Data;
-
-            var bytes = Enumerable.Range(0, hex.Length)
-                .Where(x => x%2 == 0)
-                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                .ToArray();
-            var text = Encoding.UTF8.GetString(bytes);
-            return new List<BlockchainQuestionModel>
-            {
-                JsonConvert.DeserializeObject<BlockchainQuestionModel>(text)
-            };
-        }
-
         public async Task Vote(string answer)
         {
             var voteClient = new VoteClient();
@@ -133,14 +117,7 @@ namespace EvotoClient.ViewModel
                 }
             };
 
-            try
-            {
-                await Model.WriteTransaction(txIds, toInfo, answer);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e.Message);
-            }
+            await Model.WriteTransaction(txIds, toInfo, answer);
         }
 
         #endregion
