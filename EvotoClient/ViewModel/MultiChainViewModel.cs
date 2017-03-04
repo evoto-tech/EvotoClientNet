@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Api.Clients;
 using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
-using MultiChainLib.Client;
 using MultiChainLib.Model;
-using Newtonsoft.Json;
 
 namespace EvotoClient.ViewModel
 {
@@ -117,7 +113,12 @@ namespace EvotoClient.ViewModel
                 }
             };
 
-            await Model.WriteTransaction(txIds, toInfo, answer);
+            var answerModel = new BlockchainAnswerModel
+            {
+                Answer = answer
+            };
+
+            await Model.WriteTransaction(txIds, toInfo, answerModel);
         }
 
         #endregion
