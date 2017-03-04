@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Api.Clients;
 using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
+using MultiChainLib.Model;
 using Newtonsoft.Json;
 
 namespace EvotoClient.ViewModel
@@ -58,7 +60,8 @@ namespace EvotoClient.ViewModel
                 throw new Exception("Must disconnect from blockchain before connecting to a new one");
 
             var localPort = MultiChainTools.GetNewPort(EPortType.ClientMultichainD);
-            _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort);
+            var rpcPort = MultiChainTools.GetNewPort(EPortType.ClientRpc);
+            _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort, rpcPort);
         }
 
         private void UpdateStatus()
@@ -98,6 +101,46 @@ namespace EvotoClient.ViewModel
             {
                 JsonConvert.DeserializeObject<BlockchainQuestionModel>(text)
             };
+        }
+
+        public async Task Vote(string answer)
+        {
+            var voteClient = new VoteClient();
+
+            // Create our token
+            const string token = "token";
+            var blindedToken = "blind" + token;
+
+            var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken);
+
+            // TODO: Sleep
+            var walletId = await Model.GetNewWalletAddress();
+
+            var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, blindSignature);
+
+            var txIds = new List<CreateRawTransactionTxIn>
+            {
+                new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}
+            };
+
+            var toInfo = new List<CreateRawTransactionAmount>
+            {
+                new CreateRawTransactionAsset
+                {
+                    Address = regiMeta.RegistrarAddress,
+                    Qty = 1,
+                    Name = MultiChainTools.VOTE_ASSET_NAME
+                }
+            };
+
+            try
+            {
+                await Model.WriteTransaction(txIds, toInfo, answer);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         #endregion

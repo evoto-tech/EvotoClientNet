@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Blockchain.Models;
@@ -11,7 +12,7 @@ namespace EvotoClient.ViewModel
     {
         public VoteViewModel()
         {
-            VoteCommand = new RelayCommand(DoVote);
+            VoteCommand = new RelayCommand(DoVote, CanVote);
             BackCommand = new RelayCommand(DoBack);
         }
 
@@ -32,7 +33,11 @@ namespace EvotoClient.ViewModel
         public bool Loading
         {
             get { return _loading; }
-            set { Set(ref _loading, value); }
+            set
+            {
+                Set(ref _loading, value);
+                RaisePropertyChanged(nameof(VoteVisble));
+            }
         }
 
         public bool VoteVisble => !Loading;
@@ -50,7 +55,11 @@ namespace EvotoClient.ViewModel
         public string SelectedAnswer
         {
             get { return _selectedAnswer; }
-            set { Set(ref _selectedAnswer, value); }
+            set
+            {
+                Set(ref _selectedAnswer, value);
+                VoteCommand.RaiseCanExecuteChanged();
+            }
         }
 
         #endregion
@@ -59,6 +68,7 @@ namespace EvotoClient.ViewModel
 
         public void SelectVote(BlockchainDetails blockchain)
         {
+            Loading = true;
             Task.Run(async () =>
             {
                 await ConnectToBlockchain(blockchain);
@@ -81,12 +91,28 @@ namespace EvotoClient.ViewModel
         private async Task GetVoteDetails()
         {
             var questions = await MultiChainVm.GetQuestions();
-            Ui(() => { Question = questions.First(); });
+            Ui(() =>
+            {
+                Loading = false;
+                Question = questions.First();
+            });
+        }
+
+        private bool CanVote()
+        {
+            return !string.IsNullOrEmpty(SelectedAnswer);
         }
 
         private void DoVote()
         {
-            Debug.WriteLine("Voted");
+            if (!MultiChainVm.Connected)
+            {
+                throw new Exception("Not connected");
+            }
+                Task.Run(() =>
+                {
+                    MultiChainVm.Vote(SelectedAnswer);
+                });
         }
 
         private void DoBack()

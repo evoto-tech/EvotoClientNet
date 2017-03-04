@@ -69,6 +69,7 @@
     <Compile Include="IHavePassword.cs" />
     <Compile Include="LoginModel.cs" />
     <Compile Include="ObservableRangeCollection.cs" />
+    <Compile Include="RegiMeta.cs" />
     <Compile Include="RegisterModel.cs" />
     <Compile Include="UserDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

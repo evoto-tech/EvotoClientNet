@@ -20,6 +20,7 @@ namespace Api
         private static readonly Options JilOptions = new Options(dateFormat: DateTimeFormat.ISO8601);
 
         protected static readonly CurrentAuthentication CurrentAuth = new CurrentAuthentication();
+        private readonly HttpClient _anonymousClient;
 
         private readonly HttpClient _client;
 
@@ -44,6 +45,15 @@ namespace Api
                 (sender, cert, chain, sslPolicyErrors) => true;
 #endif
             _client = new HttpClient(handler)
+            {
+                BaseAddress = new Uri($"{url}/{baseUri}")
+            };
+            if (!CurrentAuth.Expired)
+            {
+                SetAuthorizationHeader();
+            }
+
+            _anonymousClient = new HttpClient(handler)
             {
                 BaseAddress = new Uri($"{url}/{baseUri}")
             };
@@ -143,6 +153,43 @@ namespace Api
 
                 if (IsUnauthorized(response))
                     throw new UnauthorizedException();
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    await HandleBadRequest(response);
+                if (!response.IsSuccessStatusCode)
+                    throw new ApiErrorException("Invalid Response Code");
+            });
+
+            if (response == null)
+                throw new ApiErrorException("No Response");
+
+            var json = await response.Content.ReadAsStringAsync();
+            return json.Length == 0 ? null : JSON.Deserialize<T>(json, JilOptions);
+        }
+
+        /// <summary>
+        ///     Same as PostAsync but uses another client which never has authentication headers set
+        /// </summary>
+        public Task<dynamic> PostAnonymousAsync(string uri, object body, params object[] args)
+        {
+            return PostAnonymousAsync<dynamic>(uri, body, args);
+        }
+
+        /// <summary>
+        ///     Same as PostAsync<T> but uses another client which never has authentication headers set
+        /// </summary>
+        public async Task<T> PostAnonymousAsync<T>(string uri, object body, params object[] args) where T : class
+        {
+            HttpResponseMessage response = null;
+
+            var content = new StringContent(JSON.SerializeDynamic(body));
+            content.Headers.Remove("Content-Type");
+            content.Headers.Add("Content-Type", "application/json");
+
+            await _retryPolicy.ExecuteAsync(async () =>
+            {
+                uri = string.Format(uri, args);
+                response = await _anonymousClient.PostAsync(uri, content);
+
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                     await HandleBadRequest(response);
                 if (!response.IsSuccessStatusCode)
