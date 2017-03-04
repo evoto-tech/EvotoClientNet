@@ -109,10 +109,10 @@ namespace EvotoClient.ViewModel
             {
                 throw new Exception("Not connected");
             }
-                Task.Run(() =>
-                {
-                    MultiChainVm.Vote(SelectedAnswer);
-                });
+            Task.Run(async () =>
+            {
+                await MultiChainVm.Vote(SelectedAnswer);
+            });
         }
 
         private void DoBack()

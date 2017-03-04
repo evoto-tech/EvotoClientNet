@@ -19,7 +19,7 @@ namespace EvotoClient.ViewModel
             var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
             mainVm.OnLogin += async (e, u) => await GetVotes();
 
-            ProceedCommand = new RelayCommand(DoProceed);
+            ProceedCommand = new RelayCommand(DoProceed, CanProceed);
             RefreshCommand = new RelayCommand(async () => await GetVotes());
 
             Votes = new ObservableRangeCollection<BlockchainDetails>();
@@ -61,7 +61,11 @@ namespace EvotoClient.ViewModel
         public BlockchainDetails SelectedVote
         {
             get { return _selectedVote; }
-            set { Set(ref _selectedVote, value); }
+            set
+            {
+                Set(ref _selectedVote, value);
+                ProceedCommand.RaiseCanExecuteChanged();
+            }
         }
 
         #endregion
@@ -75,12 +79,16 @@ namespace EvotoClient.ViewModel
             MainVm.ChangeView(EvotoView.Vote);
         }
 
+        private bool CanProceed()
+        {
+            return SelectedVote != null;
+        }
+
         private async Task GetVotes()
         {
             Ui(() => { Loading = true; });
 
             var votes = (await _homeApiClient.GetCurrentVotes()).ToList();
-            Debug.WriteLine("Votes:");
             Ui(() =>
             {
                 Loading = false;
