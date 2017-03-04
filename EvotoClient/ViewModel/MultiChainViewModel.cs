@@ -81,7 +81,7 @@ namespace EvotoClient.ViewModel
         {
             Debug.WriteLine("Cleaning Up");
             if (_multichain != null)
-                _multiChainHandler.DisconnectAndClose(_multichain).Wait();
+                Task.Run(async () => { await _multiChainHandler.DisconnectAndClose(_multichain); }).Wait();
 
             base.Cleanup();
         }
