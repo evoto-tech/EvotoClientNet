@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Blockchain.Models;
@@ -40,7 +39,7 @@ namespace EvotoClient.ViewModel
             }
         }
 
-        public bool VoteVisble => !Loading;
+        public bool VoteVisble => !Loading && !Voted;
 
         private BlockchainQuestionModel _question;
 
@@ -59,8 +58,23 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _selectedAnswer, value);
                 VoteCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(VoteText));
             }
         }
+
+        private bool _voted;
+
+        public bool Voted
+        {
+            get { return _voted; }
+            set
+            {
+                Set(ref _voted, value);
+                VoteCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public string VoteText => $"You have voted for {SelectedAnswer}";
 
         #endregion
 
@@ -100,18 +114,22 @@ namespace EvotoClient.ViewModel
 
         private bool CanVote()
         {
-            return !string.IsNullOrEmpty(SelectedAnswer);
+            return !Loading && !Voted && !string.IsNullOrEmpty(SelectedAnswer);
         }
 
         private void DoVote()
         {
             if (!MultiChainVm.Connected)
-            {
                 throw new Exception("Not connected");
-            }
+            Loading = true;
             Task.Run(async () =>
             {
                 await MultiChainVm.Vote(SelectedAnswer);
+                Ui(() =>
+                {
+                    Voted = true;
+                    Loading = false;
+                });
             });
         }
 
