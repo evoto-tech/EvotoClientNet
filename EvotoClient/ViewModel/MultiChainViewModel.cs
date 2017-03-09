@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Api.Clients;
+using Api.Exceptions;
 using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
@@ -44,7 +45,7 @@ namespace EvotoClient.ViewModel
             set { Set(ref _status, value); }
         }
 
-        public bool Connected => (_multichain != null) && _multichain.Connected;
+        public bool Connected => _multichain != null && _multichain.Connected;
 
         #endregion
 
@@ -85,40 +86,48 @@ namespace EvotoClient.ViewModel
 
         public async Task Vote(string answer)
         {
+            Debug.WriteLine($"Voting for {answer}");
             var voteClient = new VoteClient();
 
             // Create our token
             const string token = "token";
             var blindedToken = "blind" + token;
 
-            var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken);
-
-            // TODO: Sleep
-            var walletId = await Model.GetNewWalletAddress();
-
-            var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, blindSignature);
-
-            var txIds = new List<CreateRawTransactionTxIn>
+            try
             {
-                new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}
-            };
+                var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken);
 
-            var toInfo = new List<CreateRawTransactionAmount>
-            {
-                new CreateRawTransactionAsset
+                // TODO: Sleep
+                var walletId = await Model.GetNewWalletAddress();
+
+                var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, blindSignature);
+
+                var txIds = new List<CreateRawTransactionTxIn>
                 {
-                    Address = regiMeta.RegistrarAddress,
-                    Qty = 1,
-                    Name = MultiChainTools.VOTE_ASSET_NAME
-                }
-            };
+                    new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}
+                };
 
-            var answerModel = new BlockchainAnswerModel
+                var toInfo = new List<CreateRawTransactionAmount>
+                {
+                    new CreateRawTransactionAsset
+                    {
+                        Address = regiMeta.RegistrarAddress,
+                        Qty = 1,
+                        Name = MultiChainTools.VOTE_ASSET_NAME
+                    }
+                };
+
+                var answerModel = new BlockchainAnswerModel
+                {
+                    Answer = answer
+                };
+
+                await Model.WriteTransaction(txIds, toInfo, answerModel);
+            }
+            catch (ApiException e)
             {
-                Answer = answer
-            };
-
-            await Model.WriteTransaction(txIds, toInfo, answerModel);
+                Debug.WriteLine(e.Message);
+            }
         }
 
         #endregion

@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Threading;
 using Microsoft.Practices.ServiceLocation;
 
 namespace EvotoClient.ViewModel
@@ -16,16 +18,14 @@ namespace EvotoClient.ViewModel
 
         protected MainViewModel MainVm => _mainVm ?? (_mainVm = GetVm<MainViewModel>());
 
-        protected void Ui(OnUiThreadDelegate uiDelegate)
+        protected void Ui(Action uiDelegate)
         {
-            Application.Current.Dispatcher.Invoke(uiDelegate);
+            DispatcherHelper.CheckBeginInvokeOnUI(uiDelegate);
         }
 
         protected T GetVm<T>() where T : EvotoViewModelBase
         {
             return ServiceLocator.Current.GetInstance<T>();
         }
-
-        protected delegate void OnUiThreadDelegate();
     }
 }

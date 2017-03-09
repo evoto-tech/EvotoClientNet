@@ -41,6 +41,14 @@ namespace EvotoClient.ViewModel
             set { Set(ref _currentView, value); }
         }
 
+        private bool _loggedIn;
+
+        public bool LoggedIn
+        {
+            get {  return _loggedIn;}
+            set { Set(ref _loggedIn, value); }
+        }
+
         #endregion
 
         #region Methods
