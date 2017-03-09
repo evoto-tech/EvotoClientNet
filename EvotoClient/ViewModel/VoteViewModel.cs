@@ -93,7 +93,7 @@ namespace EvotoClient.ViewModel
         private async Task ConnectToBlockchain(BlockchainDetails blockchain)
         {
             if (MultiChainVm.Connected)
-                if (MultiChainVm.Model.Name != blockchain.Name)
+                if (MultiChainVm.Model.Name != blockchain.ChainString)
                     await MultiChainVm.Disconnect();
                 else
                     return;
