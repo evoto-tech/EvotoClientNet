@@ -121,7 +121,9 @@ namespace EvotoClient.ViewModel
         {
             if (!MultiChainVm.Connected)
                 throw new Exception("Not connected");
-            Loading = true;
+            Ui(() => {
+                Loading = true;
+            });
             Task.Run(async () =>
             {
                 await MultiChainVm.Vote(SelectedAnswer);

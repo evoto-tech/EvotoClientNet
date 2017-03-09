@@ -17,7 +17,11 @@ namespace EvotoClient.ViewModel
             _homeApiClient = new HomeClient();
 
             var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
-            mainVm.OnLogin += async (e, u) => await GetVotes();
+
+            if (mainVm.LoggedIn)
+                Task.Run(async () => { await GetVotes(); });
+            else
+                mainVm.OnLogin += async (e, u) => await GetVotes();
 
             ProceedCommand = new RelayCommand(DoProceed, CanProceed);
             RefreshCommand = new RelayCommand(async () => await GetVotes());
@@ -74,9 +78,9 @@ namespace EvotoClient.ViewModel
 
         private void DoProceed()
         {
+            MainVm.ChangeView(EvotoView.Vote);
             var voteView = GetVm<VoteViewModel>();
             voteView.SelectVote(SelectedVote);
-            MainVm.ChangeView(EvotoView.Vote);
         }
 
         private bool CanProceed()
@@ -86,9 +90,11 @@ namespace EvotoClient.ViewModel
 
         private async Task GetVotes()
         {
+            Debug.WriteLine("Getting Votes");
             Ui(() => { Loading = true; });
 
             var votes = (await _homeApiClient.GetCurrentVotes()).ToList();
+
             Ui(() =>
             {
                 Loading = false;
