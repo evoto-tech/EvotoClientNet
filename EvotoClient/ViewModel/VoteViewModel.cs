@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Blockchain.Models;
@@ -11,7 +11,7 @@ namespace EvotoClient.ViewModel
     {
         public VoteViewModel()
         {
-            VoteCommand = new RelayCommand(DoVote);
+            VoteCommand = new RelayCommand(DoVote, CanVote);
             BackCommand = new RelayCommand(DoBack);
         }
 
@@ -32,10 +32,14 @@ namespace EvotoClient.ViewModel
         public bool Loading
         {
             get { return _loading; }
-            set { Set(ref _loading, value); }
+            set
+            {
+                Set(ref _loading, value);
+                RaisePropertyChanged(nameof(VoteVisble));
+            }
         }
 
-        public bool VoteVisble => !Loading;
+        public bool VoteVisble => !Loading && !Voted;
 
         private BlockchainQuestionModel _question;
 
@@ -50,8 +54,27 @@ namespace EvotoClient.ViewModel
         public string SelectedAnswer
         {
             get { return _selectedAnswer; }
-            set { Set(ref _selectedAnswer, value); }
+            set
+            {
+                Set(ref _selectedAnswer, value);
+                VoteCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(VoteText));
+            }
         }
+
+        private bool _voted;
+
+        public bool Voted
+        {
+            get { return _voted; }
+            set
+            {
+                Set(ref _voted, value);
+                VoteCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public string VoteText => $"You have voted for {SelectedAnswer}";
 
         #endregion
 
@@ -59,6 +82,7 @@ namespace EvotoClient.ViewModel
 
         public void SelectVote(BlockchainDetails blockchain)
         {
+            Loading = true;
             Task.Run(async () =>
             {
                 await ConnectToBlockchain(blockchain);
@@ -69,7 +93,7 @@ namespace EvotoClient.ViewModel
         private async Task ConnectToBlockchain(BlockchainDetails blockchain)
         {
             if (MultiChainVm.Connected)
-                if (MultiChainVm.Model.Name != blockchain.Name)
+                if (MultiChainVm.Model.Name != blockchain.ChainString)
                     await MultiChainVm.Disconnect();
                 else
                     return;
@@ -80,13 +104,35 @@ namespace EvotoClient.ViewModel
 
         private async Task GetVoteDetails()
         {
-            var questions = await MultiChainVm.GetQuestions();
-            Ui(() => { Question = questions.First(); });
+            var questions = await MultiChainVm.Model.GetQuestions();
+            Ui(() =>
+            {
+                Loading = false;
+                Question = questions.First();
+            });
+        }
+
+        private bool CanVote()
+        {
+            return !Loading && !Voted && !string.IsNullOrEmpty(SelectedAnswer);
         }
 
         private void DoVote()
         {
-            Debug.WriteLine("Voted");
+            if (!MultiChainVm.Connected)
+                throw new Exception("Not connected");
+            Ui(() => {
+                Loading = true;
+            });
+            Task.Run(async () =>
+            {
+                await MultiChainVm.Vote(SelectedAnswer);
+                Ui(() =>
+                {
+                    Voted = true;
+                    Loading = false;
+                });
+            });
         }
 
         private void DoBack()

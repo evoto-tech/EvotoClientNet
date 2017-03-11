@@ -104,39 +104,40 @@ namespace EvotoClient.ViewModel
             if (!IsFormValid(parameter, true, out loginModel))
                 return;
 
+            MainVm.LoggedIn = false;
             Loading = true;
             ErrorMessage = "";
-            Task.Factory.StartNew(
-                async () =>
+            Task.Run(async () =>
+            {
+                try
                 {
-                    try
+                    await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
+                    var userDetails = await _userClient.GetCurrentUserDetails();
+                    MainVm.ChangeView(EvotoView.Home);
+                    MainVm.LoggedIn = true;
+                    MainVm.InvokeLogin(this, userDetails);
+                }
+                catch (IncorrectLoginException)
+                {
+                    Ui(() =>
                     {
-                        await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
-                        var userDetails = await _userClient.GetCurrentUserDetails();
-                        MainVm.ChangeView(EvotoView.Home);
-                        MainVm.InvokeLogin(this, userDetails);
-                    }
-                    catch (IncorrectLoginException)
+                        ErrorMessage = "Invalid Username or Password";
+                        Loading = false;
+                    });
+                }
+                catch (ApiException e)
+                {
+                    Ui(() =>
                     {
-                        Ui(() =>
-                        {
-                            ErrorMessage = "Invalid Username or Password";
-                            Loading = false;
-                        });
-                    }
-                    catch (ApiException e)
-                    {
-                        Ui(() =>
-                        {
-                            ErrorMessage = "An Unknown Error Occurred";
+                        ErrorMessage = "An Unknown Error Occurred";
 #if DEBUG
-                            // Just override debug message, as ELSE gives annoying compiler warnings
-                            ErrorMessage = e.Message;
+                        // Just override debug message, as ELSE gives annoying compiler warnings
+                        ErrorMessage = e.Message;
 #endif
-                            Loading = false;
-                        });
-                    }
-                });
+                        Loading = false;
+                    });
+                }
+            });
         }
 
         private void DoRegister()

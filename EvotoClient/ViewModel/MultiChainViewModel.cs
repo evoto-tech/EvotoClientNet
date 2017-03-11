@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Api.Clients;
+using Api.Exceptions;
 using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
-using Newtonsoft.Json;
+using MultiChainLib.Model;
 
 namespace EvotoClient.ViewModel
 {
@@ -45,7 +45,7 @@ namespace EvotoClient.ViewModel
             set { Set(ref _status, value); }
         }
 
-        public bool Connected => (_multichain != null) && _multichain.Connected;
+        public bool Connected => _multichain != null && _multichain.Connected;
 
         #endregion
 
@@ -58,7 +58,8 @@ namespace EvotoClient.ViewModel
                 throw new Exception("Must disconnect from blockchain before connecting to a new one");
 
             var localPort = MultiChainTools.GetNewPort(EPortType.ClientMultichainD);
-            _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort);
+            var rpcPort = MultiChainTools.GetNewPort(EPortType.ClientRpc);
+            _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort, rpcPort);
         }
 
         private void UpdateStatus()
@@ -78,26 +79,55 @@ namespace EvotoClient.ViewModel
         {
             Debug.WriteLine("Cleaning Up");
             if (_multichain != null)
-                _multiChainHandler.DisconnectAndClose(_multichain).Wait();
+                Task.Run(async () => { await _multiChainHandler.DisconnectAndClose(_multichain); }).Wait();
 
             base.Cleanup();
         }
 
-        public async Task<List<BlockchainQuestionModel>> GetQuestions()
+        public async Task Vote(string answer)
         {
-            // TODO: Handle multiple questions. For now assume exactly 1
-            var result = await Model.GetStreamKeyItems(MultiChainTools.ROOT_STREAM_NAME, MultiChainTools.QUESTIONS_KEY);
-            var hex = result.First().Data;
+            Debug.WriteLine($"Voting for {answer}");
+            var voteClient = new VoteClient();
 
-            var bytes = Enumerable.Range(0, hex.Length)
-                .Where(x => x%2 == 0)
-                .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                .ToArray();
-            var text = Encoding.UTF8.GetString(bytes);
-            return new List<BlockchainQuestionModel>
+            // Create our token
+            const string token = "token";
+            var blindedToken = "blind" + token;
+
+            try
             {
-                JsonConvert.DeserializeObject<BlockchainQuestionModel>(text)
-            };
+                var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken);
+
+                // TODO: Sleep
+                var walletId = await Model.GetNewWalletAddress();
+
+                var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, blindSignature);
+
+                var txIds = new List<CreateRawTransactionTxIn>
+                {
+                    new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}
+                };
+
+                var toInfo = new List<CreateRawTransactionAmount>
+                {
+                    new CreateRawTransactionAsset
+                    {
+                        Address = regiMeta.RegistrarAddress,
+                        Qty = 1,
+                        Name = MultiChainTools.VOTE_ASSET_NAME
+                    }
+                };
+
+                var answerModel = new BlockchainAnswerModel
+                {
+                    Answer = answer
+                };
+
+                await Model.WriteTransaction(txIds, toInfo, answerModel);
+            }
+            catch (ApiException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
 
         #endregion

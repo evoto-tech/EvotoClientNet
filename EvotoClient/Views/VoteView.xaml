@@ -37,8 +37,13 @@
                    Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
         <ListBox Grid.Row="1" Grid.Column="0"
+                 SelectedItem="{Binding SelectedAnswer}"
                  ItemsSource="{Binding Question.Answers}"
                  Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0"
+                   Text="{Binding VoteText}"
+                   Visibility="{Binding Voted, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
         <Button Grid.Row="2" Command="{Binding VoteCommand}">Vote</Button>
         <Button Grid.Row="3" Command="{Binding BackCommand}">Back</Button>

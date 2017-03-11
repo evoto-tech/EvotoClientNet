@@ -58,6 +58,7 @@
     <Compile Include="ApiClient.cs" />
     <Compile Include="ApiException.cs" />
     <Compile Include="Clients\HomeClient.cs" />
+    <Compile Include="Clients\VoteClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="CurrentAuthentication.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
@@ -72,7 +73,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
+    <Compile Include="Requests\GetVoteRequestModel.cs" />
+    <Compile Include="Requests\BlindedTokenRequestModel.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />
+    <Compile Include="Responses\GetVoteResponse.cs" />
+    <Compile Include="Responses\BlindSignatureResponse.cs" />
     <Compile Include="Responses\BlockchainResponse.cs" />
     <Compile Include="Responses\ModelStateResponse.cs" />
     <Compile Include="Responses\UserDetailsResponse.cs" />
@@ -83,6 +88,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

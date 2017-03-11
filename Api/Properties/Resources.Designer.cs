@@ -88,6 +88,24 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string GetBlindSignature {
+            get {
+                return ResourceManager.GetString("GetBlindSignature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to confirm.
+        /// </summary>
+        internal static string GetVoteAction {
+            get {
+                return ResourceManager.GetString("GetVoteAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to home/.
         /// </summary>
         internal static string HomeController {
@@ -111,6 +129,15 @@ namespace Api.Properties {
         internal static string RegisterAction {
             get {
                 return ResourceManager.GetString("RegisterAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to vote/.
+        /// </summary>
+        internal static string VoteController {
+            get {
+                return ResourceManager.GetString("VoteController", resourceCulture);
             }
         }
     }
