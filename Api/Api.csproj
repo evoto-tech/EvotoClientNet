@@ -76,6 +76,7 @@
     <Compile Include="Requests\GetVoteRequestModel.cs" />
     <Compile Include="Requests\BlindedTokenRequestModel.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />
+    <Compile Include="Responses\GetPublicKeyResponse.cs" />
     <Compile Include="Responses\GetVoteResponse.cs" />
     <Compile Include="Responses\BlindSignatureResponse.cs" />
     <Compile Include="Responses\BlockchainResponse.cs" />

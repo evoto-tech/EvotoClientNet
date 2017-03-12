@@ -108,6 +108,8 @@ namespace EvotoClient.ViewModel
             Ui(() =>
             {
                 Loading = false;
+                SelectedAnswer = "";
+                Voted = false;
                 Question = questions.First();
             });
         }
