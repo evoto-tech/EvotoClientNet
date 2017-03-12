@@ -130,6 +130,7 @@ namespace EvotoClient.ViewModel
             var questions = await MultiChainVm.Model.GetQuestions();
             var questionVMs = questions.Select(q => new QuestionViewModel(this)
             {
+                QuestionNumber = q.Number,
                 Question = q.Question,
                 Answers = q.Answers.Select(a => new AnswerViewModel
                 {
@@ -171,6 +172,8 @@ namespace EvotoClient.ViewModel
 
         private bool CanVote()
         {
+            if (!Questions.Any())
+                return false;
             return Questions.All(q => q.HasAnswer);
         }
 

@@ -13,6 +13,14 @@ namespace EvotoClient.ViewModel
 
         #region Properties
 
+        private int _questionNumber;
+
+        public int QuestionNumber
+        {
+            get { return _questionNumber; }
+            set { Set(ref _questionNumber, value); }
+        }
+
         private string _question;
 
         public string Question

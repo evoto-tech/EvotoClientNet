@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
@@ -128,7 +129,11 @@ namespace EvotoClient.ViewModel
 
                 var answerModel = new BlockchainVoteModel
                 {
-                    //Answer = answer
+                    Answers = questions.Select(q => new BlockchainVoteAnswerModel
+                    {
+                        Answer = q.SelectedAnswer.Answer,
+                        Question = q.QuestionNumber
+                    }).ToList()
                 };
 
                 await Model.WriteTransaction(txIds, toInfo, answerModel);
