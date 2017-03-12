@@ -86,9 +86,8 @@ namespace EvotoClient.ViewModel
             base.Cleanup();
         }
 
-        public async Task Vote(string answer)
+        public async Task Vote(List<QuestionViewModel> questions)
         {
-            Debug.WriteLine($"Voting for {answer}");
             var voteClient = new VoteClient();
 
             // Create our token
@@ -127,9 +126,9 @@ namespace EvotoClient.ViewModel
                     }
                 };
 
-                var answerModel = new BlockchainAnswerModel
+                var answerModel = new BlockchainVoteModel
                 {
-                    Answer = answer
+                    //Answer = answer
                 };
 
                 await Model.WriteTransaction(txIds, toInfo, answerModel);

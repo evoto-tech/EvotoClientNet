@@ -15,6 +15,12 @@ namespace EvotoClient.Views
         {
             InitializeComponent();
             Closing += (s, e) => ViewModelLocator.Cleanup();
+            Loaded += OnLoad;
+        }
+
+        private void OnLoad(object sender, RoutedEventArgs e)
+        {
+            ((EvotoViewModelBase)DataContext).ViewLoaded(sender, e);
         }
     }
 }
