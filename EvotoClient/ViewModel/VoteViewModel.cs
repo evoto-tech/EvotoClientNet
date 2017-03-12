@@ -52,6 +52,16 @@ namespace EvotoClient.ViewModel
 
         public bool VoteVisble => !Loading && !Voted;
 
+        public string QuestionText
+        {
+            get
+            {
+                if (Questions == null || !Questions.Any() || CurrentQuestion == 0)
+                    return "";
+                return $"Question {CurrentQuestion} of {TotalQuestions}";
+            }
+        }
+
         private bool _voted;
 
         public bool Voted
@@ -77,6 +87,7 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _currentQuestion, value);
+                RaisePropertyChanged(nameof(QuestionText));
                 NextCommand.RaiseCanExecuteChanged();
                 PrevCommand.RaiseCanExecuteChanged();
             }
@@ -91,6 +102,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _totalQuestions, value);
                 VoteCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(QuestionText));
             }
         }
 

@@ -22,28 +22,33 @@
             <ColumnDefinition Width="20*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="75*" />
             <RowDefinition Height="10*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Row="0" Grid.Column="1"
+                     Grid.Row="1" Grid.Column="1"
                      IsIndeterminate="True"
                      Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-                     VerticalAlignment="Center" HorizontalAlignment="Center"
-                     Margin="73,28,85,27" />
+                     VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+        <TextBlock Grid.Row="0" Grid.Column="1"
+                   Text="{Binding QuestionText}"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
         <local:PageTransition
-            Grid.Row="0" Grid.Column="1"
+            Grid.Row="1" Grid.Column="1"
             x:Name="pageTransition" Margin="25"
             Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
 
-        <Button Grid.Row="0" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
-        <Button Grid.Row="0" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
+        <Button Grid.Row="1" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
+        <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
 
-        <Button Grid.Row="1" Grid.Column="1" Command="{Binding VoteCommand}">Vote</Button>
-        <Button Grid.Row="2" Grid.Column="1" Command="{Binding BackCommand}">Back</Button>
+        <Button Grid.Row="2" Grid.Column="1" Command="{Binding VoteCommand}">Vote</Button>
+        <Button Grid.Row="3" Grid.Column="1" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>
