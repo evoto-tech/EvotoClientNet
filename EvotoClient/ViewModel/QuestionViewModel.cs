@@ -4,6 +4,13 @@ namespace EvotoClient.ViewModel
 {
     public class QuestionViewModel : EvotoViewModelBase
     {
+        private VoteViewModel _vvm;
+
+        public QuestionViewModel(VoteViewModel vvm)
+        {
+            _vvm = vvm;
+        }
+
         #region Properties
 
         private string _question;
@@ -25,6 +32,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _selectedAnswer, value);
                 RaisePropertyChanged(nameof(HasAnswer));
+                _vvm.VoteChanged();
             }
         }
 

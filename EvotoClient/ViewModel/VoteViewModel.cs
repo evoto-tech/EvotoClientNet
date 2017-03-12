@@ -11,7 +11,7 @@ namespace EvotoClient.ViewModel
     {
         public VoteViewModel()
         {
-            VoteCommand = new RelayCommand(DoVote);
+            VoteCommand = new RelayCommand(DoVote, CanVote);
             BackCommand = new RelayCommand(DoBack);
 
             NextCommand = new RelayCommand(DoNext, CanNext);
@@ -87,7 +87,11 @@ namespace EvotoClient.ViewModel
         public int TotalQuestions
         {
             get { return _totalQuestions; }
-            set { Set(ref _totalQuestions, value); }
+            set
+            {
+                Set(ref _totalQuestions, value);
+                VoteCommand.RaiseCanExecuteChanged();
+            }
         }
 
         #endregion
@@ -102,6 +106,11 @@ namespace EvotoClient.ViewModel
                 await ConnectToBlockchain(blockchain);
                 await GetVoteDetails();
             });
+        }
+
+        public void VoteChanged()
+        {
+            VoteCommand.RaiseCanExecuteChanged();
         }
 
         private async Task ConnectToBlockchain(BlockchainDetails blockchain)
@@ -119,7 +128,7 @@ namespace EvotoClient.ViewModel
         private async Task GetVoteDetails()
         {
             var questions = await MultiChainVm.Model.GetQuestions();
-            var questionVMs = questions.Select(q => new QuestionViewModel
+            var questionVMs = questions.Select(q => new QuestionViewModel(this)
             {
                 Question = q.Question,
                 Answers = q.Answers.Select(a => new AnswerViewModel
@@ -158,6 +167,11 @@ namespace EvotoClient.ViewModel
                     Loading = false;
                 });
             });
+        }
+
+        private bool CanVote()
+        {
+            return Questions.All(q => q.HasAnswer);
         }
 
         private void DoBack()
