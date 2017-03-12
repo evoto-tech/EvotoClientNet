@@ -97,6 +97,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to key.
+        /// </summary>
+        internal static string GetPublicKeyAction {
+            get {
+                return ResourceManager.GetString("GetPublicKeyAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to confirm.
         /// </summary>
         internal static string GetVoteAction {

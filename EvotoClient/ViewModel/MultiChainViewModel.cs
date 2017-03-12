@@ -8,6 +8,8 @@ using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
 using MultiChainLib.Model;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math;
 
 namespace EvotoClient.ViewModel
 {
@@ -45,7 +47,7 @@ namespace EvotoClient.ViewModel
             set { Set(ref _status, value); }
         }
 
-        public bool Connected => _multichain != null && _multichain.Connected;
+        public bool Connected => (_multichain != null) && _multichain.Connected;
 
         #endregion
 
@@ -90,17 +92,25 @@ namespace EvotoClient.ViewModel
             var voteClient = new VoteClient();
 
             // Create our token
-            const string token = "token";
-            var blindedToken = "blind" + token;
+            var token = GenerateRandomToken();
 
             try
             {
-                var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken);
+                var keyInfo = await voteClient.GetPublicKey();
+                var publicKey = new RsaKeyParameters(false, new BigInteger(keyInfo.Modulus),
+                    new BigInteger(keyInfo.Exponent));
+
+                var blindedToken = RsaTools.BlindMessage(token, publicKey);
+
+                var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken.Blinded.ToString());
+
+                var unblindedSignature = RsaTools.UnblindMessage(new BigInteger(blindSignature), blindedToken.Random,
+                    publicKey);
 
                 // TODO: Sleep
                 var walletId = await Model.GetNewWalletAddress();
 
-                var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, blindSignature);
+                var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, unblindedSignature.ToString());
 
                 var txIds = new List<CreateRawTransactionTxIn>
                 {
@@ -128,6 +138,11 @@ namespace EvotoClient.ViewModel
             {
                 Debug.WriteLine(e.Message);
             }
+        }
+
+        private static string GenerateRandomToken()
+        {
+            return Guid.NewGuid().ToString("N");
         }
 
         #endregion

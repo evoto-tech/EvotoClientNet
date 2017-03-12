@@ -31,5 +31,10 @@ namespace Api.Clients
                 RegistrarAddress = res.RegistrarAddress
             };
         }
+
+        public async Task<GetPublicKeyResponse> GetPublicKey()
+        {
+            return await GetAsync<GetPublicKeyResponse>(Resources.GetPublicKeyAction);
+        }
     }
 }
