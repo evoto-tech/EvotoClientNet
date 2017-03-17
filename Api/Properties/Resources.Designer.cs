@@ -88,6 +88,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to forgotPassword.
+        /// </summary>
+        internal static string ForgotPasswordAction {
+            get {
+                return ResourceManager.GetString("ForgotPasswordAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
         internal static string GetBlindSignature {
@@ -138,6 +147,15 @@ namespace Api.Properties {
         internal static string RegisterAction {
             get {
                 return ResourceManager.GetString("RegisterAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to resetPassword.
+        /// </summary>
+        internal static string ResetPasswordAction {
+            get {
+                return ResourceManager.GetString("ResetPasswordAction", resourceCulture);
             }
         }
         

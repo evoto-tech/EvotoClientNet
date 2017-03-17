@@ -3,6 +3,7 @@ using Api.Properties;
 using Api.Requests;
 using Api.Responses;
 using Models;
+using Models.Forms;
 
 namespace Api.Clients
 {
@@ -23,6 +24,18 @@ namespace Api.Clients
         {
             var res = await GetAsync<UserDetailsResponse>(Resources.DetailsAction, CurrentAuth.UserId);
             return res.MapToModel();
+        }
+
+        public async Task ForgotPassword(ForgotPasswordModel forgotPasswordModel)
+        {
+            var requestModel = new ForgotPasswordRequestModel(forgotPasswordModel);
+            await PostAsync(Resources.ForgotPasswordAction, requestModel);
+        }
+
+        public async Task ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            var requestModel = new ResetPasswordRequestModel(resetPasswordModel);
+            await PostAsync(Resources.ResetPasswordAction, requestModel);
         }
     }
 }
