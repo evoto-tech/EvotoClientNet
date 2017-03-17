@@ -17,10 +17,7 @@ namespace EvotoClient.ViewModel
             NextCommand = new RelayCommand(DoNext, CanNext);
             PrevCommand = new RelayCommand(DoPrev, CanPrev);
 
-            Loaded += (sender, args) =>
-            {
-                TransitionView = ((VoteView) sender).pageTransition;
-            };
+            Loaded += (sender, args) => { TransitionView = ((VoteView) sender).pageTransition; };
         }
 
         #region Commands
@@ -56,7 +53,7 @@ namespace EvotoClient.ViewModel
         {
             get
             {
-                if (Questions == null || !Questions.Any() || CurrentQuestion == 0)
+                if ((Questions == null) || !Questions.Any() || (CurrentQuestion == 0))
                     return "";
                 return $"Question {CurrentQuestion} of {TotalQuestions}";
             }
@@ -112,7 +109,8 @@ namespace EvotoClient.ViewModel
 
         public void SelectVote(BlockchainDetails blockchain)
         {
-            Loading = true;
+            Ui(() => { Loading = true; });
+
             Task.Run(async () =>
             {
                 await ConnectToBlockchain(blockchain);
@@ -146,7 +144,7 @@ namespace EvotoClient.ViewModel
                 Question = q.Question,
                 Answers = q.Answers.Select(a => new AnswerViewModel
                 {
-                    Answer  = a.Answer,
+                    Answer = a.Answer,
                     Info = a.Info
                 }).ToList()
             }).ToList();

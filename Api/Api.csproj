@@ -73,9 +73,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
+    <Compile Include="Requests\HasVotedRequestModel.cs" />
     <Compile Include="Requests\GetVoteRequestModel.cs" />
     <Compile Include="Requests\BlindedTokenRequestModel.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />
+    <Compile Include="Responses\HasVotedResponse.cs" />
     <Compile Include="Responses\GetPublicKeyResponse.cs" />
     <Compile Include="Responses\GetVoteResponse.cs" />
     <Compile Include="Responses\BlindSignatureResponse.cs" />

@@ -11,10 +11,12 @@ namespace EvotoClient.ViewModel
     public class HomeViewModel : EvotoViewModelBase
     {
         private readonly HomeClient _homeApiClient;
+        private readonly VoteClient _voteClient;
 
         public HomeViewModel()
         {
             _homeApiClient = new HomeClient();
+            _voteClient = new VoteClient();
 
             var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
 
@@ -78,9 +80,26 @@ namespace EvotoClient.ViewModel
 
         private void DoProceed()
         {
-            MainVm.ChangeView(EvotoView.Vote);
-            var voteView = GetVm<VoteViewModel>();
-            voteView.SelectVote(SelectedVote);
+            Loading = true;
+
+            // Contact the Registrar to see if we have voted on this vote yet
+            Task.Run(async () =>
+            {
+                var voted = await _voteClient.HasVoted(SelectedVote.ChainString);
+
+                if (!voted)
+                {
+                    MainVm.ChangeView(EvotoView.Vote);
+                    var voteView = GetVm<VoteViewModel>();
+                    voteView.SelectVote(SelectedVote);
+                }
+                else
+                {
+                    // TODO: Results
+                }
+            });
+
+            
         }
 
         private bool CanProceed()
