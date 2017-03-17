@@ -36,6 +36,7 @@ namespace Api.Clients
         {
             var requestModel = new ResetPasswordRequestModel(resetPasswordModel);
             await PostAsync(Resources.ResetPasswordAction, requestModel);
+            await LoginAsync(resetPasswordModel.Email, resetPasswordModel.Password);
         }
     }
 }
