@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Practices.ServiceLocation;
 using Models.Forms;
 using Models.Validate;
 
@@ -128,7 +129,9 @@ namespace EvotoClient.ViewModel
                 try
                 {
                     await _userClient.Register(registerModel);
-                    MainVm.ChangeView(EvotoView.Home);
+                    MainVm.ChangeView(EvotoView.Login);
+                    var loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
+                    loginVm.VerifyEmail(Email);
                 }
                 catch (BadRequestException e)
                 {

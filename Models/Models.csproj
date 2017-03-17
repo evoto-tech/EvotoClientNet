@@ -69,6 +69,7 @@
     <Compile Include="Forms\IHavePassword.cs" />
     <Compile Include="Forms\LoginModel.cs" />
     <Compile Include="Forms\ForgotPasswordModel.cs" />
+    <Compile Include="Forms\VerifyEmailModel.cs" />
     <Compile Include="Forms\ResetPasswordModel.cs" />
     <Compile Include="ObservableRangeCollection.cs" />
     <Compile Include="RegiMeta.cs" />
