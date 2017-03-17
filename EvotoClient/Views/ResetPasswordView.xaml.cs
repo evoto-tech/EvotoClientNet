@@ -1,16 +1,15 @@
 ﻿using System.Security;
 using System.Windows.Controls;
-using Models;
 using Models.Forms;
 
 namespace EvotoClient.Views
 {
     /// <summary>
-    ///     Interaction logic for RegisterView.xaml
+    ///     Interaction logic for ResetPasswordView.xaml
     /// </summary>
-    public partial class RegisterView : UserControl, IHavePasswords
+    public partial class ResetPasswordView : UserControl, IHavePasswords
     {
-        public RegisterView()
+        public ResetPasswordView()
         {
             InitializeComponent();
         }

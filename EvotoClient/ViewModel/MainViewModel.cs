@@ -10,8 +10,10 @@ namespace EvotoClient.ViewModel
     public enum EvotoView
     {
         Login,
-        Home,
         Register,
+        ForgotPassword,
+        ResetPassword,
+        Home,
         Vote
     }
 
@@ -63,23 +65,34 @@ namespace EvotoClient.ViewModel
             Debug.WriteLine($"Changing view to: {view}");
             Ui(() =>
             {
+                EvotoViewModelBase newView;
                 switch (view)
                 {
                     case EvotoView.Login:
-                        CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
-                        break;
-                    case EvotoView.Home:
-                        CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<LoginViewModel>();
                         break;
                     case EvotoView.Register:
-                        CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        break;
+                    case EvotoView.ForgotPassword:
+                        newView = ServiceLocator.Current.GetInstance<ForgotPasswordViewModel>();
+                        break;
+                    case EvotoView.ResetPassword:
+                        newView = ServiceLocator.Current.GetInstance<ResetPasswordViewModel>();
+                        break;
+                    case EvotoView.Home:
+                        newView = ServiceLocator.Current.GetInstance<HomeViewModel>();
                         break;
                     case EvotoView.Vote:
-                        CurrentView = ServiceLocator.Current.GetInstance<VoteViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<VoteViewModel>();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(view), view, null);
                 }
+
+                // Check we're not already on the right view before switching
+                if (CurrentView != newView)
+                    CurrentView = newView;
             });
         }
 

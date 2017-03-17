@@ -18,14 +18,14 @@ namespace EvotoClient
             if (arg.Substring(0, 8) != "evoto://")
                 return;
 
-            var uriParams = arg.Substring(9).Split('/');
+            var uriParams = arg.Substring(8).Split('/');
             // Right now we're only handling one action and one parameter
             if (uriParams.Length != 2)
                 return;
 
-            switch (uriParams[0])
+            switch (uriParams[0].ToLower())
             {
-                case "resetPassword":
+                case "resetpassword":
                     HandleResetPassword(uriParams[1]);
                     break;
             }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Models.Forms;
 
 namespace Models.Validate
 {
@@ -14,6 +15,7 @@ namespace Models.Validate
 
         public static bool ValidPassword(string password)
         {
+            // TODO: Password complexity valiation
             return true;
         }
     }

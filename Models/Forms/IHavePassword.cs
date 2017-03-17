@@ -1,6 +1,6 @@
 ﻿using System.Security;
 
-namespace Models
+namespace Models.Forms
 {
     public interface IHavePassword
     {

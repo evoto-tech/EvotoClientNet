@@ -9,23 +9,27 @@ using Models.Validate;
 
 namespace EvotoClient.ViewModel
 {
-    public class RegisterViewModel : EvotoViewModelBase
+    public class ResetPasswordViewModel : EvotoViewModelBase
     {
         private readonly UserClient _userClient;
-        private readonly RegisterModelValidator _validator;
+        private readonly ResetPasswordModelValidator _validator;
 
-        public RegisterViewModel()
+        public ResetPasswordViewModel()
         {
-            _validator = new RegisterModelValidator();
+            _validator = new ResetPasswordModelValidator();
             _userClient = new UserClient();
-            RegisterCommand = new RelayCommand<object>(Register);
+            ResetCommand = new RelayCommand<object>(DoSendEmail);
+            BackCommand = new RelayCommand(DoBack);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
         }
 
         #region Commands
 
-        public RelayCommand<object> RegisterCommand { get; }
+        public RelayCommand<object> ResetCommand { get; }
+
         public RelayCommand ReturnToLoginCommand { get; }
+
+        public RelayCommand BackCommand { get; }
 
         #endregion
 
@@ -36,7 +40,11 @@ namespace EvotoClient.ViewModel
         public bool Loading
         {
             get { return _loading; }
-            set { Set(ref _loading, value); }
+            set
+            {
+                Set(ref _loading, value);
+                ResetCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private string _errorMessage;
@@ -47,22 +55,6 @@ namespace EvotoClient.ViewModel
             set { Set(ref _errorMessage, value); }
         }
 
-        private string _firstName;
-
-        public string FirstName
-        {
-            get { return _firstName; }
-            set { Set(ref _firstName, value); }
-        }
-
-        private string _lastName;
-
-        public string LastName
-        {
-            get { return _lastName; }
-            set { Set(ref _lastName, value); }
-        }
-
         private string _email;
 
         public string Email
@@ -71,21 +63,21 @@ namespace EvotoClient.ViewModel
             set { Set(ref _email, value); }
         }
 
-        private string _idNumber;
+        public string _token;
 
-        public string IdNumber
+        public string Token
         {
-            get { return _idNumber; }
-            set { Set(ref _idNumber, value); }
+            get { return _token; }
+            set { Set(ref _token, value); }
         }
 
         #endregion
 
         #region Methods
 
-        private bool IsFormValid(object parameter, out RegisterModel registerModel)
+        private bool IsFormValid(object parameter, out ResetPasswordModel model)
         {
-            registerModel = null;
+            model = null;
             var valid = true;
             var errorMessages = new List<string>();
 
@@ -102,8 +94,8 @@ namespace EvotoClient.ViewModel
                 valid = false;
             }
 
-            registerModel = new RegisterModel(Email, FirstName, LastName, IdNumber, p1, p2);
-            var v = _validator.Validate(registerModel);
+            model = new ResetPasswordModel(Email, p1, p2, Token);
+            var v = _validator.Validate(model);
             if (!v.IsValid)
             {
                 errorMessages.AddRange(v.Errors.Select(e => e.ErrorMessage));
@@ -115,10 +107,10 @@ namespace EvotoClient.ViewModel
             return valid;
         }
 
-        private void Register(object parameter)
+        private void DoSendEmail(object parameter)
         {
-            RegisterModel registerModel;
-            if (!IsFormValid(parameter, out registerModel))
+            ResetPasswordModel resetPasswordModel;
+            if (!IsFormValid(parameter, out resetPasswordModel))
                 return;
 
             Loading = true;
@@ -127,8 +119,13 @@ namespace EvotoClient.ViewModel
             {
                 try
                 {
-                    await _userClient.Register(registerModel);
+                    await _userClient.ResetPassword(resetPasswordModel);
                     MainVm.ChangeView(EvotoView.Home);
+
+                    Ui(() =>
+                    {
+                        Loading = false;
+                    });
                 }
                 catch (BadRequestException e)
                 {
@@ -152,6 +149,27 @@ namespace EvotoClient.ViewModel
         private void BackToLogin()
         {
             MainVm.ChangeView(EvotoView.Login);
+        }
+
+        private void DoBack()
+        {
+            MainVm.ChangeView(EvotoView.ForgotPassword);
+        }
+
+        public void SetToken(string token)
+        {
+            Ui(() =>
+            {
+                Token = token;
+            });
+        }
+
+        public void SetEmail(string email)
+        {
+            Ui(() =>
+            {
+                Email = email;
+            });
         }
 
         #endregion

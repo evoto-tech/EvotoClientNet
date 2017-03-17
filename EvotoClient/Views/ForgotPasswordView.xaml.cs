@@ -6,15 +6,13 @@ using Models.Forms;
 namespace EvotoClient.Views
 {
     /// <summary>
-    ///     Interaction logic for LoginView.xaml
+    ///     Interaction logic for ForgotPasswordView.xaml
     /// </summary>
-    public partial class LoginView : UserControl, IHavePassword
+    public partial class ForgotPasswordView : UserControl
     {
-        public LoginView()
+        public ForgotPasswordView()
         {
             InitializeComponent();
         }
-
-        public SecureString SecurePassword => Password.SecurePassword;
     }
 }
