@@ -150,6 +150,9 @@
   <data name="ResetPasswordAction" xml:space="preserve">
     <value>resetPassword</value>
   </data>
+  <data name="VerifyEmailAction" xml:space="preserve">
+    <value>verifyEmail</value>
+  </data>
   <data name="VoteController" xml:space="preserve">
     <value>vote/</value>
   </data>

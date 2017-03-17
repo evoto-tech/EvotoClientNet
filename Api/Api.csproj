@@ -61,6 +61,7 @@
     <Compile Include="Clients\VoteClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="CurrentAuthentication.cs" />
+    <Compile Include="Exceptions\EmailVerificationNeededException.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
     <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ApiErrorException.cs" />
@@ -73,6 +74,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
+    <Compile Include="Requests\VerifyEmailRequestModel.cs" />
     <Compile Include="Requests\ResetPasswordRequestModel.cs" />
     <Compile Include="Requests\ForgotPasswordRequestModel.cs" />
     <Compile Include="Requests\GetVoteRequestModel.cs" />

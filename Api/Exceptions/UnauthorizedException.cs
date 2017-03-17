@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace Api.Exceptions
 {
     [Serializable]
-    public class UnauthorizedException : Exception
+    public class UnauthorizedException : ApiException
     {
         public UnauthorizedException()
         {
