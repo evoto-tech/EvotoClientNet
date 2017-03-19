@@ -39,11 +39,5 @@
     <DataTemplate DataType="{x:Type vm:AnswerViewModel}">
         <views:AnswerView />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:ForgotPasswordViewModel}">
-        <views:ForgotPasswordView />
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:ResetPasswordViewModel}">
-        <views:ResetPasswordView />
-    </DataTemplate>
 
 </ResourceDictionary>
