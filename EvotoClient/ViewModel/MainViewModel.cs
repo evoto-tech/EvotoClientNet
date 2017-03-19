@@ -33,9 +33,9 @@ namespace EvotoClient.ViewModel
 
         #region Properties
 
-        private ViewModelBase _currentView;
+        private EvotoViewModelBase _currentView;
 
-        public ViewModelBase CurrentView
+        public EvotoViewModelBase CurrentView
         {
             get { return _currentView; }
             set { Set(ref _currentView, value); }
