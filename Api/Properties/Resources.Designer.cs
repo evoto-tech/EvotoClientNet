@@ -160,6 +160,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to verifyEmail.
+        /// </summary>
+        internal static string VerifyEmailAction {
+            get {
+                return ResourceManager.GetString("VerifyEmailAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to vote/.
         /// </summary>
         internal static string VoteController {

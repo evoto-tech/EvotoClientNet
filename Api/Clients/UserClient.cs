@@ -17,7 +17,6 @@ namespace Api.Clients
         {
             var requestModel = new RegisterRequestModel(registerModel);
             await PostAsync<TokenUpdate>(Resources.RegisterAction, requestModel);
-            await LoginAsync(registerModel.Email, registerModel.Password);
         }
 
         public async Task<UserDetails> GetCurrentUserDetails()
@@ -37,6 +36,12 @@ namespace Api.Clients
             var requestModel = new ResetPasswordRequestModel(resetPasswordModel);
             await PostAsync(Resources.ResetPasswordAction, requestModel);
             await LoginAsync(resetPasswordModel.Email, resetPasswordModel.Password);
+        }
+
+        public async Task VerifyEmail(VerifyEmailModel verifyEmailModel)
+        {
+            var requestModel = new VerifyEmailRequestModel(verifyEmailModel);
+            await PostAsync(Resources.VerifyEmailAction, requestModel);
         }
     }
 }
