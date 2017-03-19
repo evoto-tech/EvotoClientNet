@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
@@ -86,9 +87,8 @@ namespace EvotoClient.ViewModel
             base.Cleanup();
         }
 
-        public async Task Vote(string answer)
+        public async Task Vote(List<QuestionViewModel> questions)
         {
-            Debug.WriteLine($"Voting for {answer}");
             var voteClient = new VoteClient();
 
             // Create our token
@@ -127,9 +127,13 @@ namespace EvotoClient.ViewModel
                     }
                 };
 
-                var answerModel = new BlockchainAnswerModel
+                var answerModel = new BlockchainVoteModel
                 {
-                    Answer = answer
+                    Answers = questions.Select(q => new BlockchainVoteAnswerModel
+                    {
+                        Answer = q.SelectedAnswer.Answer,
+                        Question = q.QuestionNumber
+                    }).ToList()
                 };
 
                 await Model.WriteTransaction(txIds, toInfo, answerModel);
