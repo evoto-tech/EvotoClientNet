@@ -10,6 +10,10 @@ namespace EvotoClient
     {
         public static void HandleArgs(IList<string> args)
         {
+            var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
+            mainVm.SetStatus("Test");
+            //mainVm.SetStatus(string.Join(" ", args));
+
             // Ensure only handling one argument (aside from the exe path)
             if (args.Count != 2)
                 return;

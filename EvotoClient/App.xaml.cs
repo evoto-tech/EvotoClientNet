@@ -13,20 +13,31 @@ namespace EvotoClient
     public partial class App : Application, ISingleInstanceApp
     {
         private const string Unique = "Evoto_Client";
+        private static string[] _args;
 
         [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
             if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
                 DispatcherHelper.Initialize();
                 var application = new App();
 
+                _args = args;
+
                 application.InitializeComponent();
                 application.Run();
 
                 // Allow single instance code to perform cleanup operations
                 SingleInstance<App>.Cleanup();
+            }
+        }
+
+        public void HandleArgsCallback()
+        {
+            if (_args != null)
+            {
+                CustomUriHandler.HandleArgs(_args);
             }
         }
 
