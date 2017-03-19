@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Threading;
 using Microsoft.Practices.ServiceLocation;
@@ -9,6 +8,10 @@ namespace EvotoClient.ViewModel
     public abstract class EvotoViewModelBase : ViewModelBase
     {
         private MainViewModel _mainVm;
+
+        public event EventHandler<EventArgs> Loaded;
+
+        public bool IsLoaded { get; private set; }
 
         protected EvotoViewModelBase()
         {
@@ -26,6 +29,12 @@ namespace EvotoClient.ViewModel
         protected T GetVm<T>() where T : EvotoViewModelBase
         {
             return ServiceLocator.Current.GetInstance<T>();
+        }
+
+        public void ViewLoaded(object sender, EventArgs e)
+        {
+            Loaded?.Invoke(sender, e);
+            IsLoaded = true;
         }
     }
 }

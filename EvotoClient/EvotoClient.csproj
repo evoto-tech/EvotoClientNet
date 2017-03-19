@@ -167,6 +167,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Converters\BoolToVisibilityHiddenConverter.cs" />
+    <Compile Include="Transitions\CenterConverter.cs" />
+    <Compile Include="Transitions\HeightConverter.cs" />
+    <Compile Include="Transitions\InvertConverter.cs" />
+    <Compile Include="Transitions\PageTransitionType.cs" />
+    <Compile Include="Transitions\WidthConverter.cs" />
     <Compile Include="CustomUriHandler.cs" />
     <Compile Include="SingletonInstance.cs" />
     <Compile Include="ViewModel\EvotoViewModelBase.cs" />
@@ -178,6 +183,7 @@
       <SubType>Code</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Compile>
+    <Compile Include="ViewModel\AnswerViewModel.cs" />
     <Compile Include="ViewModel\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModel\RegisterViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
@@ -189,6 +195,18 @@
     <Page Include="Views\ForgotPasswordView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PageTransition.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AnswerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\QuestionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VoteView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -214,7 +232,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\VoteViewModel.cs" />
+    <Compile Include="Views\PageTransition.xaml.cs">
+      <DependentUpon>PageTransition.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AnswerView.xaml.cs">
+      <DependentUpon>AnswerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\QuestionView.xaml.cs">
+      <DependentUpon>QuestionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ResetPasswordView.xaml.cs">
       <DependentUpon>ResetPasswordView.xaml</DependentUpon>
     </Compile>
@@ -290,6 +318,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,11 +5,11 @@ using EvotoClient.ViewModel;
 namespace EvotoClient.Views
 {
     /// <summary>
-    ///     Interaction logic for VoteView.xaml
+    ///     Interaction logic for AnswerView.xaml
     /// </summary>
-    public partial class VoteView : UserControl
+    public partial class AnswerView : UserControl
     {
-        public VoteView()
+        public AnswerView()
         {
             InitializeComponent();
             Loaded += OnLoad;

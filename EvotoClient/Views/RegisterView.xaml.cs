@@ -1,5 +1,7 @@
 ﻿using System.Security;
+using System.Windows;
 using System.Windows.Controls;
+using EvotoClient.ViewModel;
 using Models;
 using Models.Forms;
 
@@ -13,6 +15,12 @@ namespace EvotoClient.Views
         public RegisterView()
         {
             InitializeComponent();
+            Loaded += OnLoad;
+        }
+
+        private void OnLoad(object sender, RoutedEventArgs e)
+        {
+            ((EvotoViewModelBase)DataContext).ViewLoaded(sender, e);
         }
 
         public SecureString SecurePassword => Password.SecurePassword;
