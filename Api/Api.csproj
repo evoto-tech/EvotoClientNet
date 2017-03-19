@@ -77,6 +77,8 @@
     <Compile Include="Requests\VerifyEmailRequestModel.cs" />
     <Compile Include="Requests\ResetPasswordRequestModel.cs" />
     <Compile Include="Requests\ForgotPasswordRequestModel.cs" />
+    <Compile Include="Requests\ResetPasswordRequestModel.cs" />
+    <Compile Include="Requests\ForgotPasswordRequestModel.cs" />
     <Compile Include="Requests\GetVoteRequestModel.cs" />
     <Compile Include="Requests\BlindedTokenRequestModel.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />

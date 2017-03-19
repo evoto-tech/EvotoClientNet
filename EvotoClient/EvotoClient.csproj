@@ -167,6 +167,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Converters\BoolToVisibilityHiddenConverter.cs" />
+    <Compile Include="CustomUriHandler.cs" />
+    <Compile Include="SingletonInstance.cs" />
     <Compile Include="Transitions\CenterConverter.cs" />
     <Compile Include="Transitions\HeightConverter.cs" />
     <Compile Include="Transitions\InvertConverter.cs" />
