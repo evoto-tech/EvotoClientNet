@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using EvotoClient.ViewModel;
 using GalaSoft.MvvmLight.Threading;
@@ -50,7 +51,8 @@ namespace EvotoClient
 
         public bool SignalExternalCommandLineArgs(IList<string> args)
         {
-            CustomUriHandler.HandleArgs(args);
+            // Skip first argument (filename.exe)
+            CustomUriHandler.HandleArgs(args.Skip(1).ToList());
 
             return true;
         }

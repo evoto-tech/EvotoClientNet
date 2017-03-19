@@ -10,15 +10,11 @@ namespace EvotoClient
     {
         public static void HandleArgs(IList<string> args)
         {
-            var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
-            mainVm.SetStatus("Test");
-            //mainVm.SetStatus(string.Join(" ", args));
-
-            // Ensure only handling one argument (aside from the exe path)
-            if (args.Count != 2)
+            // Ensure only handling one argument
+            if (args.Count != 1)
                 return;
 
-            var arg = args[1];
+            var arg = args[0];
             // Ensure there's nothing funny going on with the custom uri
             if (arg.Substring(0, 8) != "evoto://")
                 return;
@@ -57,10 +53,10 @@ namespace EvotoClient
             resetPassVm.SetToken(arg);
         }
 
-        private static void HandleConfirmEmail(string[] args)
+        private static void HandleConfirmEmail(IReadOnlyList<string> args)
         {
             // Expect 3 args
-            if (args.Length != 3)
+            if (args.Count != 3)
                 return;
 
             // Get email and validate

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows;
 using Blockchain;
 using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
@@ -25,6 +26,12 @@ namespace EvotoClient.ViewModel
         {
             MultiChainTools.SubDirectory = "client";
             CurrentView = _loginVm;
+
+            Loaded += (sender, args) =>
+            {
+                var app = Application.Current as App;
+                app?.HandleArgsCallback();
+            };
         }
 
         #region Events
