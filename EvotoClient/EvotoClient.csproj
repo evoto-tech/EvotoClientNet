@@ -167,7 +167,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="Converters\BoolToVisibilityHiddenConverter.cs" />
-    <Compile Include="CustomUriHandler.cs" />
     <Compile Include="SingletonInstance.cs" />
     <Compile Include="Transitions\CenterConverter.cs" />
     <Compile Include="Transitions\HeightConverter.cs" />
@@ -175,7 +174,6 @@
     <Compile Include="Transitions\PageTransitionType.cs" />
     <Compile Include="Transitions\WidthConverter.cs" />
     <Compile Include="CustomUriHandler.cs" />
-    <Compile Include="SingletonInstance.cs" />
     <Compile Include="ViewModel\EvotoViewModelBase.cs" />
     <Compile Include="ViewModel\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
