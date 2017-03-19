@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.CommandWpf;
-using Models;
+using Models.Forms;
 using Models.Validate;
 
 namespace EvotoClient.ViewModel
@@ -24,6 +24,7 @@ namespace EvotoClient.ViewModel
 
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             LoginCommand = new RelayCommand<object>(DoLogin);
+            ForgotPasswordCommand = new RelayCommand(DoForgotPassword);
         }
 
         #region Commands 
@@ -31,6 +32,8 @@ namespace EvotoClient.ViewModel
         public RelayCommand<object> LoginCommand { get; }
 
         public RelayCommand RegisterCommand { get; }
+
+        public RelayCommand ForgotPasswordCommand { get; }
 
         #endregion
 
@@ -149,6 +152,12 @@ namespace EvotoClient.ViewModel
         private bool CanRegister()
         {
             return RegisterEnabled;
+        }
+
+        private void DoForgotPassword()
+        {
+            ErrorMessage = "";
+            MainVm.ChangeView(EvotoView.ForgotPassword);
         }
 
         public static string ConvertToUnsecureString(SecureString securePassword)

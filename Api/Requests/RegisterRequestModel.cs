@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Models;
+using Models.Forms;
 
 namespace Api.Requests
 {

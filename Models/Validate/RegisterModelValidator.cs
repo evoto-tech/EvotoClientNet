@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Models.Forms;
 
 namespace Models.Validate
 {
