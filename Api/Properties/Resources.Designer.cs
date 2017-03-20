@@ -151,6 +151,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to resendEmail.
+        /// </summary>
+        internal static string ResendVerificationEmailAction {
+            get {
+                return ResourceManager.GetString("ResendVerificationEmailAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resetPassword.
         /// </summary>
         internal static string ResetPasswordAction {

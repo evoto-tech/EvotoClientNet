@@ -74,6 +74,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
+    <Compile Include="Requests\ResendVerificationRequestModel.cs" />
     <Compile Include="Requests\VerifyEmailRequestModel.cs" />
     <Compile Include="Requests\ResetPasswordRequestModel.cs" />
     <Compile Include="Requests\ForgotPasswordRequestModel.cs" />

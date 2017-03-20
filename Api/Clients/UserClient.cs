@@ -43,5 +43,11 @@ namespace Api.Clients
             var requestModel = new VerifyEmailRequestModel(verifyEmailModel);
             await PostAsync(Resources.VerifyEmailAction, requestModel);
         }
+
+        public async Task ResendVerificationEmail(string email)
+        {
+            var requestModel = new ResendVerificationRequestModel(email);
+            await PostAsync(Resources.ResendVerificationEmailAction, requestModel);
+        }
     }
 }

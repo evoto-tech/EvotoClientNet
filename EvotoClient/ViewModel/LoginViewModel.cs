@@ -25,6 +25,7 @@ namespace EvotoClient.ViewModel
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             LoginCommand = new RelayCommand<object>(DoLogin);
             ForgotPasswordCommand = new RelayCommand(DoForgotPassword);
+            ResendCommand = new RelayCommand(DoResend);
         }
 
         #region Commands 
@@ -34,6 +35,8 @@ namespace EvotoClient.ViewModel
         public RelayCommand RegisterCommand { get; }
 
         public RelayCommand ForgotPasswordCommand { get; }
+
+        public RelayCommand ResendCommand { get; }
 
         #endregion
 
@@ -202,6 +205,37 @@ namespace EvotoClient.ViewModel
         {
             ErrorMessage = "";
             MainVm.ChangeView(EvotoView.ForgotPassword);
+        }
+
+        private void DoResend()
+        {
+            if (!ShowConfirmEmail)
+                return;
+
+            Loading = true;
+            ErrorMessage = "";
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await _userClient.ResendVerificationEmail(Email);
+
+                    Ui(() =>
+                    {
+                        // TODO: This shouldn't be using the error property
+                        ErrorMessage = "Email sent!";
+                        Loading = false;
+                    });
+                }
+                catch (ApiException)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = "Could not resend verification email";
+                        Loading = false;
+                    });
+                }
+            });
         }
 
         public static string ConvertToUnsecureString(SecureString securePassword)
