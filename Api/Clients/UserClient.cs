@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Api.Exceptions;
 using Api.Properties;
 using Api.Requests;
 using Api.Responses;
@@ -28,7 +30,22 @@ namespace Api.Clients
         public async Task ForgotPassword(ForgotPasswordModel forgotPasswordModel)
         {
             var requestModel = new ForgotPasswordRequestModel(forgotPasswordModel);
-            await PostAsync(Resources.ForgotPasswordAction, requestModel);
+            try
+            {
+                await PostAsync(Resources.ForgotPasswordAction, requestModel);
+            }
+            catch (BadRequestException e)
+            {
+                ThrowNewIfDelayException(e);
+
+                if (e.Message.StartsWith("Unconfirmed Email"))
+                {
+                    throw new UnconfirmedEmailException();
+                }
+
+                throw;
+            }
+            
         }
 
         public async Task ResetPassword(ResetPasswordModel resetPasswordModel)
@@ -42,6 +59,29 @@ namespace Api.Clients
         {
             var requestModel = new VerifyEmailRequestModel(verifyEmailModel);
             await PostAsync(Resources.VerifyEmailAction, requestModel);
+        }
+
+        public async Task ResendVerificationEmail(string email)
+        {
+            var requestModel = new ResendVerificationRequestModel(email);
+            try
+            {
+                await PostAsync(Resources.ResendVerificationEmailAction, requestModel);
+            }
+            catch (BadRequestException e)
+            {
+                ThrowNewIfDelayException(e);
+                throw;
+            }
+        }
+
+        private static void ThrowNewIfDelayException(Exception e)
+        {
+            if (e.Message.StartsWith("Please wait"))
+            {
+                var delay = e.Message.Substring(12);
+                throw new TokenDelayException(delay);
+            }
         }
     }
 }

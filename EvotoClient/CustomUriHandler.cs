@@ -27,7 +27,7 @@ namespace EvotoClient
             switch (uriParams[0].ToLower())
             {
                 case "resetpassword":
-                    HandleResetPassword(uriParams[1]);
+                    HandleResetPassword(uriParams);
                     break;
                 case "confirmemail":
                     HandleConfirmEmail(uriParams);
@@ -35,10 +35,24 @@ namespace EvotoClient
             }
         }
 
-        private static void HandleResetPassword(string arg)
+        private static void HandleResetPassword(IReadOnlyList<string> args)
         {
+            // Expect 3 args
+            if (args.Count != 3)
+                return;
+
+            // Get email and validate
+            var email = args[1];
+
+            var val = new EmailAddressAttribute();
+            if (!val.IsValid(email))
+                return;
+
+            // Get token and validate
+            var token = args[2];
+
             // Token should only contain letters and numbers
-            if (InvalidToken(arg))
+            if (InvalidToken(token))
                 return;
 
             // Check we're not already logged in
@@ -50,7 +64,7 @@ namespace EvotoClient
             mainVm.ChangeView(EvotoView.ResetPassword);
 
             var resetPassVm = ServiceLocator.Current.GetInstance<ResetPasswordViewModel>();
-            resetPassVm.SetToken(arg);
+            resetPassVm.SetToken(email, token);
         }
 
         private static void HandleConfirmEmail(IReadOnlyList<string> args)
@@ -62,8 +76,8 @@ namespace EvotoClient
             // Get email and validate
             var email = args[1];
 
-            var foo = new EmailAddressAttribute();
-            if (!foo.IsValid(email))
+            var val = new EmailAddressAttribute();
+            if (!val.IsValid(email))
                 return;
 
             // Get token and validate

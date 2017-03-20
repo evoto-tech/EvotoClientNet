@@ -108,6 +108,23 @@ namespace EvotoClient.ViewModel
                         Loading = false;
                     });
                 }
+                catch (TokenDelayException e)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage =
+                            $"Please wait {e.Message} before sending another email. Be sure to check your spam folder";
+                        Loading = false;
+                    });
+                }
+                catch (UnconfirmedEmailException)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = "This email has not been verified. Please contact an administrator.";
+                        Loading = false;
+                    });
+                }
                 catch (BadRequestException e)
                 {
                     Ui(() =>
@@ -135,6 +152,16 @@ namespace EvotoClient.ViewModel
         private void DoContinue()
         {
             MainVm.ChangeView(EvotoView.ResetPassword);
+            if (!string.IsNullOrWhiteSpace(Email))
+            {
+                var resetVm = ServiceLocator.Current.GetInstance<ResetPasswordViewModel>();
+                resetVm.SetEmail(Email, false);
+            }
+        }
+
+        public void SetEmail(string email)
+        {
+            Email = email;
         }
 
         #endregion

@@ -147,6 +147,9 @@
   <data name="RegisterAction" xml:space="preserve">
     <value>register</value>
   </data>
+  <data name="ResendVerificationEmailAction" xml:space="preserve">
+    <value>resendEmail</value>
+  </data>
   <data name="ResetPasswordAction" xml:space="preserve">
     <value>resetPassword</value>
   </data>
