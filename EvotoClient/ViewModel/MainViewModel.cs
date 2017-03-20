@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Windows;
 using Blockchain;
-using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 using Models;
 
@@ -54,11 +53,12 @@ namespace EvotoClient.ViewModel
 
         public bool LoggedIn
         {
-            get {  return _loggedIn;}
+            get { return _loggedIn; }
             set { Set(ref _loggedIn, value); }
         }
 
         private string _status;
+
         public string Status
         {
             get { return _status; }

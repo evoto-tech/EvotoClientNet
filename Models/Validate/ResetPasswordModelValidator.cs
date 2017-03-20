@@ -8,6 +8,7 @@ namespace Models.Validate
         public ResetPasswordModelValidator()
         {
             RuleFor(x => x.Password).Length(6, 30).Must(LoginModelValidator.ValidPassword);
+            RuleFor(x => x.Token).NotEmpty();
         }
     }
 }

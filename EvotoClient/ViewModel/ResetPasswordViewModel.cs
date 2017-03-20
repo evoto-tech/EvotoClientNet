@@ -122,10 +122,7 @@ namespace EvotoClient.ViewModel
                     await _userClient.ResetPassword(resetPasswordModel);
                     MainVm.ChangeView(EvotoView.Home);
 
-                    Ui(() =>
-                    {
-                        Loading = false;
-                    });
+                    Ui(() => { Loading = false; });
                 }
                 catch (BadRequestException e)
                 {
@@ -156,19 +153,32 @@ namespace EvotoClient.ViewModel
             MainVm.ChangeView(EvotoView.ForgotPassword);
         }
 
-        public void SetToken(string token)
+        public void SetToken(string email, string token)
         {
             Ui(() =>
             {
                 Token = token;
+                Email = email;
+                ErrorMessage = "";
             });
         }
 
-        public void SetEmail(string email)
+        public void SetEmail(string email, bool sent = true)
         {
             Ui(() =>
             {
                 Email = email;
+                Token = "";
+                if (sent)
+                {
+                    // TODO: Don't use Error Message
+                    ErrorMessage =
+                        $"An email has been sent to {email}.\nPlease click the link in the email, or enter the token above.";
+                }
+                else
+                {
+                    ErrorMessage = "";
+                }
             });
         }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Practices.ServiceLocation;
 using Models.Forms;
 using Models.Validate;
 
@@ -97,7 +98,7 @@ namespace EvotoClient.ViewModel
 
         #region Methods
 
-        private bool IsFormValid(object parameter, bool updateErrorMessage, out LoginModel loginModel)
+        private bool IsFormValid(object parameter, out LoginModel loginModel)
         {
             loginModel = null;
             var valid = true;
@@ -115,7 +116,16 @@ namespace EvotoClient.ViewModel
                 valid = false;
             }
 
-            if (updateErrorMessage && !valid)
+            if (ShowConfirmEmail)
+            {
+                if (string.IsNullOrWhiteSpace(EmailToken))
+                {
+                    errorMessages.Add("Email Token is required");
+                    valid = false;
+                }
+            }
+
+            if (!valid)
                 ErrorMessage = string.Join("\n", errorMessages);
             return valid;
         }
@@ -123,7 +133,7 @@ namespace EvotoClient.ViewModel
         private void DoLogin(object parameter)
         {
             LoginModel loginModel;
-            if (!IsFormValid(parameter, true, out loginModel))
+            if (!IsFormValid(parameter, out loginModel))
                 return;
 
             MainVm.LoggedIn = false;
@@ -163,7 +173,7 @@ namespace EvotoClient.ViewModel
                     {
                         ShowConfirmEmail = true;
                         ErrorMessage =
-                            "This email is unconfirmed. Please enter the verification code sent to this email.";
+                            "This email is unconfirmed. Please enter the verification token sent to this email.";
                         Loading = false;
                     });
                 }
@@ -204,6 +214,11 @@ namespace EvotoClient.ViewModel
         private void DoForgotPassword()
         {
             ErrorMessage = "";
+            if (!string.IsNullOrWhiteSpace(Email))
+            {
+                var forgotPasswordVM = ServiceLocator.Current.GetInstance<ForgotPasswordViewModel>();
+                forgotPasswordVM.SetEmail(Email);
+            }
             MainVm.ChangeView(EvotoView.ForgotPassword);
         }
 
@@ -224,6 +239,14 @@ namespace EvotoClient.ViewModel
                     {
                         // TODO: This shouldn't be using the error property
                         ErrorMessage = "Email sent!";
+                        Loading = false;
+                    });
+                }
+                catch (TokenDelayException e)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = $"Please wait {e.Message} before sending another email. Be sure to check your spam folder";
                         Loading = false;
                     });
                 }
