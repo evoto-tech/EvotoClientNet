@@ -25,64 +25,54 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="120" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="0">First Name</Label>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}">
+        <Label Grid.Row="0" Grid.Column="0"
+               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            Email
+        </Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                 Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
             <TextBox.InputBindings>
                 <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
                             Key="Return" />
             </TextBox.InputBindings>
         </TextBox>
 
-        <Label Grid.Row="1" Grid.Column="0">Last Name</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
-                            Key="Return" />
-            </TextBox.InputBindings>
-        </TextBox>
-
-        <Label Grid.Row="2" Grid.Column="0">ID Number</Label>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding IdNumber, UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
-                            Key="Return" />
-            </TextBox.InputBindings>
-        </TextBox>
-
-        <Label Grid.Row="3" Grid.Column="0">Email</Label>
-        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}">
-            <TextBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
-                            Key="Return" />
-            </TextBox.InputBindings>
-        </TextBox>
-
-        <Label Grid.Row="4" Grid.Column="0">Password</Label>
-        <PasswordBox Grid.Row="4" Grid.Column="1" x:Name="Password">
+        <Label Grid.Row="1" Grid.Column="0"
+               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            Password
+        </Label>
+        <PasswordBox Grid.Row="1" Grid.Column="1" x:Name="Password"
+                     Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
             <PasswordBox.InputBindings>
                 <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
                             Key="Return" />
             </PasswordBox.InputBindings>
         </PasswordBox>
 
-        <Label Grid.Row="5" Grid.Column="0">Confirm Password</Label>
-        <PasswordBox Grid.Row="5" Grid.Column="1" x:Name="PasswordConfirm">
+        <Label Grid.Row="2" Grid.Column="0"
+               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            Confirm Password
+        </Label>
+        <PasswordBox Grid.Row="2" Grid.Column="1" x:Name="PasswordConfirm"
+                     Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
             <PasswordBox.InputBindings>
                 <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
                             Key="Return" />
             </PasswordBox.InputBindings>
         </PasswordBox>
+
+        <ItemsControl
+            Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding CustomFields}" />
 
         <Button
-            Grid.Row="6"
+            Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0 5px"
@@ -92,15 +82,15 @@
         </Button>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                     Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
                      IsIndeterminate="True"
                      Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
 
-        <TextBlock Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" />
+        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" />
 
-        <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2">
+        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2">
             <Hyperlink Command="{Binding ReturnToLoginCommand}">Login</Hyperlink>
         </TextBlock>
     </Grid>

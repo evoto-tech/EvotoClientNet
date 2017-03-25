@@ -123,6 +123,9 @@
   <data name="CurrentVotesAction" xml:space="preserve">
     <value>votes</value>
   </data>
+  <data name="CustomUserFieldsAction" xml:space="preserve">
+    <value>customFields</value>
+  </data>
   <data name="DetailsAction" xml:space="preserve">
     <value>details/{0}</value>
   </data>

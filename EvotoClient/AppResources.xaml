@@ -39,5 +39,8 @@
     <DataTemplate DataType="{x:Type vm:AnswerViewModel}">
         <views:AnswerView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:CustomUserFieldViewModel}">
+        <views:CustomUserFieldView />
+    </DataTemplate>
 
 </ResourceDictionary>

@@ -5,6 +5,7 @@ using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
+using Models;
 using Models.Forms;
 using Models.Validate;
 
@@ -21,6 +22,10 @@ namespace EvotoClient.ViewModel
             _userClient = new UserClient();
             RegisterCommand = new RelayCommand<object>(Register);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
+
+            CustomFields = new ObservableRangeCollection<CustomUserFieldViewModel>();
+
+            Loaded += (sender, args) => { Task.Run(async () => { await LoadCustomFields(); }); };
         }
 
         #region Commands
@@ -32,13 +37,19 @@ namespace EvotoClient.ViewModel
 
         #region Properties
 
-        private bool _loading;
+        private bool _loading = true;
 
         public bool Loading
         {
             get { return _loading; }
-            set { Set(ref _loading, value); }
+            set
+            {
+                Set(ref _loading, value);
+                RaisePropertyChanged(nameof(ShowFields));
+            }
         }
+
+        public bool ShowFields => !Loading;
 
         private string _errorMessage;
 
@@ -46,22 +57,6 @@ namespace EvotoClient.ViewModel
         {
             get { return _errorMessage; }
             set { Set(ref _errorMessage, value); }
-        }
-
-        private string _firstName;
-
-        public string FirstName
-        {
-            get { return _firstName; }
-            set { Set(ref _firstName, value); }
-        }
-
-        private string _lastName;
-
-        public string LastName
-        {
-            get { return _lastName; }
-            set { Set(ref _lastName, value); }
         }
 
         private string _email;
@@ -72,13 +67,7 @@ namespace EvotoClient.ViewModel
             set { Set(ref _email, value); }
         }
 
-        private string _idNumber;
-
-        public string IdNumber
-        {
-            get { return _idNumber; }
-            set { Set(ref _idNumber, value); }
-        }
+        public ObservableRangeCollection<CustomUserFieldViewModel> CustomFields { get; }
 
         #endregion
 
@@ -103,7 +92,7 @@ namespace EvotoClient.ViewModel
                 valid = false;
             }
 
-            registerModel = new RegisterModel(Email, FirstName, LastName, IdNumber, p1, p2);
+            registerModel = new RegisterModel(Email, p1, p2);
             var v = _validator.Validate(registerModel);
             if (!v.IsValid)
             {
@@ -150,6 +139,32 @@ namespace EvotoClient.ViewModel
                     });
                 }
             });
+        }
+
+        private async Task LoadCustomFields()
+        {
+            Ui(() => { Loading = true; });
+
+            try
+            {
+                var fields = await _userClient.GetCustomFields();
+
+                Ui(() =>
+                {
+                    CustomFields.Clear();
+                    CustomFields.AddRange(fields.Select(f => new CustomUserFieldViewModel(f)));
+
+                    Loading = false;
+                });
+            }
+            catch (ApiException e)
+            {
+                Ui(() =>
+                {
+                    ErrorMessage = e.Message;
+                    Loading = false;
+                });
+            }
         }
 
         private void BackToLogin()
