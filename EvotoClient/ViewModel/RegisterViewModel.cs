@@ -44,12 +44,23 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _loading, value);
-                RaisePropertyChanged(nameof(ShowFields));
                 RegisterCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public bool ShowFields => !Loading;
+        private bool _fieldsLoading;
+
+        public bool FieldsLoading
+        {
+            get { return _fieldsLoading;}
+            set
+            {
+                Set(ref _fieldsLoading, value);
+                RaisePropertyChanged(nameof(ShowFields));
+            }
+        }
+
+        public bool ShowFields => !FieldsLoading;
 
         private string _errorMessage;
 
@@ -165,7 +176,7 @@ namespace EvotoClient.ViewModel
 
         private async Task LoadCustomFields()
         {
-            Ui(() => { Loading = true; });
+            Ui(() => { FieldsLoading = true; });
 
             try
             {
@@ -178,7 +189,7 @@ namespace EvotoClient.ViewModel
                     CustomFields.Clear();
                     CustomFields.AddRange(fields.Select(f => new CustomUserFieldViewModel(f)));
 
-                    Loading = false;
+                    FieldsLoading = false;
                 });
             }
             catch (ApiException e)
@@ -187,7 +198,7 @@ namespace EvotoClient.ViewModel
                 {
                     // Oh no!
                     ErrorMessage = e.Message;
-                    Loading = false;
+                    FieldsLoading = false;
                 });
             }
         }
