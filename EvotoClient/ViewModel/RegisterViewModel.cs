@@ -126,7 +126,7 @@ namespace EvotoClient.ViewModel
 
         private bool CanRegister(object _)
         {
-            return !Loading;
+            return !FieldsLoading;
         }
 
         private void DoRegister(object parameter)
