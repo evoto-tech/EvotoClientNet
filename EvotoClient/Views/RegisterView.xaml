@@ -68,6 +68,7 @@
         </PasswordBox>
 
         <ItemsControl
+            IsTabStop="False"
             Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding CustomFields}" />
 
