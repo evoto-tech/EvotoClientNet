@@ -1,4 +1,6 @@
-﻿namespace Models.Forms
+﻿using System.Collections.Generic;
+
+namespace Models.Forms
 {
     public class RegisterModel
     {
@@ -12,5 +14,7 @@
         public string Email { get; }
         public string Password { get; }
         public string ConfirmPassword { get; }
+
+        public List<CustomUserField> CustomFields { get; set; }
     }
 }

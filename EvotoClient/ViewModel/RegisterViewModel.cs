@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
@@ -20,7 +19,7 @@ namespace EvotoClient.ViewModel
         {
             _validator = new RegisterModelValidator();
             _userClient = new UserClient();
-            RegisterCommand = new RelayCommand<object>(Register);
+            RegisterCommand = new RelayCommand<object>(DoRegister, CanRegister);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
 
             CustomFields = new ObservableRangeCollection<CustomUserFieldViewModel>();
@@ -46,6 +45,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _loading, value);
                 RaisePropertyChanged(nameof(ShowFields));
+                RegisterCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -77,21 +77,28 @@ namespace EvotoClient.ViewModel
         {
             registerModel = null;
             var valid = true;
-            var errorMessages = new List<string>();
+
+            // Start out with list of custom field messages, as they should be first. Maybe
+            var errorMessages =
+                CustomFields.Where(cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
+                    .Select(f => $"{f.Name} is Required").ToList();
 
             var passwordContainer = parameter as IHavePasswords;
             if (passwordContainer == null)
                 return false;
 
+            // Pull out our passwords
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
 
+            // Check they match
             if (p1 != p2)
             {
                 errorMessages.Add("Passwords do not match");
                 valid = false;
             }
 
+            // Validate the form
             registerModel = new RegisterModel(Email, p1, p2);
             var v = _validator.Validate(registerModel);
             if (!v.IsValid)
@@ -100,16 +107,25 @@ namespace EvotoClient.ViewModel
                 valid = false;
             }
 
+            // Display error message(s) if invalid
             if (!valid)
                 ErrorMessage = string.Join("\n", errorMessages);
             return valid;
         }
 
-        private void Register(object parameter)
+        private bool CanRegister(object _)
+        {
+            return !Loading;
+        }
+
+        private void DoRegister(object parameter)
         {
             RegisterModel registerModel;
+            // Ensure form is valid
             if (!IsFormValid(parameter, out registerModel))
                 return;
+
+            registerModel.CustomFields = CustomFields.Select(cf => cf.GetModel()).ToList();
 
             Loading = true;
             ErrorMessage = "";
@@ -117,9 +133,15 @@ namespace EvotoClient.ViewModel
             {
                 try
                 {
+                    // Send registration info to API
                     await _userClient.Register(registerModel);
+
+                    // Redirect to login page
+                    // TODO: If email verification off, login?
                     MainVm.ChangeView(EvotoView.Login);
                     var loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
+
+                    // Autofill their email and ask them to verify it
                     loginVm.VerifyEmail(Email);
                 }
                 catch (BadRequestException e)
@@ -147,10 +169,12 @@ namespace EvotoClient.ViewModel
 
             try
             {
+                // Get custom fields from API
                 var fields = await _userClient.GetCustomFields();
 
                 Ui(() =>
                 {
+                    // Display custom fields
                     CustomFields.Clear();
                     CustomFields.AddRange(fields.Select(f => new CustomUserFieldViewModel(f)));
 
@@ -161,6 +185,7 @@ namespace EvotoClient.ViewModel
             {
                 Ui(() =>
                 {
+                    // Oh no!
                     ErrorMessage = e.Message;
                     Loading = false;
                 });

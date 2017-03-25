@@ -4,34 +4,28 @@ namespace EvotoClient.ViewModel
 {
     public class CustomUserFieldViewModel : EvotoViewModelBase
     {
-        private string _name;
-
-        private bool _required;
-
-        private string _value;
+        private readonly CustomUserField _model;
 
         public CustomUserFieldViewModel(CustomUserField model)
         {
-            Name = model.Name;
-            Required = model.Required;
+            _model = model;
         }
 
-        public string Name
-        {
-            get { return _name; }
-            set { Set(ref _name, value); }
-        }
+        public string Name => _model.Name;
 
+        public bool Required => _model.Required;
+
+        private string _value;
         public string Value
         {
             get { return _value; }
             set { Set(ref _value, value); }
         }
 
-        public bool Required
+        public CustomUserField GetModel()
         {
-            get { return _required; }
-            set { Set(ref _required, value); }
+            _model.Value = Value;
+            return _model;
         }
     }
 }
