@@ -12,11 +12,10 @@ namespace EvotoClient.ViewModel
         Login,
         Register,
         Vote,
-        Results
+        Results,
         ForgotPassword,
         ResetPassword,
-        Home,
-        Vote
+        Home
     }
 
     public class MainViewModel : EvotoViewModelBase
@@ -103,7 +102,7 @@ namespace EvotoClient.ViewModel
                         newView = ServiceLocator.Current.GetInstance<VoteViewModel>();
                         break;
                     case EvotoView.Results:
-                        CurrentView = ServiceLocator.Current.GetInstance<ResultsViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<ResultsViewModel>();
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(view), view, null);
