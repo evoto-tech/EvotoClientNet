@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
 using GalaSoft.MvvmLight.CommandWpf;
-using Models;
+using Microsoft.Practices.ServiceLocation;
+using Models.Forms;
 using Models.Validate;
 
 namespace EvotoClient.ViewModel
@@ -24,6 +25,8 @@ namespace EvotoClient.ViewModel
 
             RegisterCommand = new RelayCommand(DoRegister, CanRegister);
             LoginCommand = new RelayCommand<object>(DoLogin);
+            ForgotPasswordCommand = new RelayCommand(DoForgotPassword);
+            ResendCommand = new RelayCommand(DoResend);
         }
 
         #region Commands 
@@ -31,6 +34,10 @@ namespace EvotoClient.ViewModel
         public RelayCommand<object> LoginCommand { get; }
 
         public RelayCommand RegisterCommand { get; }
+
+        public RelayCommand ForgotPasswordCommand { get; }
+
+        public RelayCommand ResendCommand { get; }
 
         #endregion
 
@@ -71,11 +78,27 @@ namespace EvotoClient.ViewModel
         //TODO: Pull from registrar
         public bool RegisterEnabled => true;
 
+        private bool _showConfirmEmail;
+
+        public bool ShowConfirmEmail
+        {
+            get { return _showConfirmEmail; }
+            set { Set(ref _showConfirmEmail, value); }
+        }
+
+        private string _emailToken;
+
+        public string EmailToken
+        {
+            get { return _emailToken; }
+            set { Set(ref _emailToken, value); }
+        }
+
         #endregion
 
         #region Methods
 
-        private bool IsFormValid(object parameter, bool updateErrorMessage, out LoginModel loginModel)
+        private bool IsFormValid(object parameter, out LoginModel loginModel)
         {
             loginModel = null;
             var valid = true;
@@ -93,7 +116,16 @@ namespace EvotoClient.ViewModel
                 valid = false;
             }
 
-            if (updateErrorMessage && !valid)
+            if (ShowConfirmEmail)
+            {
+                if (string.IsNullOrWhiteSpace(EmailToken))
+                {
+                    errorMessages.Add("Email Token is required");
+                    valid = false;
+                }
+            }
+
+            if (!valid)
                 ErrorMessage = string.Join("\n", errorMessages);
             return valid;
         }
@@ -101,7 +133,7 @@ namespace EvotoClient.ViewModel
         private void DoLogin(object parameter)
         {
             LoginModel loginModel;
-            if (!IsFormValid(parameter, true, out loginModel))
+            if (!IsFormValid(parameter, out loginModel))
                 return;
 
             MainVm.LoggedIn = false;
@@ -111,8 +143,18 @@ namespace EvotoClient.ViewModel
             {
                 try
                 {
+                    // Verify email first
+                    if (ShowConfirmEmail)
+                    {
+                        var model = new VerifyEmailModel(Email, EmailToken);
+                        await _userClient.VerifyEmail(model);
+                    }
                     await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
                     var userDetails = await _userClient.GetCurrentUserDetails();
+
+                    ShowConfirmEmail = false;
+                    Loading = false;
+
                     MainVm.ChangeView(EvotoView.Home);
                     MainVm.LoggedIn = true;
                     MainVm.InvokeLogin(this, userDetails);
@@ -122,6 +164,24 @@ namespace EvotoClient.ViewModel
                     Ui(() =>
                     {
                         ErrorMessage = "Invalid Username or Password";
+                        Loading = false;
+                    });
+                }
+                catch (EmailVerificationNeededException)
+                {
+                    Ui(() =>
+                    {
+                        ShowConfirmEmail = true;
+                        ErrorMessage =
+                            "This email is unconfirmed. Please enter the verification token sent to this email.";
+                        Loading = false;
+                    });
+                }
+                catch (UnauthorizedException)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = "Invalid Token";
                         Loading = false;
                     });
                 }
@@ -151,9 +211,60 @@ namespace EvotoClient.ViewModel
             return RegisterEnabled;
         }
 
+        private void DoForgotPassword()
+        {
+            ErrorMessage = "";
+            if (!string.IsNullOrWhiteSpace(Email))
+            {
+                var forgotPasswordVM = ServiceLocator.Current.GetInstance<ForgotPasswordViewModel>();
+                forgotPasswordVM.SetEmail(Email);
+            }
+            MainVm.ChangeView(EvotoView.ForgotPassword);
+        }
+
+        private void DoResend()
+        {
+            if (!ShowConfirmEmail)
+                return;
+
+            Loading = true;
+            ErrorMessage = "";
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await _userClient.ResendVerificationEmail(Email);
+
+                    Ui(() =>
+                    {
+                        // TODO: This shouldn't be using the error property
+                        ErrorMessage = "Email sent!";
+                        Loading = false;
+                    });
+                }
+                catch (TokenDelayException e)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = $"Please wait {e.Message} before sending another email. Be sure to check your spam folder";
+                        Loading = false;
+                    });
+                }
+                catch (ApiException)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = "Could not resend verification email";
+                        Loading = false;
+                    });
+                }
+            });
+        }
+
         public static string ConvertToUnsecureString(SecureString securePassword)
         {
-            if (securePassword == null) return string.Empty;
+            if (securePassword == null)
+                return string.Empty;
 
             var unmanagedString = IntPtr.Zero;
             try
@@ -165,6 +276,20 @@ namespace EvotoClient.ViewModel
             {
                 Marshal.ZeroFreeGlobalAllocUnicode(unmanagedString);
             }
+        }
+
+        public void VerifyEmail(string email)
+        {
+            Email = email;
+            ShowConfirmEmail = true;
+            ErrorMessage = "Please enter your email verification token that was sent to the above email address.";
+        }
+
+        public void SetToken(string email, string token)
+        {
+            Email = email;
+            ShowConfirmEmail = true;
+            EmailToken = token;
         }
 
         #endregion

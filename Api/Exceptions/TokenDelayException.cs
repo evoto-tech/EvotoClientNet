@@ -4,21 +4,21 @@ using System.Runtime.Serialization;
 namespace Api.Exceptions
 {
     [Serializable]
-    public class UnauthorizedException : ApiException
+    public class TokenDelayException : ApiException
     {
-        public UnauthorizedException()
+        public TokenDelayException()
         {
         }
 
-        public UnauthorizedException(string message) : base(message)
+        public TokenDelayException(string message) : base(message)
         {
         }
 
-        public UnauthorizedException(string message, Exception inner) : base(message, inner)
+        public TokenDelayException(string message, Exception inner) : base(message, inner)
         {
         }
 
-        protected UnauthorizedException(
+        protected TokenDelayException(
             SerializationInfo info,
             StreamingContext context)
             : base(info, context)

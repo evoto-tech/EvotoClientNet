@@ -269,7 +269,15 @@ namespace Api
             }
 
             if (response.StatusCode == HttpStatusCode.BadRequest)
-                throw new IncorrectLoginException(await response.Content.ReadAsStringAsync());
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                if (content.Contains("Unconfirmed Email"))
+                    throw new EmailVerificationNeededException();
+
+                throw new IncorrectLoginException(content);
+            }
+                
             if (!response.IsSuccessStatusCode)
                 throw new UnableToObtainTokenException();
 

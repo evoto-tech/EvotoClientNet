@@ -8,8 +8,15 @@ namespace Api.Exceptions
     public class BadRequestException : ApiException
     {
         public BadRequestException(ModelStateResponse modelState)
-            : base($"{string.Join("\n", modelState.ModelState.SelectMany(kv => kv.Value))}")
+            : base(GetMessage(modelState))
         {
+        }
+
+        private static string GetMessage(ModelStateResponse ms)
+        {
+            if (ms.ModelState == null)
+                return ms.Message;
+            return $"{string.Join("\n", ms.ModelState.SelectMany(kv => kv.Value))}";
         }
     }
 }

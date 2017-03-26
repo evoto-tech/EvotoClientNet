@@ -126,6 +126,9 @@
   <data name="DetailsAction" xml:space="preserve">
     <value>details/{0}</value>
   </data>
+  <data name="ForgotPasswordAction" xml:space="preserve">
+    <value>forgotPassword</value>
+  </data>
   <data name="GetBlindSignature" xml:space="preserve">
     <value />
   </data>
@@ -146,6 +149,15 @@
   </data>
   <data name="RegisterAction" xml:space="preserve">
     <value>register</value>
+  </data>
+  <data name="ResendVerificationEmailAction" xml:space="preserve">
+    <value>resendEmail</value>
+  </data>
+  <data name="ResetPasswordAction" xml:space="preserve">
+    <value>resetPassword</value>
+  </data>
+  <data name="VerifyEmailAction" xml:space="preserve">
+    <value>verifyEmail</value>
   </data>
   <data name="VoteController" xml:space="preserve">
     <value>vote/</value>

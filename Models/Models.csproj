@@ -65,15 +65,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockchainDetails.cs" />
-    <Compile Include="IHavePasswords.cs" />
-    <Compile Include="IHavePassword.cs" />
-    <Compile Include="LoginModel.cs" />
+    <Compile Include="Forms\IHavePasswords.cs" />
+    <Compile Include="Forms\IHavePassword.cs" />
+    <Compile Include="Forms\LoginModel.cs" />
+    <Compile Include="Forms\ForgotPasswordModel.cs" />
+    <Compile Include="Forms\VerifyEmailModel.cs" />
+    <Compile Include="Forms\ResetPasswordModel.cs" />
     <Compile Include="ObservableRangeCollection.cs" />
     <Compile Include="RegiMeta.cs" />
-    <Compile Include="RegisterModel.cs" />
+    <Compile Include="Forms\RegisterModel.cs" />
     <Compile Include="UserDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validate\ForgotPasswordModelValidator.cs" />
     <Compile Include="Validate\LoginModelValidator.cs" />
+    <Compile Include="Validate\ResetPasswordModelValidator.cs" />
     <Compile Include="Validate\RegisterModelValidator.cs" />
   </ItemGroup>
   <ItemGroup>

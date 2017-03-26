@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using EvotoClient.ViewModel;
 using Models;
+using Models.Forms;
 
 namespace EvotoClient.Views
 {

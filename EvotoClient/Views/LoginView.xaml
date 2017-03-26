@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <c:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
 
     <Grid
@@ -19,7 +20,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -43,7 +48,20 @@
             </PasswordBox.InputBindings>
         </PasswordBox>
 
-        <Button Grid.Row="2"
+        <Label Grid.Row="2" Grid.Column="0"
+               Visibility="{Binding ShowConfirmEmail, Converter={StaticResource BoolToVisibilityConverter}}">
+            Email Token
+        </Label>
+        <TextBox Grid.Row="2" Grid.Column="1"
+                 Text="{Binding EmailToken, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding Loading}"
+                 Visibility="{Binding ShowConfirmEmail, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+            </TextBox.InputBindings>
+        </TextBox>
+
+        <Button Grid.Row="3"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="0 5px"
@@ -53,17 +71,26 @@
         </Button>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                     Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                      IsIndeterminate="True"
                      Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
 
-        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
-                   Visibility="{Binding RegisterEnabled, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
+                   Visibility="{Binding ShowConfirmEmail, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Hyperlink Command="{Binding ResendCommand}">Resend Email Token</Hyperlink>
+        </TextBlock>
+        
+        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                   Visibility="{Binding RegisterEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
             <Hyperlink Command="{Binding RegisterCommand}">Register</Hyperlink>
+        </TextBlock>
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2">
+            <Hyperlink Command="{Binding ForgotPasswordCommand}">Forgotten Your Password?</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows;
 using Blockchain;
-using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 using Models;
 
@@ -10,10 +10,13 @@ namespace EvotoClient.ViewModel
     public enum EvotoView
     {
         Login,
-        Home,
         Register,
         Vote,
         Results
+        ForgotPassword,
+        ResetPassword,
+        Home,
+        Vote
     }
 
     public class MainViewModel : EvotoViewModelBase
@@ -24,6 +27,12 @@ namespace EvotoClient.ViewModel
         {
             MultiChainTools.SubDirectory = "client";
             CurrentView = _loginVm;
+
+            Loaded += (sender, args) =>
+            {
+                var app = Application.Current as App;
+                app?.HandleArgsCallback();
+            };
         }
 
         #region Events
@@ -46,8 +55,16 @@ namespace EvotoClient.ViewModel
 
         public bool LoggedIn
         {
-            get {  return _loggedIn;}
+            get { return _loggedIn; }
             set { Set(ref _loggedIn, value); }
+        }
+
+        private string _status;
+
+        public string Status
+        {
+            get { return _status; }
+            set { Set(ref _status, value); }
         }
 
         #endregion
@@ -64,19 +81,26 @@ namespace EvotoClient.ViewModel
             Debug.WriteLine($"Changing view to: {view}");
             Ui(() =>
             {
+                EvotoViewModelBase newView;
                 switch (view)
                 {
                     case EvotoView.Login:
-                        CurrentView = ServiceLocator.Current.GetInstance<LoginViewModel>();
-                        break;
-                    case EvotoView.Home:
-                        CurrentView = ServiceLocator.Current.GetInstance<HomeViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<LoginViewModel>();
                         break;
                     case EvotoView.Register:
-                        CurrentView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<RegisterViewModel>();
+                        break;
+                    case EvotoView.ForgotPassword:
+                        newView = ServiceLocator.Current.GetInstance<ForgotPasswordViewModel>();
+                        break;
+                    case EvotoView.ResetPassword:
+                        newView = ServiceLocator.Current.GetInstance<ResetPasswordViewModel>();
+                        break;
+                    case EvotoView.Home:
+                        newView = ServiceLocator.Current.GetInstance<HomeViewModel>();
                         break;
                     case EvotoView.Vote:
-                        CurrentView = ServiceLocator.Current.GetInstance<VoteViewModel>();
+                        newView = ServiceLocator.Current.GetInstance<VoteViewModel>();
                         break;
                     case EvotoView.Results:
                         CurrentView = ServiceLocator.Current.GetInstance<ResultsViewModel>();
@@ -84,7 +108,16 @@ namespace EvotoClient.ViewModel
                     default:
                         throw new ArgumentOutOfRangeException(nameof(view), view, null);
                 }
+
+                // Check we're not already on the right view before switching
+                if (CurrentView != newView)
+                    CurrentView = newView;
             });
+        }
+
+        public void SetStatus(string status)
+        {
+            Status = status;
         }
 
         #endregion
