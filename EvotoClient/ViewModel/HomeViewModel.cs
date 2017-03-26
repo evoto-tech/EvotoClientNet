@@ -95,7 +95,9 @@ namespace EvotoClient.ViewModel
                 }
                 else
                 {
-                    // TODO: Results
+                    MainVm.ChangeView(EvotoView.Results);
+                    var resultsVm = GetVm<ResultsViewModel>();
+                    resultsVm.SelectVote(SelectedVote);
                 }
             });
 

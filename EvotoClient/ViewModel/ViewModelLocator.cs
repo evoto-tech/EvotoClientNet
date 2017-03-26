@@ -37,6 +37,7 @@ namespace EvotoClient.ViewModel
             SimpleIoc.Default.Register<HomeViewModel>();
             SimpleIoc.Default.Register<RegisterViewModel>();
             SimpleIoc.Default.Register<VoteViewModel>();
+            SimpleIoc.Default.Register<ResultsViewModel>();
         }
 
         /// <summary>
@@ -68,6 +69,11 @@ namespace EvotoClient.ViewModel
         public VoteViewModel Vote
         {
             get { return ServiceLocator.Current.GetInstance<VoteViewModel>(); }
+        }
+
+        public ResultsViewModel Results
+        {
+            get { return ServiceLocator.Current.GetInstance<ResultsViewModel>(); }
         }
 
         /// <summary>
