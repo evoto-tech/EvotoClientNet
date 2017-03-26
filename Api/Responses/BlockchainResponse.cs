@@ -19,6 +19,9 @@ namespace Api.Responses
         [DataMember]
         public int Port { get; private set; }
 
+        [DataMember]
+        public string WalletId { get; private set; }
+
         public BlockchainDetails ToModel()
         {
             return new BlockchainDetails
@@ -26,7 +29,8 @@ namespace Api.Responses
                 Name = Name,
                 ExpiryDate = ExpiryDate,
                 ChainString = ChainString,
-                Port = Port
+                Port = Port,
+                WalletId = WalletId
             };
         }
     }

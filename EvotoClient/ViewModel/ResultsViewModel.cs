@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Api.Clients;
 using Blockchain.Models;
 using Models;
 using MultiChainLib.Client;
@@ -13,6 +12,11 @@ namespace EvotoClient.ViewModel
 {
     public class ResultsViewModel : EvotoViewModelBase
     {
+        public ResultsViewModel()
+        {
+            Data = new ObservableRangeCollection<KeyValuePair<string, int>>();
+        }
+
         #region Methods
 
         public void SelectVote(BlockchainDetails blockchain)
