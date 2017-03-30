@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -44,52 +45,60 @@ namespace EvotoClient.ViewModel
 
         private async Task GetResults(BlockchainDetails blockchain)
         {
-            // Get the answers (aka transactions sent to the registrar's wallet ID)
-            var votes = await MultiChainVm.Model.GetAddressTransactions(blockchain.WalletId);
+            // Insure the blockchain is up to date
+            await MultiChainVm.Model.WaitUntilBlockchainSynced(blockchain.Blocks);
 
-            // Read the questions from the blockchain
-            var questions = await MultiChainVm.Model.GetQuestions();
-
-            // Read the answers from hex
-            var answers = votes
-                .Select(v => MultiChainClient.ParseHexString(v.Data.First()))
-                .Select(Encoding.UTF8.GetString)
-                .Select(JsonConvert.DeserializeObject<BlockchainVoteModel>).ToList();
-
-            // For each question, get its total for each answer
-            var results = questions.Select(question =>
+            try
             {
-                // Setup response dictionary, answer -> num votes
-                var options = question.Answers.ToDictionary(a => a.Answer, a => 0);
-                foreach (var answer in answers)
+                // Get the answers (aka transactions sent to the registrar's wallet ID)
+                var votes = await MultiChainVm.Model.GetAddressTransactions(blockchain.WalletId);
+
+                // Read the questions from the blockchain
+                var questions = await MultiChainVm.Model.GetQuestions();
+
+                // Read the answers from hex
+                var answers = Enumerable.ToList(votes
+                    .Select(v => MultiChainClient.ParseHexString(v.Data.First()))
+                    .Select(Encoding.UTF8.GetString)
+                    .Select(JsonConvert.DeserializeObject<BlockchainVoteModel>));
+
+                // For each question, get its total for each answer
+                var results = questions.Select(question =>
                 {
-                    // Each vote has answer for multiple questions. Only look at the one corresponding to our current question
-                    foreach (var questionAnswer in answer.Answers.Where(a => a.Question == question.Number))
-                    {
-                        // In case we have anything unusual going on
-                        if (!options.ContainsKey(questionAnswer.Answer))
+                    // Setup response dictionary, answer -> num votes
+                    var options = question.Answers.ToDictionary(a => a.Answer, a => 0);
+                    foreach (var answer in answers)
+                        foreach (var questionAnswer in answer.Answers.Where(a => a.Question == question.Number))
                         {
-                            Debug.WriteLine($"Unexpected answer for question {questionAnswer.Question}: {questionAnswer.Answer}");
-                            continue;
+                            // In case we have anything unusual going on
+                            if (!options.ContainsKey(questionAnswer.Answer))
+                            {
+                                Debug.WriteLine(
+                                    $"Unexpected answer for question {questionAnswer.Question}: {questionAnswer.Answer}");
+                                continue;
+                            }
+                            options[questionAnswer.Answer]++;
                         }
-                        options[questionAnswer.Answer]++;
-                    }
-                }
 
-                return new
+                    return new
+                    {
+                        question.Number,
+                        question.Question,
+                        Results = options
+                    };
+                });
+
+                Ui(() =>
                 {
-                    question.Number,
-                    question.Question,
-                    Results = options
-                };
-            });
-
-            Ui(() =>
+                    Loading = false;
+                    Data.Clear();
+                    Data.AddRange(results.First().Results);
+                });
+            }
+            catch (Exception e)
             {
-                Loading = false;
-                Data.Clear();
-                Data.AddRange(results.First().Results);
-            });
+                Debug.WriteLine(e);
+            }
         }
 
         #endregion
