@@ -51,7 +51,7 @@ namespace EvotoClient.ViewModel
 
             var localPort = MultiChainTools.GetNewPort(EPortType.ClientMultichainD);
             var rpcPort = MultiChainTools.GetNewPort(EPortType.ClientRpc);
-            _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort, rpcPort);
+            _multichain = await _multiChainHandler.Connect(hostname, blockchainName, port, localPort, rpcPort, false);
         }
 
         public async Task Disconnect()
