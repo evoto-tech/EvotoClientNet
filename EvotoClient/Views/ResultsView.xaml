@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:EvotoClient.Views"
              xmlns:converters="clr-namespace:EvotoClient.Converters"
              xmlns:transitions="clr-namespace:EvotoClient.Transitions"
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
 
@@ -37,6 +38,11 @@
             x:Name="pageTransition" Margin="25"
             Visibility="{Binding ResultsVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
+
+        <Image Grid.Column="1"
+               MaxWidth="200"
+               Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+           gif:ImageBehavior.AnimatedSource="../Skins/blockchain.gif" />
 
         <Button Grid.Row="0" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
         <Button Grid.Row="0" Grid.Column="2" Command="{Binding NextCommand}">next</Button>

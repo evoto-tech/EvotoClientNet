@@ -127,6 +127,7 @@ namespace EvotoClient.ViewModel
                 }
                 else
                 {
+                    Debug.WriteLine("No votes");
                     NoVotes = true;
                 }
             });
