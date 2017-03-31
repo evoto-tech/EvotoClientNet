@@ -9,6 +9,8 @@ namespace EvotoClient.ViewModel
 {
     public class VoteViewModel : EvotoViewModelBase
     {
+        private BlockchainDetails _currentDetails;
+
         public VoteViewModel()
         {
             VoteCommand = new RelayCommand(DoVote, CanVote);
@@ -17,10 +19,7 @@ namespace EvotoClient.ViewModel
             NextCommand = new RelayCommand(DoNext, CanNext);
             PrevCommand = new RelayCommand(DoPrev, CanPrev);
 
-            Loaded += (sender, args) =>
-            {
-                TransitionView = ((VoteView) sender).pageTransition;
-            };
+            Loaded += (sender, args) => { TransitionView = ((VoteView) sender).pageTransition; };
         }
 
         #region Commands
@@ -56,7 +55,7 @@ namespace EvotoClient.ViewModel
         {
             get
             {
-                if (Questions == null || !Questions.Any() || CurrentQuestion == 0)
+                if ((Questions == null) || !Questions.Any() || (CurrentQuestion == 0))
                     return "";
                 return $"Question {CurrentQuestion} of {TotalQuestions}";
             }
@@ -112,7 +111,9 @@ namespace EvotoClient.ViewModel
 
         public void SelectVote(BlockchainDetails blockchain)
         {
-            Loading = true;
+            _currentDetails = blockchain;
+            Ui(() => { Loading = true; });
+
             Task.Run(async () =>
             {
                 await ConnectToBlockchain(blockchain);
@@ -146,7 +147,7 @@ namespace EvotoClient.ViewModel
                 Question = q.Question,
                 Answers = q.Answers.Select(a => new AnswerViewModel
                 {
-                    Answer  = a.Answer,
+                    Answer = a.Answer,
                     Info = a.Info
                 }).ToList()
             }).ToList();
@@ -176,8 +177,11 @@ namespace EvotoClient.ViewModel
                 await MultiChainVm.Vote(Questions.ToList());
                 Ui(() =>
                 {
-                    Voted = true;
                     Loading = false;
+
+                    MainVm.ChangeView(EvotoView.Results);
+                    var resultsVm = GetVm<ResultsViewModel>();
+                    resultsVm.SelectVote(_currentDetails);
                 });
             });
         }

@@ -11,10 +11,12 @@ namespace EvotoClient.ViewModel
     public class HomeViewModel : EvotoViewModelBase
     {
         private readonly HomeClient _homeApiClient;
+        private readonly VoteClient _voteClient;
 
         public HomeViewModel()
         {
             _homeApiClient = new HomeClient();
+            _voteClient = new VoteClient();
 
             var mainVm = ServiceLocator.Current.GetInstance<MainViewModel>();
 
@@ -51,7 +53,11 @@ namespace EvotoClient.ViewModel
         public bool NoVotes
         {
             get { return _noVotes; }
-            set { Set(ref _noVotes, value); }
+            set
+            {
+                Set(ref _noVotes, value);
+                RaisePropertyChanged(nameof(VotesVisible));
+            }
         }
 
         public bool NoVotesMessageVisible => !Loading && NoVotes;
@@ -78,9 +84,28 @@ namespace EvotoClient.ViewModel
 
         private void DoProceed()
         {
-            MainVm.ChangeView(EvotoView.Vote);
-            var voteView = GetVm<VoteViewModel>();
-            voteView.SelectVote(SelectedVote);
+            Loading = true;
+
+            // Contact the Registrar to see if we have voted on this vote yet
+            Task.Run(async () =>
+            {
+                var voted = await _voteClient.HasVoted(SelectedVote.ChainString);
+
+                if (!voted)
+                {
+                    MainVm.ChangeView(EvotoView.Vote);
+                    var voteView = GetVm<VoteViewModel>();
+                    voteView.SelectVote(SelectedVote);
+                }
+                else
+                {
+                    MainVm.ChangeView(EvotoView.Results);
+                    var resultsVm = GetVm<ResultsViewModel>();
+                    resultsVm.SelectVote(SelectedVote);
+                }
+            });
+
+            
         }
 
         private bool CanProceed()
@@ -106,6 +131,7 @@ namespace EvotoClient.ViewModel
                 }
                 else
                 {
+                    Debug.WriteLine("No votes");
                     NoVotes = true;
                 }
             });
