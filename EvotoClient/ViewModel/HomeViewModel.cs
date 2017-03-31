@@ -53,7 +53,11 @@ namespace EvotoClient.ViewModel
         public bool NoVotes
         {
             get { return _noVotes; }
-            set { Set(ref _noVotes, value); }
+            set
+            {
+                Set(ref _noVotes, value);
+                RaisePropertyChanged(nameof(VotesVisible));
+            }
         }
 
         public bool NoVotesMessageVisible => !Loading && NoVotes;
@@ -87,7 +91,7 @@ namespace EvotoClient.ViewModel
             {
                 var voted = await _voteClient.HasVoted(SelectedVote.ChainString);
 
-                if (!voted)
+                if (voted)
                 {
                     MainVm.ChangeView(EvotoView.Vote);
                     var voteView = GetVm<VoteViewModel>();
