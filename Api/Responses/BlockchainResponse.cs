@@ -7,17 +7,23 @@ namespace Api.Responses
     [Serializable]
     public class BlockchainResponse
     {
-        [DataMember]
+        [DataMember(Name = "name")]
         public string Name { get; private set; }
 
-        [DataMember]
+        [DataMember(Name = "expiryDate")]
         public DateTime ExpiryDate { get; private set; }
 
-        [DataMember]
+        [DataMember(Name = "chainString")]
         public string ChainString { get; private set; }
 
-        [DataMember]
+        [DataMember(Name = "port")]
         public int Port { get; private set; }
+
+        [DataMember(Name = "walletId")]
+        public string WalletId { get; private set; }
+
+        [DataMember(Name = "blocks")]
+        public int Blocks { get; private set; }
 
         public BlockchainDetails ToModel()
         {
@@ -26,7 +32,9 @@ namespace Api.Responses
                 Name = Name,
                 ExpiryDate = ExpiryDate,
                 ChainString = ChainString,
-                Port = Port
+                Port = Port,
+                WalletId = WalletId,
+                Blocks = Blocks
             };
         }
     }

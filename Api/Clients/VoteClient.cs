@@ -20,6 +20,13 @@ namespace Api.Clients
             return res.Signature;
         }
 
+        public async Task<bool> HasVoted(string blockchain)
+        {
+            var res = await
+                GetAsync<HasVotedResponse>(Resources.GetHasVotedAction, new HasVotedRequestModel(blockchain));
+            return res.Voted;
+        }
+
         public async Task<RegiMeta> GetVote(string blockchain, string walletId, string token, string blindSignature)
         {
             var res = await

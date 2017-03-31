@@ -19,12 +19,12 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="70*" />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
-        <TextBlock>You are home</TextBlock>
+        <TextBlock >Available Votes</TextBlock>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="1" Grid.Column="0"

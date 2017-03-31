@@ -8,6 +8,8 @@ namespace Models
         public DateTime ExpiryDate { get; set; }
         public string ChainString { get; set; }
         public int Port { get; set; }
+        public string WalletId { get; set; }
+        public int Blocks { get; set; }
 
         public override string ToString()
         {

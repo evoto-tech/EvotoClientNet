@@ -76,6 +76,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RefreshTokenProvider.cs" />
+    <Compile Include="Requests\HasVotedRequestModel.cs" />
     <Compile Include="Requests\ResendVerificationRequestModel.cs" />
     <Compile Include="Requests\VerifyEmailRequestModel.cs" />
     <Compile Include="Requests\ResetPasswordRequestModel.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Requests\BlindedTokenRequestModel.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />
     <Compile Include="Responses\CustomUserFieldResponse.cs" />
+    <Compile Include="Responses\HasVotedResponse.cs" />
     <Compile Include="Responses\GetPublicKeyResponse.cs" />
     <Compile Include="Responses\GetVoteResponse.cs" />
     <Compile Include="Responses\BlindSignatureResponse.cs" />

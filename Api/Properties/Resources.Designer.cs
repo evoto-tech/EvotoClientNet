@@ -115,6 +115,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hasvoted.
+        /// </summary>
+        internal static string GetHasVotedAction {
+            get {
+                return ResourceManager.GetString("GetHasVotedAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to key.
         /// </summary>
         internal static string GetPublicKeyAction {
