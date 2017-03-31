@@ -194,6 +194,7 @@
     <Compile Include="Transitions\PageTransitionType.cs" />
     <Compile Include="Transitions\WidthConverter.cs" />
     <Compile Include="CustomUriHandler.cs" />
+    <Compile Include="ViewModel\CustomUserFieldViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\EvotoViewModelBase.cs" />
     <Compile Include="ViewModel\ResetPasswordViewModel.cs" />
@@ -210,6 +211,10 @@
     <Compile Include="ViewModel\ResultsViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Views\CustomUserFieldView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ResetPasswordView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -264,6 +269,9 @@
     </Compile>
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\VoteViewModel.cs" />
+    <Compile Include="Views\CustomUserFieldView.xaml.cs">
+      <DependentUpon>CustomUserFieldView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>

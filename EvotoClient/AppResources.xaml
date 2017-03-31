@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:vm="clr-namespace:EvotoClient.ViewModel"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -39,11 +39,13 @@
     <DataTemplate DataType="{x:Type vm:AnswerViewModel}">
         <views:AnswerView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:CustomUserFieldViewModel}">
+        <views:CustomUserFieldView />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ResultsViewModel}">
         <views:ResultsView />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ChartViewModel}">
         <views:ChartView />
     </DataTemplate>
-
 </ResourceDictionary>

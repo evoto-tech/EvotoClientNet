@@ -79,6 +79,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to customFields.
+        /// </summary>
+        internal static string CustomUserFieldsAction {
+            get {
+                return ResourceManager.GetString("CustomUserFieldsAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to details/{0}.
         /// </summary>
         internal static string DetailsAction {

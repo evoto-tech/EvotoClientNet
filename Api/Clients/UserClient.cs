@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Exceptions;
 using Api.Properties;
@@ -73,6 +75,12 @@ namespace Api.Clients
                 ThrowNewIfDelayException(e);
                 throw;
             }
+        }
+
+        public async Task<IList<CustomUserField>> GetCustomFields()
+        {
+            var res = await GetAsync<IList<CustomUserFieldResponse>>(Resources.CustomUserFieldsAction);
+            return res.Select(c => c.MapToModel()).ToList();
         }
 
         private static void ThrowNewIfDelayException(Exception e)

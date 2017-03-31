@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockchainDetails.cs" />
+    <Compile Include="CustomUserField.cs" />
     <Compile Include="Forms\IHavePasswords.cs" />
     <Compile Include="Forms\IHavePassword.cs" />
     <Compile Include="Forms\LoginModel.cs" />
