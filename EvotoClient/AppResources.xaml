@@ -41,6 +41,7 @@
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:CustomUserFieldViewModel}">
         <views:CustomUserFieldView />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ResultsViewModel}">
         <views:ResultsView />
     </DataTemplate>
