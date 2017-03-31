@@ -113,13 +113,14 @@ namespace EvotoClient.ViewModel
             try
             {
                 // Get the answers (aka transactions sent to the registrar's wallet ID)
-                var votes = await MultiChainVm.Model.GetAddressTransactions(blockchain.WalletId);
+                var txs = await MultiChainVm.Model.GetAddressTransactions(blockchain.WalletId);
 
                 // Read the questions from the blockchain
                 var questions = await MultiChainVm.Model.GetQuestions();
 
                 // Read the answers from hex
-                var answers = Enumerable.ToList(votes
+                var answers = Enumerable.ToList(txs
+                    .Where(t => t.Data != null && t.Data.Any())
                     .Select(v => MultiChainClient.ParseHexString(v.Data.First()))
                     .Select(Encoding.UTF8.GetString)
                     .Select(JsonConvert.DeserializeObject<BlockchainVoteModel>));
