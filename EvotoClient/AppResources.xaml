@@ -42,5 +42,8 @@
     <DataTemplate DataType="{x:Type vm:ResultsViewModel}">
         <views:ResultsView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ChartViewModel}">
+        <views:ChartView />
+    </DataTemplate>
 
 </ResourceDictionary>

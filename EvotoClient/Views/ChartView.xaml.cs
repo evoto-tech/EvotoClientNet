@@ -5,11 +5,11 @@ using EvotoClient.ViewModel;
 namespace EvotoClient.Views
 {
     /// <summary>
-    ///     Interaction logic for ResultsView.xaml
+    ///     Interaction logic for ChartView.xaml
     /// </summary>
-    public partial class ResultsView : UserControl
+    public partial class ChartView : UserControl
     {
-        public ResultsView()
+        public ChartView()
         {
             InitializeComponent();
             Loaded += OnLoad;
@@ -17,7 +17,7 @@ namespace EvotoClient.Views
 
         private void OnLoad(object sender, RoutedEventArgs e)
         {
-            ((EvotoViewModelBase) DataContext).ViewLoaded(sender, e);
+            ((EvotoViewModelBase)DataContext).ViewLoaded(sender, e);
         }
     }
 }

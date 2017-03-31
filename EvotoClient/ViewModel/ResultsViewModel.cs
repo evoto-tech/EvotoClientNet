@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Blockchain.Models;
+using EvotoClient.Views;
+using GalaSoft.MvvmLight.Command;
 using Models;
 using MultiChainLib.Client;
 using Newtonsoft.Json;
@@ -15,8 +16,69 @@ namespace EvotoClient.ViewModel
     {
         public ResultsViewModel()
         {
-            Data = new ObservableRangeCollection<KeyValuePair<string, int>>();
+            BackCommand = new RelayCommand(DoBack);
+
+            NextCommand = new RelayCommand(DoNext, CanNext);
+            PrevCommand = new RelayCommand(DoPrev, CanPrev);
+
+            Loaded += (sender, args) => { TransitionView = ((ResultsView) sender).pageTransition; };
         }
+
+        #region Commands
+
+        public RelayCommand BackCommand { get; }
+
+        public RelayCommand NextCommand { get; }
+        public RelayCommand PrevCommand { get; }
+
+        #endregion
+
+        #region Properties
+
+        private MultiChainViewModel _multiChainVm;
+        public MultiChainViewModel MultiChainVm => _multiChainVm ?? (_multiChainVm = GetVm<MultiChainViewModel>());
+
+        public ObservableRangeCollection<ChartViewModel> Results =
+            new ObservableRangeCollection<ChartViewModel>();
+
+        public PageTransition TransitionView { private get; set; }
+
+        public bool _loading;
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                Set(ref _loading, value);
+                RaisePropertyChanged(nameof(ResultsVisible));
+            }
+        }
+
+        public bool ResultsVisible => !Loading;
+
+        private int _currentResults;
+
+        public int CurrentResults
+        {
+            get { return _currentResults; }
+            set
+            {
+                Set(ref _currentResults, value);
+                NextCommand.RaiseCanExecuteChanged();
+                PrevCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        private int _totalResults;
+
+        public int TotalResults
+        {
+            get { return _totalResults; }
+            set { Set(ref _totalResults, value); }
+        }
+
+        #endregion
 
         #region Methods
 
@@ -86,13 +148,22 @@ namespace EvotoClient.ViewModel
                         question.Question,
                         Results = options
                     };
-                });
+                }).ToList();
+
+                var chartVms = results.Select(q => new ChartViewModel(q.Results)
+                {
+                    Question = q.Question
+                }).ToList();
 
                 Ui(() =>
                 {
                     Loading = false;
-                    Data.Clear();
-                    Data.AddRange(results.First().Results);
+                    Results.Clear();
+                    Results.AddRange(chartVms);
+
+                    TotalResults = chartVms.Count;
+                    CurrentResults = 1;
+                    TransitionView.ShowPage(Results.First());
                 });
             }
             catch (Exception e)
@@ -101,29 +172,33 @@ namespace EvotoClient.ViewModel
             }
         }
 
-        #endregion
-
-        #region Properties
-
-        private MultiChainViewModel _multiChainVm;
-        public MultiChainViewModel MultiChainVm => _multiChainVm ?? (_multiChainVm = GetVm<MultiChainViewModel>());
-
-        private string _question;
-
-        public string Question
+        private void DoBack()
         {
-            get { return _question; }
-            set { Set(ref _question, value); }
+            MainVm.ChangeView(EvotoView.Home);
         }
 
-        public ObservableRangeCollection<KeyValuePair<string, int>> Data { get; }
-
-        public bool _loading;
-
-        public bool Loading
+        private void DoNext()
         {
-            get { return _loading; }
-            set { Set(ref _loading, value); }
+            CurrentResults++;
+            var page = Results[CurrentResults - 1];
+            TransitionView.ShowPage(page);
+        }
+
+        private bool CanNext()
+        {
+            return CurrentResults < TotalResults;
+        }
+
+        private void DoPrev()
+        {
+            CurrentResults--;
+            var page = Results[CurrentResults - 1];
+            TransitionView.ShowPage(page, false);
+        }
+
+        private bool CanPrev()
+        {
+            return CurrentResults > 1;
         }
 
         #endregion

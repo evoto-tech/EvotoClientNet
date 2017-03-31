@@ -190,6 +190,7 @@
     <Compile Include="Transitions\PageTransitionType.cs" />
     <Compile Include="Transitions\WidthConverter.cs" />
     <Compile Include="CustomUriHandler.cs" />
+    <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\EvotoViewModelBase.cs" />
     <Compile Include="ViewModel\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
@@ -213,7 +214,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ResultsView.xaml">
+    <Page Include="Views\ChartView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -228,6 +229,10 @@
     <Page Include="Views\QuestionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ResultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\VoteView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -255,8 +260,8 @@
     </Compile>
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\VoteViewModel.cs" />
-    <Compile Include="Views\ResultsView.xaml.cs">
-      <DependentUpon>ResultsView.xaml</DependentUpon>
+    <Compile Include="Views\ChartView.xaml.cs">
+      <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PageTransition.xaml.cs">
       <DependentUpon>PageTransition.xaml</DependentUpon>
@@ -272,6 +277,9 @@
     </Compile>
     <Compile Include="Views\ForgotPasswordView.xaml.cs">
       <DependentUpon>ForgotPasswordView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ResultsView.xaml.cs">
+      <DependentUpon>ResultsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VoteView.xaml.cs">
       <DependentUpon>VoteView.xaml</DependentUpon>
@@ -342,7 +350,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Skins\blockchain.gif" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

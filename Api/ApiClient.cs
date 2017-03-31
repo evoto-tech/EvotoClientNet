@@ -32,7 +32,7 @@ namespace Api
 #if DEBUG
             const string url = "http://localhost:15893";
 #else
-            const string url = "http://api.evoto.tech";
+            const string url = "https://api.evoto.tech";
 #endif
             _retryPolicy = Policy
                 .Handle<UnauthorizedException>()
