@@ -133,7 +133,7 @@ namespace EvotoClient.ViewModel
                 // Send our vote, encrytped if required
                 if (blockchain.ShouldEncryptResults)
                 {
-                    var key = RsaTools.KeyFromString(blockchain.EncryptKey);
+                    var key = RsaTools.PublicKeyFromString(blockchain.EncryptKey);
                     var encryptedAnswers = new BlockchainVoteModelEncrypted
                     {
                         Answers = RsaTools.EncryptMessage(JsonConvert.SerializeObject(answers), key)

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Blockchain.Models;
 using EvotoClient.Views;
 using GalaSoft.MvvmLight.Command;
 using Models;
-using MultiChainLib.Client;
-using Newtonsoft.Json;
 
 namespace EvotoClient.ViewModel
 {
@@ -112,18 +108,12 @@ namespace EvotoClient.ViewModel
 
             try
             {
-                // Get the answers (aka transactions sent to the registrar's wallet ID)
-                var txs = await MultiChainVm.Model.GetAddressTransactions(blockchain.WalletId);
-
                 // Read the questions from the blockchain
                 var questions = await MultiChainVm.Model.GetQuestions();
 
-                // Read the answers from hex
-                var answers = Enumerable.ToList(txs
-                    .Where(t => t.Data != null && t.Data.Any())
-                    .Select(v => MultiChainClient.ParseHexString(v.Data.First()))
-                    .Select(Encoding.UTF8.GetString)
-                    .Select(JsonConvert.DeserializeObject<BlockchainVoteModel>));
+                // Get answers from blockchain
+                var answers =
+                    await MultiChainVm.Model.GetResults(blockchain.WalletId, blockchain.EncryptKey, blockchain.Name);
 
                 // For each question, get its total for each answer
                 var results = questions.Select(question =>

@@ -174,7 +174,7 @@ namespace EvotoClient.ViewModel
 
             Task.Run(async () =>
             {
-                await MultiChainVm.Vote(Questions.ToList());
+                await MultiChainVm.Vote(Questions.ToList(), _currentDetails);
                 Ui(() =>
                 {
                     Loading = false;
