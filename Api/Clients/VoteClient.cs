@@ -39,9 +39,9 @@ namespace Api.Clients
             };
         }
 
-        public async Task<GetPublicKeyResponse> GetPublicKey()
+        public async Task<GetPublicKeyResponse> GetPublicKey(string blockchain)
         {
-            return await GetAsync<GetPublicKeyResponse>(Resources.GetPublicKeyAction);
+            return await GetAsync<GetPublicKeyResponse>(Resources.GetPublicKeyAction, blockchain);
         }
     }
 }

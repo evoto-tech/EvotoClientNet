@@ -139,7 +139,7 @@
     <value>hasvoted</value>
   </data>
   <data name="GetPublicKeyAction" xml:space="preserve">
-    <value>key</value>
+    <value>key/{0}</value>
   </data>
   <data name="GetVoteAction" xml:space="preserve">
     <value>confirm</value>

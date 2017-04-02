@@ -124,7 +124,7 @@ namespace Api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to key.
+        ///   Looks up a localized string similar to key/{0}.
         /// </summary>
         internal static string GetPublicKeyAction {
             get {

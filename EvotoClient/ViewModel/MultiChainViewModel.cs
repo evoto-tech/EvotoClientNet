@@ -80,7 +80,7 @@ namespace EvotoClient.ViewModel
 
             try
             {
-                var keyInfo = await voteClient.GetPublicKey();
+                var keyInfo = await voteClient.GetPublicKey(Model.Name);
                 var publicKey = new RsaKeyParameters(false, new BigInteger(keyInfo.Modulus),
                     new BigInteger(keyInfo.Exponent));
 
