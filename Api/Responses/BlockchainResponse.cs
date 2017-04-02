@@ -25,6 +25,9 @@ namespace Api.Responses
         [DataMember(Name = "blocks")]
         public int Blocks { get; private set; }
 
+        [DataMember(Name="encryptKey")]
+        public string EncryptKey { get; private set; }
+
         public BlockchainDetails ToModel()
         {
             return new BlockchainDetails
@@ -34,7 +37,8 @@ namespace Api.Responses
                 ChainString = ChainString,
                 Port = Port,
                 WalletId = WalletId,
-                Blocks = Blocks
+                Blocks = Blocks,
+                EncryptKey = EncryptKey
             };
         }
     }

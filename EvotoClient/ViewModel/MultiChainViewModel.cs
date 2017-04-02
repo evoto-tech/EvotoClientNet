@@ -8,7 +8,9 @@ using Api.Exceptions;
 using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
+using Models;
 using MultiChainLib.Model;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 
@@ -71,36 +73,45 @@ namespace EvotoClient.ViewModel
             base.Cleanup();
         }
 
-        public async Task Vote(List<QuestionViewModel> questions)
+        public async Task Vote(List<QuestionViewModel> questions, BlockchainDetails blockchain)
         {
             var voteClient = new VoteClient();
 
-            // Create our token
-            var token = GenerateRandomToken();
-
             try
             {
+                // Create our random voting token
+                var token = GenerateRandomToken();
+
+                // Get the registrar's public key, to use for the blind signature
                 var keyInfo = await voteClient.GetPublicKey(Model.Name);
                 var publicKey = new RsaKeyParameters(false, new BigInteger(keyInfo.Modulus),
                     new BigInteger(keyInfo.Exponent));
 
+                // Blind our token
                 var blindedToken = RsaTools.BlindMessage(token, publicKey);
 
+                // Get the token signed by the registrar
                 var blindSignature = await voteClient.GetBlindSignature(Model.Name, blindedToken.Blinded.ToString());
 
-                var unblindedSignature = RsaTools.UnblindMessage(new BigInteger(blindSignature), blindedToken.Random,
+                // Unblind the token
+                var unblindedToken = RsaTools.UnblindMessage(new BigInteger(blindSignature), blindedToken.Random,
                     publicKey);
 
                 // TODO: Sleep
+
+                // Create a wallet address to vote from
                 var walletId = await Model.GetNewWalletAddress();
 
-                var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, unblindedSignature.ToString());
+                // Request a voting asset (currency)
+                var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, unblindedToken.ToString());
 
+                // Where the transaction's currency comes from
                 var txIds = new List<CreateRawTransactionTxIn>
                 {
                     new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}
                 };
-
+                
+                // Where the transaction's currency goes to (registrar)
                 var toInfo = new List<CreateRawTransactionAmount>
                 {
                     new CreateRawTransactionAsset
@@ -111,16 +122,35 @@ namespace EvotoClient.ViewModel
                     }
                 };
 
-                var answerModel = new BlockchainVoteModel
+                // Create our list of answers
+                var answers = questions.Select(q => new BlockchainVoteAnswerModel
                 {
-                    Answers = questions.Select(q => new BlockchainVoteAnswerModel
-                    {
-                        Answer = q.SelectedAnswer.Answer,
-                        Question = q.QuestionNumber
-                    }).ToList()
-                };
+                    Answer = q.SelectedAnswer.Answer,
+                    Question = q.QuestionNumber
+                }).ToList();
+                
 
-                await Model.WriteTransaction(txIds, toInfo, answerModel);
+                // Send our vote, encrytped if required
+                if (blockchain.ShouldEncryptResults)
+                {
+                    var key = RsaTools.KeyFromString(blockchain.EncryptKey);
+                    var encryptedAnswers = new BlockchainVoteModelEncrypted
+                    {
+                        Answers = RsaTools.EncryptMessage(JsonConvert.SerializeObject(answers), key)
+                    };
+
+                    await Model.WriteTransaction(txIds, toInfo, encryptedAnswers);
+                }
+                else
+                {
+                    // Send vote regularly (live readable results)
+                    var answerModel = new BlockchainVoteModelPlainText
+                    {
+                        Answers = answers
+                    };
+
+                    await Model.WriteTransaction(txIds, toInfo, answerModel);
+                }
             }
             catch (ApiException e)
             {
