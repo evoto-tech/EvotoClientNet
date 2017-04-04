@@ -188,8 +188,7 @@ namespace EvotoClient.ViewModel
         private void DoNext()
         {
             CurrentResults++;
-            var page = Results[CurrentResults - 1];
-            TransitionView.ShowPage(page);
+            ShowPage();
         }
 
         private bool CanNext()
@@ -200,8 +199,7 @@ namespace EvotoClient.ViewModel
         private void DoPrev()
         {
             CurrentResults--;
-            var page = Results[CurrentResults - 1];
-            TransitionView.ShowPage(page, false);
+            ShowPage();
         }
 
         private bool CanPrev()
@@ -214,6 +212,12 @@ namespace EvotoClient.ViewModel
             var findVoteVm = GetVm<FindVoteViewModel>();
             findVoteVm.SetResults(_answers);
             MainVm.ChangeView(EvotoView.FindVote);
+        }
+
+        public void ShowPage(bool forwards = true)
+        {
+            var page = Results[CurrentResults - 1];
+            TransitionView.ShowPage(page, forwards);
         }
 
         #endregion
