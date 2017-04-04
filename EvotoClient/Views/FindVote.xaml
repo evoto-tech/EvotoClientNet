@@ -21,7 +21,7 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Text="{Binding AnswerText}" />
+        <TextBlock Grid.Row="0" Text="{Binding AnswerText}" />
         <TextBox Grid.Row="0" Visibility="{Binding NotFound, Converter={StaticResource BoolToVisibilityHiddenConverter}}" Text="Answer not found" />
 
         <TextBox Grid.Row="1" Text="{Binding MagicWords}" />
