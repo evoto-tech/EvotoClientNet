@@ -23,7 +23,8 @@
             <ColumnDefinition Width="20*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75*" />
+            <RowDefinition Height="80*" />
+            <RowDefinition Height="10*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
@@ -47,6 +48,7 @@
         <Button Grid.Row="0" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
         <Button Grid.Row="0" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
 
-        <Button Grid.Row="1" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
+        <Button Grid.Row="1" Grid.ColumnSpan="3" Command="{Binding FindVoteCommand}">Find My Vote</Button>
+        <Button Grid.Row="2" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>

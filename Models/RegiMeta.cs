@@ -8,5 +8,7 @@
         public string TxId { get; set; }
 
         public string RegistrarAddress { get; set; }
+
+        public string Words { get; set; }
     }
 }

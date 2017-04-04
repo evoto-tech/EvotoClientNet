@@ -10,6 +10,9 @@ namespace Models
         public int Port { get; set; }
         public string WalletId { get; set; }
         public int Blocks { get; set; }
+        public string EncryptKey { get; set; }
+
+        public bool ShouldEncryptResults => !string.IsNullOrWhiteSpace(EncryptKey);
 
         public override string ToString()
         {

@@ -12,6 +12,8 @@ namespace EvotoClient.ViewModel
         Login,
         Register,
         Vote,
+        PostVote,
+        FindVote,
         Results,
         ForgotPassword,
         ResetPassword,
@@ -100,6 +102,12 @@ namespace EvotoClient.ViewModel
                         break;
                     case EvotoView.Vote:
                         newView = ServiceLocator.Current.GetInstance<VoteViewModel>();
+                        break;
+                    case EvotoView.PostVote:
+                        newView = ServiceLocator.Current.GetInstance<PostVoteViewModel>();
+                        break;
+                    case EvotoView.FindVote:
+                        newView = ServiceLocator.Current.GetInstance<FindVoteViewModel>();
                         break;
                     case EvotoView.Results:
                         newView = ServiceLocator.Current.GetInstance<ResultsViewModel>();

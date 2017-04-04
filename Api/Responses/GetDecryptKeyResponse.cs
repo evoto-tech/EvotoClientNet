@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace Api.Responses
 {
     [Serializable]
-    public class GetPublicKeyResponse
+    public class GetDecryptKeyResponse
     {
         [DataMember]
-        public string PublicKey { get; private set; }
+        public string PrivateKey { get; private set; }
     }
 }

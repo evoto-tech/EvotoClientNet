@@ -35,13 +35,21 @@ namespace Api.Clients
             return new RegiMeta
             {
                 TxId = res.TxId,
-                RegistrarAddress = res.RegistrarAddress
+                RegistrarAddress = res.RegistrarAddress,
+                Words = res.Words
             };
         }
 
-        public async Task<GetPublicKeyResponse> GetPublicKey()
+        public async Task<string> GetPublicKey(string blockchain)
         {
-            return await GetAsync<GetPublicKeyResponse>(Resources.GetPublicKeyAction);
+            var res = await GetAsync<GetPublicKeyResponse>(Resources.GetPublicKeyAction, blockchain);
+            return res.PublicKey;
+        }
+
+        public async Task<string> GetDecryptKey(string blockchain)
+        {
+            var res = await GetAnonymousAsync<GetDecryptKeyResponse>(Resources.GetDecryptKeyAction, blockchain);
+            return res.PrivateKey;
         }
     }
 }

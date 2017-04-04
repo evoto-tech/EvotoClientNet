@@ -135,11 +135,14 @@
   <data name="GetBlindSignature" xml:space="preserve">
     <value />
   </data>
+  <data name="GetDecryptKeyAction" xml:space="preserve">
+    <value>decrypt/{0}</value>
+  </data>
   <data name="GetHasVotedAction" xml:space="preserve">
     <value>hasvoted</value>
   </data>
   <data name="GetPublicKeyAction" xml:space="preserve">
-    <value>key</value>
+    <value>key/{0}</value>
   </data>
   <data name="GetVoteAction" xml:space="preserve">
     <value>confirm</value>

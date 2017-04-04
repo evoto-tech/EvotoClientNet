@@ -11,5 +11,8 @@ namespace Api.Responses
 
         [DataMember]
         public string RegistrarAddress { get; private set; }
+
+        [DataMember]
+        public string Words { get; private set; }
     }
 }

@@ -107,12 +107,35 @@ namespace Api
             });
 
             if (response == null)
-                throw new ApiErrorException();
+                throw new ApiErrorException("No Response");
 
             var json = await response.Content.ReadAsStringAsync();
             return JSON.Deserialize<T>(json, JilOptions);
         }
 
+        /// <summary>
+        ///     Same as GetAsync but uses another client which never has authentication headers set
+        /// </summary>
+        public async Task<T> GetAnonymousAsync<T>(string uri, params object[] args)
+            where T : class
+        {
+            HttpResponseMessage response = null;
+
+            await _retryPolicy.ExecuteAsync(async () =>
+            {
+                uri = string.Format(uri, args);
+                response = await _anonymousClient.GetAsync(uri);
+
+                if (!response.IsSuccessStatusCode)
+                    throw new ApiErrorException();
+            });
+
+            if (response == null)
+                throw new ApiErrorException("No Response");
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JSON.Deserialize<T>(json, JilOptions);
+        }
 
         /// <summary>
         ///     Makes a HTTP POST call to a specified endpoint, serializing any

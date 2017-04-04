@@ -49,7 +49,7 @@ namespace EvotoClient.ViewModel
             }
         }
 
-        public bool VoteVisble => !Loading && !Voted;
+        public bool VoteVisble => !Loading;
 
         public string QuestionText
         {
@@ -58,18 +58,6 @@ namespace EvotoClient.ViewModel
                 if ((Questions == null) || !Questions.Any() || (CurrentQuestion == 0))
                     return "";
                 return $"Question {CurrentQuestion} of {TotalQuestions}";
-            }
-        }
-
-        private bool _voted;
-
-        public bool Voted
-        {
-            get { return _voted; }
-            set
-            {
-                Set(ref _voted, value);
-                VoteCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -155,7 +143,6 @@ namespace EvotoClient.ViewModel
             Ui(() =>
             {
                 Loading = false;
-                Voted = false;
 
                 Questions.Clear();
                 Questions.AddRange(questionVMs);
@@ -174,14 +161,14 @@ namespace EvotoClient.ViewModel
 
             Task.Run(async () =>
             {
-                await MultiChainVm.Vote(Questions.ToList());
+                var words = await MultiChainVm.Vote(Questions.ToList(), _currentDetails);
                 Ui(() =>
                 {
                     Loading = false;
 
-                    MainVm.ChangeView(EvotoView.Results);
-                    var resultsVm = GetVm<ResultsViewModel>();
-                    resultsVm.SelectVote(_currentDetails);
+                    var postVoteVm = GetVm<PostVoteViewModel>();
+                    postVoteVm.Voted(_currentDetails, words);
+                    MainVm.ChangeView(EvotoView.PostVote);
                 });
             });
         }

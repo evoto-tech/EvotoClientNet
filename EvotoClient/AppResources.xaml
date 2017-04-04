@@ -27,6 +27,12 @@
     <DataTemplate DataType="{x:Type vm:VoteViewModel}">
         <views:VoteView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:PostVoteViewModel}">
+        <views:PostVoteView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:FindVoteViewModel}">
+        <views:FindVote />
+    </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ForgotPasswordViewModel}">
         <views:ForgotPasswordView />
     </DataTemplate>
