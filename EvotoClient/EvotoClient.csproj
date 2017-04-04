@@ -197,6 +197,8 @@
     <Compile Include="ViewModel\CustomUserFieldViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\EvotoViewModelBase.cs" />
+    <Compile Include="ViewModel\FindVoteViewModel.cs" />
+    <Compile Include="ViewModel\PostVoteViewModel.cs" />
     <Compile Include="ViewModel\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
@@ -214,6 +216,14 @@
     <Page Include="Views\CustomUserFieldView.xaml">
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindVote.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\PostVoteView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ResetPasswordView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -274,6 +284,12 @@
     </Compile>
     <Compile Include="Views\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FindVote.xaml.cs">
+      <DependentUpon>FindVote.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PostVoteView.xaml.cs">
+      <DependentUpon>PostVoteView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PageTransition.xaml.cs">
       <DependentUpon>PageTransition.xaml</DependentUpon>

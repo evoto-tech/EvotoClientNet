@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Clients;
+using Blockchain.Models;
 using EvotoClient.Views;
 using GalaSoft.MvvmLight.Command;
 using Models;
@@ -10,8 +13,15 @@ namespace EvotoClient.ViewModel
 {
     public class ResultsViewModel : EvotoViewModelBase
     {
+        private List<BlockchainVoteModelPlainText> _answers;
+        private BlockchainDetails _blockchainDetails;
+        private readonly VoteClient _voteClient;
+
         public ResultsViewModel()
         {
+            _voteClient = new VoteClient();
+
+            FindVoteCommand = new RelayCommand(DoFindVote);
             BackCommand = new RelayCommand(DoBack);
 
             NextCommand = new RelayCommand(DoNext, CanNext);
@@ -22,6 +32,7 @@ namespace EvotoClient.ViewModel
 
         #region Commands
 
+        public RelayCommand FindVoteCommand { get; }
         public RelayCommand BackCommand { get; }
 
         public RelayCommand NextCommand { get; }
@@ -111,16 +122,22 @@ namespace EvotoClient.ViewModel
                 // Read the questions from the blockchain
                 var questions = await MultiChainVm.Model.GetQuestions();
 
+                var decryptKey = "";
+
+                // Blockchain encrypted, so we need the decryption key to read the results
+                if (blockchain.ShouldEncryptResults)
+                    decryptKey = await _voteClient.GetDecryptKey(blockchain.ChainString);
+
                 // Get answers from blockchain
-                var answers =
-                    await MultiChainVm.Model.GetResults(blockchain.WalletId, blockchain.EncryptKey, blockchain.Name);
+                _answers =
+                    await MultiChainVm.Model.GetResults(blockchain.WalletId, decryptKey, blockchain.Name);
 
                 // For each question, get its total for each answer
                 var results = questions.Select(question =>
                 {
                     // Setup response dictionary, answer -> num votes
                     var options = question.Answers.ToDictionary(a => a.Answer, a => 0);
-                    foreach (var answer in answers)
+                    foreach (var answer in _answers)
                         foreach (var questionAnswer in answer.Answers.Where(a => a.Question == question.Number))
                         {
                             // In case we have anything unusual going on
@@ -190,6 +207,13 @@ namespace EvotoClient.ViewModel
         private bool CanPrev()
         {
             return CurrentResults > 1;
+        }
+
+        private void DoFindVote()
+        {
+            var findVoteVm = GetVm<FindVoteViewModel>();
+            findVoteVm.SetResults(_answers);
+            MainVm.ChangeView(EvotoView.FindVote);
         }
 
         #endregion

@@ -135,6 +135,9 @@
   <data name="GetBlindSignature" xml:space="preserve">
     <value />
   </data>
+  <data name="GetDecryptKeyAction" xml:space="preserve">
+    <value>decrypt/{0}</value>
+  </data>
   <data name="GetHasVotedAction" xml:space="preserve">
     <value>hasvoted</value>
   </data>

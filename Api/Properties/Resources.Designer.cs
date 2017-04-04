@@ -115,6 +115,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to decrypt/{0}.
+        /// </summary>
+        internal static string GetDecryptKeyAction {
+            get {
+                return ResourceManager.GetString("GetDecryptKeyAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to hasvoted.
         /// </summary>
         internal static string GetHasVotedAction {
