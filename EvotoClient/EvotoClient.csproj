@@ -399,13 +399,7 @@
     <Resource Include="Skins\logo%400,5x.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Skins\Icon.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
