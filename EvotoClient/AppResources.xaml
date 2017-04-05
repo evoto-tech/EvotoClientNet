@@ -7,7 +7,6 @@
                     xmlns:views="clr-namespace:EvotoClient.Views"
                     mc:Ignorable="d ignore">
 
-
     <!--Global View Model Locator-->
     <vm:ViewModelLocator x:Key="Locator"
                          d:IsDataSource="True" />

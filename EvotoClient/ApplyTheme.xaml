@@ -1,0 +1,53 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:EvotoClient.ViewModel"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:ignore="http://www.galasoft.ch/ignore"
+                    xmlns:views="clr-namespace:EvotoClient.Views"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    mc:Ignorable="d ignore">
+
+    <!-- Applying Theme -->
+    
+    <!-- Link Theme -->
+    <Style TargetType="{x:Type Hyperlink}">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryColour}"/>
+        <Setter Property="TextBlock.TextDecorations" Value="{x:Null}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryColourHover}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Button Theme -->
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="Background" Value="{DynamicResource PrimaryColour}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryFontColour}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColour}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource PrimaryColourHover}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Window Theme -->
+    <Style x:Key="ClientWindowStyle">
+        <Setter Property="Control.Background" Value="{DynamicResource BackgroundColour}"/>
+        <Setter Property="Control.Foreground" Value="{DynamicResource FontColour}"/>
+        <Setter Property="Window.Title" Value="{DynamicResource Title}"/>
+    </Style>
+
+</ResourceDictionary>

@@ -96,6 +96,9 @@
   <PropertyGroup>
     <StartupObject>EvotoClient.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Skins\Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -175,6 +178,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ApplyTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EvotoTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -380,6 +391,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Skins\blockchain.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Skins\logo%402.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Skins\logo%400,5x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Skins\Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon1.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

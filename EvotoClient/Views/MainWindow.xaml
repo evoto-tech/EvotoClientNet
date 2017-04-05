@@ -6,18 +6,16 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="350"
+        Height="425"
         Width="525"
-        Title="Evoto"
-
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Style="{DynamicResource ClientWindowStyle}"
+        UseLayoutRounding="True"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
-        Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-
+        Icon="pack://application:,,,../Skins/Icon.ico"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <DockPanel>

@@ -16,8 +16,10 @@
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
 
                 <ResourceDictionary Source="AppResources.xaml" />
+
+                <ResourceDictionary Source="EvotoTheme.xaml" />
+                <ResourceDictionary Source="ApplyTheme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-
 </Application>
