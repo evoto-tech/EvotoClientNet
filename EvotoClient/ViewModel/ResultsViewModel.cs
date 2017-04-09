@@ -98,7 +98,12 @@ namespace EvotoClient.ViewModel
 
         public void SelectVote(BlockchainDetails blockchain)
         {
-            Ui(() => { Loading = true; });
+            Ui(() =>
+            {
+                Loading = true;
+                TotalResults = 0;
+                CurrentResults = 0;
+            });
 
             // Default progress message. Will be shown for a short while until the blockchain size has been calculated.
             ResetProgress();
