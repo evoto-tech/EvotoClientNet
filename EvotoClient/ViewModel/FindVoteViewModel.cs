@@ -66,6 +66,8 @@ namespace EvotoClient.ViewModel
         public void DoBack()
         {
             MainVm.ChangeView(EvotoView.Results);
+            var resultsVm = GetVm<ResultsViewModel>();
+            resultsVm.ShowPage();
         }
 
         public void DoFind()
