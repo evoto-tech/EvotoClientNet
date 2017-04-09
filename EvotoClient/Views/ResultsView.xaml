@@ -28,22 +28,20 @@
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
-        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Row="1" Grid.Column="1"
-                     IsIndeterminate="True"
-                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-                     VerticalAlignment="Center" HorizontalAlignment="Center" />
-
         <local:PageTransition
             Grid.Row="0" Grid.Column="1"
             x:Name="pageTransition" Margin="25"
             Visibility="{Binding ResultsVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
 
-        <Image Grid.Column="1"
-               MaxWidth="200"
-               Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-           gif:ImageBehavior.AnimatedSource="../Skins/blockchain.gif" />
+        <StackPanel Grid.Column="1"
+                    Grid.Row="0"
+                    Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            <Image
+                   MaxWidth="200"
+                   gif:ImageBehavior.AnimatedSource="../Skins/blockchain.gif" />
+            <TextBlock Text="{Binding LoadingText}" HorizontalAlignment="Center" TextAlignment="Center" />
+        </StackPanel>
 
         <Button Grid.Row="0" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
         <Button Grid.Row="0" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
