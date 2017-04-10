@@ -83,6 +83,12 @@
                    Visibility="{Binding ShowConfirmEmail, Converter={StaticResource BoolToVisibilityConverter}}">
             <Hyperlink Command="{Binding ResendCommand}">Resend Email Token</Hyperlink>
         </TextBlock>
+
+        <ProgressBar
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            IsIndeterminate="True"
+            Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                   Visibility="{Binding RegisterLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
         
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
                    Visibility="{Binding RegisterEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
