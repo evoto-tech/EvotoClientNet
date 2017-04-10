@@ -85,7 +85,7 @@
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2"
                      IsIndeterminate="True"
-                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                     Visibility="{Binding LoadingSpinner, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
 
