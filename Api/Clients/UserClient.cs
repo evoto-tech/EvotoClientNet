@@ -20,13 +20,30 @@ namespace Api.Clients
         public async Task Register(RegisterModel registerModel)
         {
             var requestModel = new RegisterRequestModel(registerModel);
-            await PostAsync<TokenUpdate>(Resources.RegisterAction, requestModel);
+            try
+            {
+                await PostAsync<TokenUpdate>(Resources.RegisterAction, requestModel);
+            }
+            catch (BadRequestException e)
+            {
+                if (e.Message.Contains("register disabled"))
+                {
+                    throw new RegisterDisabledException();
+                }
+                throw;
+            }
         }
 
         public async Task<UserDetails> GetCurrentUserDetails()
         {
             var res = await GetAsync<UserDetailsResponse>(Resources.DetailsAction, CurrentAuth.UserId);
             return res.MapToModel();
+        }
+
+        public async Task<bool> RegisterEnabled()
+        {
+            var res = await GetAsync<RegisterEnabledResponse>(Resources.RegisterEnabled);
+            return res.Enabled;
         }
 
         public async Task ForgotPassword(ForgotPasswordModel forgotPasswordModel)

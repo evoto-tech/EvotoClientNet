@@ -23,10 +23,19 @@ namespace EvotoClient.ViewModel
             _userClient = new UserClient();
             _validator = new LoginModelValidator();
 
-            RegisterCommand = new RelayCommand(DoRegister, CanRegister);
+            RegisterCommand = new RelayCommand(DoRegister);
             LoginCommand = new RelayCommand<object>(DoLogin);
             ForgotPasswordCommand = new RelayCommand(DoForgotPassword);
             ResendCommand = new RelayCommand(DoResend);
+
+            if (IsLoaded)
+            {
+                OnLoad(this, null);
+            }
+            else
+            {
+                Loaded += OnLoad;
+            }
         }
 
         #region Commands 
@@ -55,6 +64,14 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private bool _registerLoading;
+
+        public bool RegisterLoading
+        {
+            get { return _registerLoading; }
+            set { Set(ref _registerLoading, value); }
+        }
+
         private string _errorMessage;
 
         public string ErrorMessage
@@ -75,8 +92,13 @@ namespace EvotoClient.ViewModel
             }
         }
 
-        //TODO: Pull from registrar
-        public bool RegisterEnabled => true;
+        private bool _registerEnabled;
+
+        public bool RegisterEnabled
+        {
+            get { return _registerEnabled; }
+            set { Set(ref _registerEnabled, value); }
+        }
 
         private bool _showConfirmEmail;
 
@@ -98,6 +120,32 @@ namespace EvotoClient.ViewModel
 
         #region Methods
 
+        public void OnLoad(object sender, EventArgs e)
+        {
+            RegisterLoading = true;
+            Task.Run(async () =>
+            {
+                try
+                {
+                    var canRegister = await _userClient.RegisterEnabled();
+
+                    Ui(() =>
+                    {
+                        RegisterEnabled = canRegister;
+                        RegisterLoading = false;
+                    });
+                }
+                catch (ApiException)
+                {
+                    Ui(() =>
+                    {
+                        RegisterEnabled = true;
+                        RegisterLoading = false;
+                    });
+                }
+            });
+        } 
+
         private bool IsFormValid(object parameter, out LoginModel loginModel)
         {
             loginModel = null;
@@ -117,13 +165,11 @@ namespace EvotoClient.ViewModel
             }
 
             if (ShowConfirmEmail)
-            {
                 if (string.IsNullOrWhiteSpace(EmailToken))
                 {
                     errorMessages.Add("Email Token is required");
                     valid = false;
                 }
-            }
 
             if (!valid)
                 ErrorMessage = string.Join("\n", errorMessages);
@@ -191,7 +237,7 @@ namespace EvotoClient.ViewModel
                     {
                         ErrorMessage = "An Unknown Error Occurred";
 #if DEBUG
-                        // Just override debug message, as ELSE gives annoying compiler warnings
+// Just override debug message, as ELSE gives annoying compiler warnings
                         ErrorMessage = e.Message;
 #endif
                         Loading = false;
@@ -204,11 +250,6 @@ namespace EvotoClient.ViewModel
         {
             ErrorMessage = "";
             MainVm.ChangeView(EvotoView.Register);
-        }
-
-        private bool CanRegister()
-        {
-            return RegisterEnabled;
         }
 
         private void DoForgotPassword()
@@ -246,7 +287,8 @@ namespace EvotoClient.ViewModel
                 {
                     Ui(() =>
                     {
-                        ErrorMessage = $"Please wait {e.Message} before sending another email. Be sure to check your spam folder";
+                        ErrorMessage =
+                            $"Please wait {e.Message} before sending another email. Be sure to check your spam folder";
                         Loading = false;
                     });
                 }

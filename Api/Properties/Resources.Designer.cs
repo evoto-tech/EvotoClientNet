@@ -178,6 +178,15 @@ namespace Api.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to canRegister.
+        /// </summary>
+        internal static string RegisterEnabled {
+            get {
+                return ResourceManager.GetString("RegisterEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to resendEmail.
         /// </summary>
         internal static string ResendVerificationEmailAction {
