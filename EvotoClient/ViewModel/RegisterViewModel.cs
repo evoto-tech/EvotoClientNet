@@ -36,7 +36,7 @@ namespace EvotoClient.ViewModel
 
         #region Properties
 
-        private bool _loading = true;
+        private bool _loading;
 
         public bool Loading
         {
@@ -45,8 +45,11 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _loading, value);
                 RegisterCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(LoadingSpinner));
             }
         }
+
+        public bool LoadingSpinner => Loading || FieldsLoading;
 
         private bool _fieldsLoading;
 
@@ -57,6 +60,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _fieldsLoading, value);
                 RaisePropertyChanged(nameof(ShowFields));
+                RaisePropertyChanged(nameof(LoadingSpinner));
             }
         }
 
