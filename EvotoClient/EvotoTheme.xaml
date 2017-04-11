@@ -1,0 +1,21 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:EvotoClient.ViewModel"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:ignore="http://www.galasoft.ch/ignore"
+                    xmlns:views="clr-namespace:EvotoClient.Views"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    mc:Ignorable="d ignore">
+
+    <!-- Theme Values -->
+    <sys:String x:Key="LogoPath">pack://application:,,,../Skins/logo@0,5x.png</sys:String>
+    <sys:String x:Key="Title">evoto</sys:String>
+    <!-- Colors -->
+    <SolidColorBrush x:Key="PrimaryColour">#8BC34A</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryColourHover">#7ab13b</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryFontColour">#ffffff</SolidColorBrush>
+    <SolidColorBrush x:Key="BackgroundColour">#ffffff</SolidColorBrush>
+    <SolidColorBrush x:Key="FontColour">#000000</SolidColorBrush>
+
+</ResourceDictionary>

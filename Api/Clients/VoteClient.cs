@@ -23,7 +23,7 @@ namespace Api.Clients
         public async Task<bool> HasVoted(string blockchain)
         {
             var res = await
-                GetAsync<HasVotedResponse>(Resources.GetHasVotedAction, new HasVotedRequestModel(blockchain));
+                GetAsync<HasVotedResponse>(Resources.GetHasVotedAction, blockchain);
             return res.Voted;
         }
 

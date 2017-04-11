@@ -124,7 +124,7 @@ namespace Api.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to hasvoted.
+        ///   Looks up a localized string similar to hasvoted/{0}.
         /// </summary>
         internal static string GetHasVotedAction {
             get {

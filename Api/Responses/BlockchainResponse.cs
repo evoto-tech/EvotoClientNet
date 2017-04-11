@@ -16,6 +16,9 @@ namespace Api.Responses
         [DataMember(Name = "chainString")]
         public string ChainString { get; private set; }
 
+        [DataMember(Name = "info")]
+        public string Info { get; private set; }
+
         [DataMember(Name = "port")]
         public int Port { get; private set; }
 
@@ -35,6 +38,7 @@ namespace Api.Responses
                 Name = Name,
                 ExpiryDate = ExpiryDate,
                 ChainString = ChainString,
+                Info = Info,
                 Port = Port,
                 WalletId = WalletId,
                 Blocks = Blocks,

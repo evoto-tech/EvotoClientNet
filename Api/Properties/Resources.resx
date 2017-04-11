@@ -139,7 +139,7 @@
     <value>decrypt/{0}</value>
   </data>
   <data name="GetHasVotedAction" xml:space="preserve">
-    <value>hasvoted</value>
+    <value>hasvoted/{0}</value>
   </data>
   <data name="GetPublicKeyAction" xml:space="preserve">
     <value>key/{0}</value>
