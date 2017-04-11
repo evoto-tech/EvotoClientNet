@@ -7,6 +7,7 @@ namespace Models
         public string Name { get; set; }
         public DateTime ExpiryDate { get; set; }
         public string ChainString { get; set; }
+        public string Info { get; set; }
         public int Port { get; set; }
         public string WalletId { get; set; }
         public int Blocks { get; set; }
