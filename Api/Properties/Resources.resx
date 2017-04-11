@@ -156,6 +156,9 @@
   <data name="RegisterAction" xml:space="preserve">
     <value>register</value>
   </data>
+  <data name="RegisterEnabled" xml:space="preserve">
+    <value>canRegister</value>
+  </data>
   <data name="ResendVerificationEmailAction" xml:space="preserve">
     <value>resendEmail</value>
   </data>

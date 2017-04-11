@@ -14,6 +14,7 @@ namespace EvotoClient.ViewModel
     {
         private readonly UserClient _userClient;
         private readonly RegisterModelValidator _validator;
+        private bool _registerDisabled;
 
         public RegisterViewModel()
         {
@@ -36,7 +37,7 @@ namespace EvotoClient.ViewModel
 
         #region Properties
 
-        private bool _loading = true;
+        private bool _loading;
 
         public bool Loading
         {
@@ -45,8 +46,11 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _loading, value);
                 RegisterCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(LoadingSpinner));
             }
         }
+
+        public bool LoadingSpinner => Loading || FieldsLoading;
 
         private bool _fieldsLoading;
 
@@ -57,6 +61,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _fieldsLoading, value);
                 RaisePropertyChanged(nameof(ShowFields));
+                RaisePropertyChanged(nameof(LoadingSpinner));
             }
         }
 
@@ -126,7 +131,7 @@ namespace EvotoClient.ViewModel
 
         private bool CanRegister(object _)
         {
-            return !FieldsLoading;
+            return !FieldsLoading && !_registerDisabled;
         }
 
         private void DoRegister(object parameter)
@@ -155,8 +160,18 @@ namespace EvotoClient.ViewModel
                     // Autofill their email and ask them to verify it
                     loginVm.VerifyEmail(Email);
                 }
+                catch (RegisterDisabledException)
+                {
+                    Ui(() =>
+                    {
+                        ErrorMessage = "Sorry, registration is not enabled at this time";
+                        Loading = false;
+                    });
+                }
                 catch (BadRequestException e)
                 {
+                    _registerDisabled = true;
+                    RegisterCommand.RaiseCanExecuteChanged();
                     Ui(() =>
                     {
                         ErrorMessage = e.Message;

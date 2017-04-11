@@ -91,6 +91,11 @@ namespace EvotoClient.ViewModel
             {
                 var voted = await _voteClient.HasVoted(SelectedVote.ChainString);
 
+                Ui(() =>
+                {
+                    Loading = false;
+                });
+
                 if (!voted)
                 {
                     MainVm.ChangeView(EvotoView.Vote);

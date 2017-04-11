@@ -19,11 +19,6 @@
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <DockPanel>
-        <StatusBar DockPanel.Dock="Bottom" Height="20" VerticalAlignment="Bottom">
-            <TextBlock Text="{Binding Status}" />
-        </StatusBar>
-
         <ContentControl Content="{Binding CurrentView}" />
-
     </DockPanel>
 </Window>

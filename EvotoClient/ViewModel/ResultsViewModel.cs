@@ -13,9 +13,8 @@ namespace EvotoClient.ViewModel
 {
     public class ResultsViewModel : EvotoViewModelBase
     {
-        private List<BlockchainVoteModelPlainText> _answers;
-        private BlockchainDetails _blockchainDetails;
         private readonly VoteClient _voteClient;
+        private List<BlockchainVoteModelPlainText> _answers;
 
         public ResultsViewModel()
         {
@@ -85,13 +84,29 @@ namespace EvotoClient.ViewModel
             set { Set(ref _totalResults, value); }
         }
 
+        private string _loadingText;
+
+        public string LoadingText
+        {
+            get { return _loadingText; }
+            set { Set(ref _loadingText, value); }
+        }
+
         #endregion
 
         #region Methods
 
         public void SelectVote(BlockchainDetails blockchain)
         {
-            Ui(() => { Loading = true; });
+            Ui(() =>
+            {
+                Loading = true;
+                TotalResults = 0;
+                CurrentResults = 0;
+            });
+
+            // Default progress message. Will be shown for a short while until the blockchain size has been calculated.
+            ResetProgress();
 
             Task.Run(async () =>
             {
@@ -112,10 +127,25 @@ namespace EvotoClient.ViewModel
             await MultiChainVm.Connect("localhost", blockchain.Port, blockchain.ChainString);
         }
 
+        private void ResetProgress()
+        {
+            Ui(() => { LoadingText = "Synchronising Blockchain"; });
+        }
+
+        private void UpdateProgress(BlockchainSyncProgress model)
+        {
+            Ui(() =>
+            {
+                LoadingText =
+                    $"Synchronising Blockchain {Math.Round(model.Percentage)}% Complete\n({model.CurrentBlocks}/{model.TotalBlocks} blocks)";
+            });
+        }
+
         private async Task GetResults(BlockchainDetails blockchain)
         {
-            // Insure the blockchain is up to date
-            await MultiChainVm.Model.WaitUntilBlockchainSynced(blockchain.Blocks);
+            // Ensure the blockchain is up to date
+            var progressModel = new Progress<BlockchainSyncProgress>(UpdateProgress);
+            await MultiChainVm.Model.WaitUntilBlockchainSynced(blockchain.Blocks, progressModel);
 
             try
             {
@@ -130,7 +160,7 @@ namespace EvotoClient.ViewModel
 
                 // Get answers from blockchain
                 _answers =
-                    await MultiChainVm.Model.GetResults(blockchain.WalletId, decryptKey, blockchain.Name);
+                    await MultiChainVm.Model.GetResults(blockchain.WalletId, decryptKey);
 
                 // For each question, get its total for each answer
                 var results = questions.Select(question =>
@@ -188,8 +218,7 @@ namespace EvotoClient.ViewModel
         private void DoNext()
         {
             CurrentResults++;
-            var page = Results[CurrentResults - 1];
-            TransitionView.ShowPage(page);
+            ShowPage();
         }
 
         private bool CanNext()
@@ -200,8 +229,7 @@ namespace EvotoClient.ViewModel
         private void DoPrev()
         {
             CurrentResults--;
-            var page = Results[CurrentResults - 1];
-            TransitionView.ShowPage(page, false);
+            ShowPage();
         }
 
         private bool CanPrev()
@@ -214,6 +242,12 @@ namespace EvotoClient.ViewModel
             var findVoteVm = GetVm<FindVoteViewModel>();
             findVoteVm.SetResults(_answers);
             MainVm.ChangeView(EvotoView.FindVote);
+        }
+
+        public void ShowPage(bool forwards = true)
+        {
+            var page = Results[CurrentResults - 1];
+            TransitionView.ShowPage(page, forwards);
         }
 
         #endregion

@@ -61,6 +61,7 @@
     <Compile Include="Clients\VoteClient.cs" />
     <Compile Include="Clients\UserClient.cs" />
     <Compile Include="CurrentAuthentication.cs" />
+    <Compile Include="Exceptions\RegisterDisabledException.cs" />
     <Compile Include="Exceptions\UnconfirmedEmailException.cs" />
     <Compile Include="Exceptions\EmailVerificationNeededException.cs" />
     <Compile Include="Exceptions\ApiException.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Requests\GetVoteRequestModel.cs" />
     <Compile Include="Requests\BlindedTokenRequestModel.cs" />
     <Compile Include="Requests\RegisterRequestModel.cs" />
+    <Compile Include="Responses\RegisterEnabledResponse.cs" />
     <Compile Include="Responses\CustomUserFieldResponse.cs" />
     <Compile Include="Responses\GetDecryptKeyResponse.cs" />
     <Compile Include="Responses\HasVotedResponse.cs" />

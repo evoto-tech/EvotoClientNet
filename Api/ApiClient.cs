@@ -98,7 +98,14 @@ namespace Api
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 uri = string.Format(uri, args);
-                response = await _client.GetAsync(uri);
+                try
+                {
+                    response = await _client.GetAsync(uri);
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new ApiErrorException(e.Message, e);
+                }
 
                 if (IsUnauthorized(response))
                     throw new UnauthorizedException();
@@ -124,7 +131,14 @@ namespace Api
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 uri = string.Format(uri, args);
-                response = await _anonymousClient.GetAsync(uri);
+                try
+                {
+                    response = await _anonymousClient.GetAsync(uri);
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new ApiErrorException(e.Message, e);
+                }
 
                 if (!response.IsSuccessStatusCode)
                     throw new ApiErrorException();
@@ -172,7 +186,14 @@ namespace Api
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 uri = string.Format(uri, args);
-                response = await _client.PostAsync(uri, content);
+                try
+                {
+                    response = await _client.PostAsync(uri, content);
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new ApiErrorException(e.Message, e);
+                }
 
                 if (IsUnauthorized(response))
                     throw new UnauthorizedException();
@@ -211,7 +232,14 @@ namespace Api
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 uri = string.Format(uri, args);
-                response = await _anonymousClient.PostAsync(uri, content);
+                try
+                {
+                    response = await _anonymousClient.PostAsync(uri, content);
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new ApiErrorException(e.Message, e);
+                }
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                     await HandleBadRequest(response);
@@ -250,7 +278,14 @@ namespace Api
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 uri = string.Format(uri, args);
-                response = await _client.DeleteAsync(uri);
+                try
+                {
+                    response = await _client.DeleteAsync(uri);
+                }
+                catch (HttpRequestException e)
+                {
+                    throw new ApiErrorException(e.Message, e);
+                }
 
                 if (IsUnauthorized(response))
                     throw new UnauthorizedException();
@@ -281,15 +316,7 @@ namespace Api
                 {"password", password}
             });
 
-            HttpResponseMessage response;
-            try
-            {
-                response = await _client.PostAsync(TOKEN_ENDPOINT, data);
-            }
-            catch (HttpRequestException e)
-            {
-                throw new ApiErrorException(e.Message, e);
-            }
+            var response = await _client.PostAsync(TOKEN_ENDPOINT, data);
 
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {

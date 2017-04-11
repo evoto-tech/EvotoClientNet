@@ -60,14 +60,6 @@ namespace EvotoClient.ViewModel
             set { Set(ref _loggedIn, value); }
         }
 
-        private string _status;
-
-        public string Status
-        {
-            get { return _status; }
-            set { Set(ref _status, value); }
-        }
-
         #endregion
 
         #region Methods
@@ -120,11 +112,6 @@ namespace EvotoClient.ViewModel
                 if (CurrentView != newView)
                     CurrentView = newView;
             });
-        }
-
-        public void SetStatus(string status)
-        {
-            Status = status;
         }
 
         #endregion
