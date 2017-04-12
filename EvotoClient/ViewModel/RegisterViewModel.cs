@@ -184,7 +184,7 @@ namespace EvotoClient.ViewModel
                     Ui(() =>
                     {
                         Loading = false;
-                        ResetForm();
+                        ResetForm(parameter);
                     });
                     
                     // Autofill their email and ask them to verify it
