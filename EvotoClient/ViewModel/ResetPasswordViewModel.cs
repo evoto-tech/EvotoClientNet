@@ -166,15 +166,10 @@ namespace EvotoClient.ViewModel
                 Email = email;
                 Token = "";
                 if (sent)
-                {
-                    // TODO: Don't use Error Message
                     ErrorMessage =
                         $"An email has been sent to {email}.\nPlease click the link in the email, or enter the token above.";
-                }
                 else
-                {
                     ErrorMessage = "";
-                }
             });
         }
 
