@@ -43,7 +43,7 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _loading, value);
-                ResetCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(CanSubmit));
             }
         }
 
@@ -71,6 +71,8 @@ namespace EvotoClient.ViewModel
             set { Set(ref _token, value); }
         }
 
+        public bool CanSubmit => !Loading;
+
         #endregion
 
         #region Methods
@@ -87,12 +89,6 @@ namespace EvotoClient.ViewModel
 
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
-
-            if (p1 != p2)
-            {
-                errorMessages.Add("Passwords do not match");
-                valid = false;
-            }
 
             model = new ResetPasswordModel(Email, p1, p2, Token);
             var v = _validator.Validate(model);
@@ -170,15 +166,10 @@ namespace EvotoClient.ViewModel
                 Email = email;
                 Token = "";
                 if (sent)
-                {
-                    // TODO: Don't use Error Message
                     ErrorMessage =
                         $"An email has been sent to {email}.\nPlease click the link in the email, or enter the token above.";
-                }
                 else
-                {
                     ErrorMessage = "";
-                }
             });
         }
 

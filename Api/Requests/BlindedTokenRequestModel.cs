@@ -6,6 +6,10 @@ namespace Api.Requests
     [Serializable]
     public class BlindedTokenRequestModel
     {
+        public BlindedTokenRequestModel()
+        {
+        }
+
         public BlindedTokenRequestModel(string blockchain, string token)
         {
             Blockchain = blockchain;

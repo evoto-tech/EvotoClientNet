@@ -4,8 +4,8 @@
     {
         public VerifyEmailModel(string email, string token)
         {
-            Email = email.Trim();
-            Token = token.Trim();
+            Email = email?.Trim();
+            Token = token?.Trim();
         }
         
         public string Email { get; }

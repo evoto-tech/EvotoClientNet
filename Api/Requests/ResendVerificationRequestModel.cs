@@ -6,6 +6,10 @@ namespace Api.Requests
     [Serializable]
     public class ResendVerificationRequestModel
     {
+        public ResendVerificationRequestModel()
+        {
+        }
+
         public ResendVerificationRequestModel(string email)
         {
             Email = email;

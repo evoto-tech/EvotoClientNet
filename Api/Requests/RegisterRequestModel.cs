@@ -10,6 +10,10 @@ namespace Api.Requests
     [Serializable]
     public class RegisterRequestModel
     {
+        public RegisterRequestModel()
+        {
+        }
+
         public RegisterRequestModel(RegisterModel model)
         {
             Email = model.Email;
@@ -34,6 +38,10 @@ namespace Api.Requests
     [Serializable]
     public class RegisterCustomFieldRequestModel
     {
+        public RegisterCustomFieldRequestModel()
+        {
+        }
+
         public RegisterCustomFieldRequestModel(CustomUserField model)
         {
             Name = model.Name;
