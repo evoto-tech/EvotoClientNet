@@ -16,6 +16,14 @@ namespace EvotoClient
         private const string Unique = "Evoto_Client";
         private static string[] _args;
 
+        public bool SignalExternalCommandLineArgs(IList<string> args)
+        {
+            // Skip first argument (filename.exe)
+            CustomUriHandler.HandleArgs(args.Skip(1).ToList());
+
+            return true;
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -37,9 +45,7 @@ namespace EvotoClient
         public void HandleArgsCallback()
         {
             if (_args != null)
-            {
                 CustomUriHandler.HandleArgs(_args);
-            }
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -47,14 +53,6 @@ namespace EvotoClient
             var vm = ServiceLocator.Current.GetInstance<MultiChainViewModel>();
             if (vm.Connected)
                 vm.Cleanup();
-        }
-
-        public bool SignalExternalCommandLineArgs(IList<string> args)
-        {
-            // Skip first argument (filename.exe)
-            CustomUriHandler.HandleArgs(args.Skip(1).ToList());
-
-            return true;
         }
     }
 }

@@ -14,6 +14,7 @@
     <!-- Colors -->
     <SolidColorBrush x:Key="PrimaryColour">#8BC34A</SolidColorBrush>
     <SolidColorBrush x:Key="PrimaryColourHover">#7ab13b</SolidColorBrush>
+    <SolidColorBrush x:Key="PrimaryColourDisabled">#a3c679</SolidColorBrush>
     <SolidColorBrush x:Key="PrimaryFontColour">#ffffff</SolidColorBrush>
     <SolidColorBrush x:Key="BackgroundColour">#ffffff</SolidColorBrush>
     <SolidColorBrush x:Key="FontColour">#000000</SolidColorBrush>
