@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using EvotoClient.ViewModel;
-using FluentValidation;
 using GalaSoft.MvvmLight.Threading;
 using Microsoft.Practices.ServiceLocation;
 
@@ -17,6 +16,14 @@ namespace EvotoClient
         private const string Unique = "Evoto_Client";
         private static string[] _args;
 
+        public bool SignalExternalCommandLineArgs(IList<string> args)
+        {
+            // Skip first argument (filename.exe)
+            CustomUriHandler.HandleArgs(args.Skip(1).ToList());
+
+            return true;
+        }
+
         [STAThread]
         public static void Main(string[] args)
         {
@@ -26,8 +33,6 @@ namespace EvotoClient
                 var application = new App();
 
                 _args = args;
-
-                ValidatorOptions.DisplayNameResolver = (type, info, arg3) => info.Name;
 
                 application.InitializeComponent();
                 application.Run();
@@ -40,9 +45,7 @@ namespace EvotoClient
         public void HandleArgsCallback()
         {
             if (_args != null)
-            {
                 CustomUriHandler.HandleArgs(_args);
-            }
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -50,14 +53,6 @@ namespace EvotoClient
             var vm = ServiceLocator.Current.GetInstance<MultiChainViewModel>();
             if (vm.Connected)
                 vm.Cleanup();
-        }
-
-        public bool SignalExternalCommandLineArgs(IList<string> args)
-        {
-            // Skip first argument (filename.exe)
-            CustomUriHandler.HandleArgs(args.Skip(1).ToList());
-
-            return true;
         }
     }
 }
