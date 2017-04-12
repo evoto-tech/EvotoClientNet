@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using EvotoClient.ViewModel;
+using FluentValidation;
 using GalaSoft.MvvmLight.Threading;
 using Microsoft.Practices.ServiceLocation;
 
@@ -25,6 +26,8 @@ namespace EvotoClient
                 var application = new App();
 
                 _args = args;
+
+                ValidatorOptions.DisplayNameResolver = (type, info, arg3) => info.Name;
 
                 application.InitializeComponent();
                 application.Run();

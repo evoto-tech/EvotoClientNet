@@ -1,14 +1,13 @@
 ﻿namespace Models.Forms
 {
-    public class LoginModel
+    public class LoginModel : PasswordForm
     {
         public LoginModel(string email, string password)
         {
-            Email = email;
-            Password = password;
+            Email = email.Trim();
+            Password = password.Trim();
         }
 
         public string Email { get; }
-        public string Password { get; }
     }
 }

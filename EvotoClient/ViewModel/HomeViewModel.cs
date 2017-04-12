@@ -26,7 +26,7 @@ namespace EvotoClient.ViewModel
                 mainVm.OnLogin += async (e, u) => await GetVotes();
 
             ProceedCommand = new RelayCommand(DoProceed, CanProceed);
-            RefreshCommand = new RelayCommand(async () => await GetVotes());
+            RefreshCommand = new RelayCommand(async () => await GetVotes(), CanRefresh);
 
             Votes = new ObservableRangeCollection<BlockchainDetails>();
         }
@@ -45,7 +45,13 @@ namespace EvotoClient.ViewModel
         public bool Loading
         {
             get { return _loading; }
-            set { Set(ref _loading, value); }
+            set
+            {
+                Set(ref _loading, value);
+                RaisePropertyChanged(nameof(VotesVisible));
+                RaisePropertyChanged(nameof(NoVotesMessageVisible));
+                RefreshCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private bool _noVotes;
@@ -57,6 +63,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _noVotes, value);
                 RaisePropertyChanged(nameof(VotesVisible));
+                RaisePropertyChanged(nameof(NoVotesMessageVisible));
             }
         }
 
@@ -118,9 +125,13 @@ namespace EvotoClient.ViewModel
             return SelectedVote != null;
         }
 
+        private bool CanRefresh()
+        {
+            return !Loading;
+        }
+
         private async Task GetVotes()
         {
-            Debug.WriteLine("Getting Votes");
             Ui(() => { Loading = true; });
 
             var votes = (await _homeApiClient.GetCurrentVotes()).ToList();
@@ -136,7 +147,6 @@ namespace EvotoClient.ViewModel
                 }
                 else
                 {
-                    Debug.WriteLine("No votes");
                     NoVotes = true;
                 }
             });
