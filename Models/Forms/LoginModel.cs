@@ -4,8 +4,8 @@
     {
         public LoginModel(string email, string password)
         {
-            Email = email.Trim();
-            Password = password.Trim();
+            Email = email?.Trim();
+            Password = password?.Trim();
         }
 
         public string Email { get; }

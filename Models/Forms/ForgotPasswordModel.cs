@@ -4,7 +4,7 @@
     {
         public ForgotPasswordModel(string email)
         {
-            Email = email;
+            Email = email?.Trim();
         }
 
         public string Email { get; }

@@ -88,12 +88,6 @@ namespace EvotoClient.ViewModel
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
 
-            if (p1 != p2)
-            {
-                errorMessages.Add("Passwords do not match");
-                valid = false;
-            }
-
             model = new ResetPasswordModel(Email, p1, p2, Token);
             var v = _validator.Validate(model);
             if (!v.IsValid)

@@ -6,9 +6,9 @@ namespace Models.Forms
     {
         public RegisterModel(string email, string password, string confirmPassword)
         {
-            Email = email.Trim();
-            Password = password.Trim();
-            ConfirmPassword = confirmPassword.Trim();
+            Email = email?.Trim();
+            Password = password?.Trim();
+            ConfirmPassword = confirmPassword?.Trim();
         }
 
         public string Email { get; }

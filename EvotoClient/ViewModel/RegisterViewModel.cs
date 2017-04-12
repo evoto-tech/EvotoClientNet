@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
@@ -56,7 +57,7 @@ namespace EvotoClient.ViewModel
 
         public bool FieldsLoading
         {
-            get { return _fieldsLoading;}
+            get { return _fieldsLoading; }
             set
             {
                 Set(ref _fieldsLoading, value);
@@ -94,10 +95,8 @@ namespace EvotoClient.ViewModel
             registerModel = null;
             var valid = true;
 
-            // Start out with list of custom field messages, as they should be first. Maybe
-            var errorMessages =
-                CustomFields.Where(cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
-                    .Select(f => $"{f.Name} is Required").ToList();
+            var errorMessages = new List<string>();
+            var customErrors = false;
 
             var passwordContainer = parameter as IHavePasswords;
             if (passwordContainer == null)
@@ -107,19 +106,24 @@ namespace EvotoClient.ViewModel
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
 
-            // Check they match
-            if (p1 != p2)
-            {
-                errorMessages.Add("Passwords do not match");
-                valid = false;
-            }
-
             // Validate the form
             registerModel = new RegisterModel(Email, p1, p2);
             var v = _validator.Validate(registerModel);
             if (!v.IsValid)
             {
-                errorMessages.AddRange(v.Errors.Select(e => e.ErrorMessage));
+                // Put the errors into our error list, ensuring email goes first, followed by custom, followed by password
+                // This is the same order as the view
+                foreach (var msg in v.Errors)
+                {
+                    if ((msg.PropertyName != nameof(registerModel.Email)) && !customErrors)
+                    {
+                        customErrors = true;
+                        errorMessages.AddRange(CustomFields.Where(
+                                cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
+                            .Select(f => $"{f.Name} is Required"));
+                    }
+                    errorMessages.Add(msg.ErrorMessage);
+                }
                 valid = false;
             }
 
