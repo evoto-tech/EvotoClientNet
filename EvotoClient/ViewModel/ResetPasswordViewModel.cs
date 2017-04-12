@@ -43,7 +43,7 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _loading, value);
-                ResetCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(CanSubmit));
             }
         }
 
@@ -70,6 +70,8 @@ namespace EvotoClient.ViewModel
             get { return _token; }
             set { Set(ref _token, value); }
         }
+
+        public bool CanSubmit => !Loading;
 
         #endregion
 
