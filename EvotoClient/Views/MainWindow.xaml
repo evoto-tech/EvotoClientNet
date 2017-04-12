@@ -6,6 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         xmlns:local="clr-namespace:EvotoClient.Views"
+        xmlns:converters="clr-namespace:EvotoClient.Converters"
         mc:Ignorable="d ignore"
         Height="425"
         Width="525"
@@ -17,12 +18,18 @@
         TextOptions.TextRenderingMode="Auto"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Icon="pack://application:,,,../Skins/Icon.ico"
-        
+
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
+    <Window.Resources>
+        <converters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
+    </Window.Resources>
+
     <DockPanel>
-        <ContentControl Content="{Binding UserBar, Source={StaticResource Locator}}"
-                        DockPanel.Dock="Top" Height="30" />
+        <ContentControl
+            Visibility="{Binding LoggedIn,Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+            Content="{Binding UserBar, Source={StaticResource Locator}}"
+            DockPanel.Dock="Top" Height="30" />
         <ContentControl Content="{Binding CurrentView}" />
     </DockPanel>
 </Window>

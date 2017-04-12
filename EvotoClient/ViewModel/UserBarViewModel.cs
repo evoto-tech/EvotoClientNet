@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using Models;
 
 namespace EvotoClient.ViewModel
@@ -28,7 +27,9 @@ namespace EvotoClient.ViewModel
 
         private void DoLogout()
         {
-            Application.Current.Shutdown();
+            Email = "";
+            MainVm.InvokeLogout(this);
+            MainVm.ChangeView(EvotoView.Login);
         }
 
         #endregion

@@ -78,6 +78,14 @@ namespace Api
         }
 
         /// <summary>
+        ///     Deletes any tokens and user authentication info. Used when logging out
+        /// </summary>
+        public static void ClearAuth()
+        {
+            CurrentAuth.Clear();
+        }
+
+        /// <summary>
         ///     Makes a HTTP GET call to a specified endpoint and deserializes the
         ///     response to a specified type.
         /// </summary>
