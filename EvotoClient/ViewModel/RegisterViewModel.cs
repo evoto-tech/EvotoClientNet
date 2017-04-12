@@ -145,6 +145,20 @@ namespace EvotoClient.ViewModel
                 .Select(f => $"{f.Name} is Required");
         }
 
+        private void ResetForm(object parameter)
+        {
+            var passwordContainer = parameter as IHavePasswords;
+            if (passwordContainer == null)
+                return;
+
+            passwordContainer.SecurePassword.Clear();
+            passwordContainer.SecurePasswordConfirm.Clear();
+
+            Email = "";
+            foreach (var f in CustomFields)
+                f.Value = "";
+        }
+
         private void DoRegister(object parameter)
         {
             RegisterModel registerModel;
@@ -164,10 +178,15 @@ namespace EvotoClient.ViewModel
                     await _userClient.Register(registerModel);
 
                     // Redirect to login page
-                    // TODO: If email verification off, login?
                     MainVm.ChangeView(EvotoView.Login);
                     var loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
 
+                    Ui(() =>
+                    {
+                        Loading = false;
+                        ResetForm(parameter);
+                    });
+                    
                     // Autofill their email and ask them to verify it
                     loginVm.VerifyEmail(Email);
                 }

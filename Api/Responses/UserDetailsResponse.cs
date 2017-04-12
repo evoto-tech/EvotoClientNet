@@ -7,21 +7,17 @@ namespace Api.Responses
     [Serializable]
     internal class UserDetailsResponse
     {
-        [DataMember]
-        public int UserId { get; private set; }
+        [DataMember(Name = "id")]
+        public int Id { get; set; }
 
-        [DataMember]
-        public string Email { get; private set; }
-
-        [DataMember]
-        public string CompanyId { get; private set; }
+        [DataMember(Name = "email")]
+        public string Email { get; set; }
 
         public UserDetails MapToModel()
         {
             return new UserDetails
             {
-                UserId = UserId,
-                CompanyId = CompanyId,
+                Id = Id,
                 Email = Email
             };
         }

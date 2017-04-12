@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows;
+using Api;
 using Blockchain;
 using Microsoft.Practices.ServiceLocation;
 using Models;
@@ -40,6 +41,8 @@ namespace EvotoClient.ViewModel
 
         public event EventHandler<UserDetails> OnLogin;
 
+        public event EventHandler OnLogout;
+
         #endregion
 
         #region Properties
@@ -67,6 +70,13 @@ namespace EvotoClient.ViewModel
         public void InvokeLogin(object caller, UserDetails details)
         {
             OnLogin?.Invoke(caller, details);
+        }
+
+        public void InvokeLogout(object caller)
+        {
+            LoggedIn = false;
+            ApiClient.ClearAuth();
+            OnLogout?.Invoke(caller, EventArgs.Empty);
         }
 
         public void ChangeView(EvotoView view)
