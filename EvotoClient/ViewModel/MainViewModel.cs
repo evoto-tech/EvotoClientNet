@@ -79,7 +79,7 @@ namespace EvotoClient.ViewModel
         {
             LoggedIn = false;
             ApiClient.ClearAuth();
-            MainVm.ChangeView(EvotoView.Login);
+            ChangeView(EvotoView.Login);
             OnLogout?.Invoke(caller, EventArgs.Empty);
         }
 
