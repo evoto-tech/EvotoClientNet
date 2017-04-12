@@ -7,6 +7,10 @@ namespace Api.Requests
     [Serializable]
     public class ResetPasswordRequestModel
     {
+        public ResetPasswordRequestModel()
+        {
+        }
+
         public ResetPasswordRequestModel(ResetPasswordModel model)
         {
             Email = model.Email;

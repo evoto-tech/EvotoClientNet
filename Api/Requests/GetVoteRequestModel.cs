@@ -6,6 +6,10 @@ namespace Api.Requests
     [Serializable]
     public class GetVoteRequestModel
     {
+        public GetVoteRequestModel()
+        {
+        }
+
         public GetVoteRequestModel(string blockchain, string walletId, string token, string blindSignature)
         {
             Blockchain = blockchain;

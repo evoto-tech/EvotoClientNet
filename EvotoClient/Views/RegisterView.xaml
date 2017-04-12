@@ -92,7 +92,7 @@
         <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
 
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
-            <Hyperlink Command="{Binding ReturnToLoginCommand}">Login</Hyperlink>
+            <Hyperlink Command="{Binding ReturnToLoginCommand}">Back to Login</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>
