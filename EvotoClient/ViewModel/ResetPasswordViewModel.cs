@@ -129,7 +129,8 @@ namespace EvotoClient.ViewModel
                 try
                 {
                     await _userClient.ResetPassword(resetPasswordModel);
-                    MainVm.ChangeView(EvotoView.Home);
+                    var userDetails = await _userClient.GetCurrentUserDetails();
+                    MainVm.Login(this, userDetails);
 
                     Ui(() =>
                     {

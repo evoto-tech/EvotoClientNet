@@ -28,8 +28,7 @@ namespace EvotoClient.ViewModel
         private void DoLogout()
         {
             Email = "";
-            MainVm.InvokeLogout(this);
-            MainVm.ChangeView(EvotoView.Login);
+            MainVm.Logout(this);
         }
 
         #endregion
