@@ -194,6 +194,7 @@ namespace EvotoClient.ViewModel
 
                     ShowConfirmEmail = false;
                     Loading = false;
+                    Email = "";
 
                     MainVm.ChangeView(EvotoView.Home);
                     MainVm.LoggedIn = true;

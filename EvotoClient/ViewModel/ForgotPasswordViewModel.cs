@@ -107,6 +107,7 @@ namespace EvotoClient.ViewModel
 
                     Ui(() =>
                     {
+                        Email = "";
                         Loading = false;
                     });
                 }
