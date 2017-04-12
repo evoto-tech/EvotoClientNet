@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:local="clr-namespace:EvotoClient.Views"
         mc:Ignorable="d ignore"
         Height="425"
         Width="525"
@@ -16,9 +17,12 @@
         TextOptions.TextRenderingMode="Auto"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Icon="pack://application:,,,../Skins/Icon.ico"
+        
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <DockPanel>
+        <ContentControl Content="{Binding UserBar, Source={StaticResource Locator}}"
+                        DockPanel.Dock="Top" Height="30" />
         <ContentControl Content="{Binding CurrentView}" />
     </DockPanel>
 </Window>

@@ -222,6 +222,7 @@
     <Compile Include="ViewModel\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModel\RegisterViewModel.cs" />
     <Compile Include="ViewModel\ResultsViewModel.cs" />
+    <Compile Include="ViewModel\UserBarViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="Views\CustomUserFieldView.xaml">
@@ -263,6 +264,10 @@
     <Page Include="Views\ResultsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserBarView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VoteView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -319,6 +324,9 @@
     </Compile>
     <Compile Include="Views\ResultsView.xaml.cs">
       <DependentUpon>ResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserBarView.xaml.cs">
+      <DependentUpon>UserBarView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VoteView.xaml.cs">
       <DependentUpon>VoteView.xaml</DependentUpon>
