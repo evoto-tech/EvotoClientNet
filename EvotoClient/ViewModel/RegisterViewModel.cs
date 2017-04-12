@@ -21,7 +21,7 @@ namespace EvotoClient.ViewModel
         {
             _validator = new RegisterModelValidator();
             _userClient = new UserClient();
-            RegisterCommand = new RelayCommand<object>(DoRegister, CanRegister);
+            RegisterCommand = new RelayCommand<object>(DoRegister);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
 
             CustomFields = new ObservableRangeCollection<CustomUserFieldViewModel>();
@@ -63,6 +63,7 @@ namespace EvotoClient.ViewModel
                 Set(ref _fieldsLoading, value);
                 RaisePropertyChanged(nameof(ShowFields));
                 RaisePropertyChanged(nameof(LoadingSpinner));
+                RaisePropertyChanged(nameof(CanRegister));
             }
         }
 
@@ -86,6 +87,8 @@ namespace EvotoClient.ViewModel
 
         public ObservableRangeCollection<CustomUserFieldViewModel> CustomFields { get; }
 
+        public bool CanRegister => !FieldsLoading && !_registerDisabled;
+
         #endregion
 
         #region Methods
@@ -93,7 +96,6 @@ namespace EvotoClient.ViewModel
         private bool IsFormValid(object parameter, out RegisterModel registerModel)
         {
             registerModel = null;
-            var valid = true;
 
             var errorMessages = new List<string>();
             var customErrors = false;
@@ -118,24 +120,29 @@ namespace EvotoClient.ViewModel
                     if ((msg.PropertyName != nameof(registerModel.Email)) && !customErrors)
                     {
                         customErrors = true;
-                        errorMessages.AddRange(CustomFields.Where(
-                                cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
-                            .Select(f => $"{f.Name} is Required"));
+                        errorMessages.AddRange(GetCustomErrors());
                     }
                     errorMessages.Add(msg.ErrorMessage);
                 }
-                valid = false;
             }
 
+            if (!customErrors)
+                errorMessages.AddRange(GetCustomErrors());
+
             // Display error message(s) if invalid
-            if (!valid)
+            if (errorMessages.Any())
+            {
                 ErrorMessage = string.Join("\n", errorMessages);
-            return valid;
+                return false;
+            }
+            ErrorMessage = "";
+            return true;
         }
 
-        private bool CanRegister(object _)
+        private IEnumerable<string> GetCustomErrors()
         {
-            return !FieldsLoading && !_registerDisabled;
+            return CustomFields.Where(cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
+                .Select(f => $"{f.Name} is Required");
         }
 
         private void DoRegister(object parameter)
@@ -166,6 +173,8 @@ namespace EvotoClient.ViewModel
                 }
                 catch (RegisterDisabledException)
                 {
+                    _registerDisabled = true;
+                    RaisePropertyChanged(nameof(CanRegister));
                     Ui(() =>
                     {
                         ErrorMessage = "Sorry, registration is not enabled at this time";
@@ -174,8 +183,6 @@ namespace EvotoClient.ViewModel
                 }
                 catch (BadRequestException e)
                 {
-                    _registerDisabled = true;
-                    RegisterCommand.RaiseCanExecuteChanged();
                     Ui(() =>
                     {
                         ErrorMessage = e.Message;

@@ -76,6 +76,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0 5px"
+            IsEnabled="{Binding CanRegister}"
             Command="{Binding RegisterCommand}"
             CommandParameter="{Binding ElementName=This}">
             Register
@@ -88,7 +89,7 @@
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
 
-        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
 
         <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
             <Hyperlink Command="{Binding ReturnToLoginCommand}">Login</Hyperlink>

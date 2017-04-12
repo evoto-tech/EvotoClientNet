@@ -11,7 +11,7 @@ namespace Models.Validate
                 .EmailAddress().WithMessage("Invalid Email Address")
                 .NotEmpty().WithMessage("Invalid Email Address");
             ValidPassword();
-            RuleFor(x => x.Password).Matches(x => x.ConfirmPassword).WithMessage("Passwords must match");
+            RuleFor(x => x.Password).Equal(x => x.ConfirmPassword).WithMessage("Passwords must match");
         }
     }
 }
