@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows;
 using Api;
 using Blockchain;
@@ -67,15 +68,18 @@ namespace EvotoClient.ViewModel
 
         #region Methods
 
-        public void InvokeLogin(object caller, UserDetails details)
+        public void Login(object caller, UserDetails details)
         {
+            LoggedIn = true;
+            ChangeView(EvotoView.Home);
             OnLogin?.Invoke(caller, details);
         }
 
-        public void InvokeLogout(object caller)
+        public void Logout(object caller)
         {
             LoggedIn = false;
             ApiClient.ClearAuth();
+            ChangeView(EvotoView.Login);
             OnLogout?.Invoke(caller, EventArgs.Empty);
         }
 

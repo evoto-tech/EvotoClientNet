@@ -190,15 +190,13 @@ namespace EvotoClient.ViewModel
                         await _userClient.VerifyEmail(model);
                     }
                     await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
-                    var userDetails = await _userClient.GetCurrentUserDetails();
+
+                    var details = await _userClient.GetCurrentUserDetails();
+                    MainVm.Login(this, details);
 
                     ShowConfirmEmail = false;
                     Loading = false;
                     Email = "";
-
-                    MainVm.ChangeView(EvotoView.Home);
-                    MainVm.LoggedIn = true;
-                    MainVm.InvokeLogin(this, userDetails);
                 }
                 catch (IncorrectLoginException)
                 {
