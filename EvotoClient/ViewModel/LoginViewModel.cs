@@ -166,7 +166,7 @@ namespace EvotoClient.ViewModel
                 }
 
             if (!valid)
-                ErrorMessage = string.Join("\n", errorMessages);
+                ErrorMessage = string.Join("\n", errorMessages.Distinct());
             return valid;
         }
 
