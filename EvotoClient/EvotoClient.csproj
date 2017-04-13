@@ -205,6 +205,7 @@
     <Compile Include="Transitions\PageTransitionType.cs" />
     <Compile Include="Transitions\WidthConverter.cs" />
     <Compile Include="CustomUriHandler.cs" />
+    <Compile Include="ViewModel\BlockchainViewModel.cs" />
     <Compile Include="ViewModel\CustomUserFieldViewModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\EvotoViewModelBase.cs" />

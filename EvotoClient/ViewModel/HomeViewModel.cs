@@ -28,7 +28,7 @@ namespace EvotoClient.ViewModel
             ProceedCommand = new RelayCommand(DoProceed, CanProceed);
             RefreshCommand = new RelayCommand(async () => await GetVotes(), CanRefresh);
 
-            Votes = new ObservableRangeCollection<BlockchainDetails>();
+            Votes = new ObservableRangeCollection<BlockchainViewModel>();
         }
 
         #region Commands
@@ -71,11 +71,11 @@ namespace EvotoClient.ViewModel
 
         public bool VotesVisible => !Loading && !NoVotes;
 
-        public ObservableRangeCollection<BlockchainDetails> Votes { get; }
+        public ObservableRangeCollection<BlockchainViewModel> Votes { get; }
 
-        private BlockchainDetails _selectedVote;
+        private BlockchainViewModel _selectedVote;
 
-        public BlockchainDetails SelectedVote
+        public BlockchainViewModel SelectedVote
         {
             get { return _selectedVote; }
             set
@@ -91,6 +91,9 @@ namespace EvotoClient.ViewModel
 
         private void DoProceed()
         {
+            if (SelectedVote == null)
+                return;
+
             Loading = true;
 
             // Contact the Registrar to see if we have voted on this vote yet
@@ -107,13 +110,13 @@ namespace EvotoClient.ViewModel
                 {
                     MainVm.ChangeView(EvotoView.Vote);
                     var voteView = GetVm<VoteViewModel>();
-                    voteView.SelectVote(SelectedVote);
+                    voteView.SelectVote(SelectedVote.GetModel());
                 }
                 else
                 {
                     MainVm.ChangeView(EvotoView.Results);
                     var resultsVm = GetVm<ResultsViewModel>();
-                    resultsVm.SelectVote(SelectedVote);
+                    resultsVm.SelectVote(SelectedVote.GetModel());
                 }
             });
 
@@ -135,6 +138,7 @@ namespace EvotoClient.ViewModel
             Ui(() => { Loading = true; });
 
             var votes = (await _homeApiClient.GetCurrentVotes()).ToList();
+            var voteVms = votes.Select(v => new BlockchainViewModel(v));
 
             Ui(() =>
             {
@@ -142,7 +146,7 @@ namespace EvotoClient.ViewModel
                 if (votes.Any())
                 {
                     Votes.Clear();
-                    Votes.AddRange(votes);
+                    Votes.AddRange(voteVms);
                     NoVotes = false;
                 }
                 else

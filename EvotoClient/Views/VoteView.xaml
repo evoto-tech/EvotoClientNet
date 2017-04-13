@@ -56,7 +56,7 @@
         <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
 
         <TextBlock Grid.Row="2" Grid.Column="1"
-                   Text="{Binding ErrorMessage}"
+                   Text="{Binding ErrorMessage}" TextWrapping="Wrap"
                    HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
 
         <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
