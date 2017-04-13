@@ -51,12 +51,17 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <TextBlock Padding="16 0 0 0" Grid.Row="0" FontWeight="Bold" Text="{Binding Name}" />
-                        <TextBlock Padding="16 0 0 0" Grid.Row="1" Text="{Binding Info}" />
+                        <TextBlock Padding="16 0 0 0" Grid.Row="0" Grid.Column="0" FontWeight="Bold" Text="{Binding Name}" />
+                        <TextBlock Padding="16 0 0 0" Grid.Row="1" Grid.Column="0" Text="{Binding Info}" />
+                        <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Text="{Binding EndDate}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
