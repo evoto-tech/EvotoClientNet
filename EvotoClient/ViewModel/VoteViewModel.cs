@@ -138,6 +138,7 @@ namespace EvotoClient.ViewModel
                 CannotConnect = false;
                 TotalQuestions = 0;
                 CurrentQuestion = 0;
+                ErrorMessage = "";
             });
 
             Task.Run(async () =>
@@ -234,7 +235,8 @@ namespace EvotoClient.ViewModel
                     {
                         Loading = false;
 
-                        ErrorMessage = "An error occurred while voting. Please try again";
+                        ErrorMessage =
+                            "An error occurred while voting. Please try again or contact a system administrator";
                     });
                 }
             });
