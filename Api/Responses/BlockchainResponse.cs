@@ -21,6 +21,9 @@ namespace Api.Responses
 
         [DataMember(Name = "port")]
         public int Port { get; private set; }
+        
+        [DataMember(Name = "host")]
+        public string Host { get; private set; }
 
         [DataMember(Name = "walletId")]
         public string WalletId { get; private set; }
@@ -40,6 +43,7 @@ namespace Api.Responses
                 ChainString = ChainString,
                 Info = Info,
                 Port = Port,
+                Host = Host,
                 WalletId = WalletId,
                 Blocks = Blocks,
                 EncryptKey = EncryptKey
