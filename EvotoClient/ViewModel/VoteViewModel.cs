@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Blockchain.Exceptions;
 using EvotoClient.Views;
 using GalaSoft.MvvmLight.Command;
 using Models;
@@ -19,6 +20,8 @@ namespace EvotoClient.ViewModel
             NextCommand = new RelayCommand(DoNext, CanNext);
             PrevCommand = new RelayCommand(DoPrev, CanPrev);
 
+            ReconnectCommand = new RelayCommand(Connect);
+
             Loaded += (sender, args) => { TransitionView = ((VoteView) sender).pageTransition; };
         }
 
@@ -29,6 +32,8 @@ namespace EvotoClient.ViewModel
 
         public RelayCommand NextCommand { get; }
         public RelayCommand PrevCommand { get; }
+
+        public RelayCommand ReconnectCommand { get; }
 
         #endregion
 
@@ -93,6 +98,14 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private bool _cannotConnect;
+
+        public bool CannotConnect
+        {
+            get { return _cannotConnect; }
+            set { Set(ref _cannotConnect, value); }
+        }
+
         #endregion
 
         #region Methods
@@ -100,12 +113,38 @@ namespace EvotoClient.ViewModel
         public void SelectVote(BlockchainDetails blockchain)
         {
             _currentDetails = blockchain;
-            Ui(() => { Loading = true; });
+
+            Connect();
+        }
+
+        private void Connect()
+        {
+            if (Loading)
+                return;
+
+            Ui(() =>
+            {
+                Loading = true;
+                CannotConnect = false;
+                TotalQuestions = 0;
+                CurrentQuestion = 0;
+            });
 
             Task.Run(async () =>
             {
-                await ConnectToBlockchain(blockchain);
-                await GetVoteDetails();
+                try
+                {
+                    await ConnectToBlockchain(_currentDetails);
+                    await GetVoteDetails();
+                }
+                catch (CouldNotConnectToBlockchainException)
+                {
+                    Ui(() =>
+                    {
+                        Loading = false;
+                        CannotConnect = true;
+                    });
+                }
             });
         }
 
@@ -122,8 +161,7 @@ namespace EvotoClient.ViewModel
                 else
                     return;
 
-            // TODO: Varied host
-            await MultiChainVm.Connect("localhost", blockchain.Port, blockchain.ChainString);
+            await MultiChainVm.Connect(blockchain.Host, blockchain.Port, blockchain.ChainString);
         }
 
         private async Task GetVoteDetails()

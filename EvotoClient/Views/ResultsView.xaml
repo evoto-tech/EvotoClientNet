@@ -34,6 +34,11 @@
             Visibility="{Binding ResultsVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
 
+        <TextBlock Grid.Row="0" Grid.Column="1"
+                   Visibility="{Binding CannotConnect, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                   HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
+                   >Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink></TextBlock>
+
         <StackPanel Grid.Column="1"
                     Grid.Row="0"
                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
