@@ -24,6 +24,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="5*" />
             <RowDefinition Height="75*" />
+            <RowDefinition Height="5*" />
             <RowDefinition Height="10*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
@@ -41,9 +42,10 @@
 
         <TextBlock Grid.Row="1" Grid.Column="1"
                    Visibility="{Binding CannotConnect, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-                   HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
-                   >Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink></TextBlock>
-        
+                   HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">
+            Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink>
+        </TextBlock>
+
         <local:PageTransition
             Grid.Row="1" Grid.Column="1"
             x:Name="pageTransition" Margin="25"
@@ -53,7 +55,10 @@
         <Button Grid.Row="1" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
         <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
 
-        <Button Grid.Row="2" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
-        <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
+        <TextBlock Text="{Binding ErrorMessage}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
+
+        <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
+        <Button Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>
