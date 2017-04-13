@@ -14,7 +14,7 @@
         BorderThickness="0 0 0 1"
         Background="{x:Static SystemColors.ControlLightLightBrush}">
         <Border.Effect>
-            <DropShadowEffect ShadowDepth="2" Color="#444444" BlurRadius="2" Direction="0" />
+            <DropShadowEffect ShadowDepth="2" Color="#444444" BlurRadius="2" Direction="90" />
         </Border.Effect>
 
         <DockPanel>
