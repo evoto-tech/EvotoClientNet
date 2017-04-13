@@ -67,7 +67,7 @@ namespace EvotoClient.ViewModel
         {
             MainVm.ChangeView(EvotoView.Results);
             var resultsVm = GetVm<ResultsViewModel>();
-            resultsVm.ShowPage();
+            resultsVm.ReInit();
         }
 
         public void DoFind()
@@ -78,7 +78,7 @@ namespace EvotoClient.ViewModel
                 var answerText = answer == null ? "" : JsonConvert.SerializeObject(answer.Answers);
                 Ui(() =>
                 {
-                    NotFound = (answer == null);
+                    NotFound = answer == null;
                     AnswerText = answerText;
                 });
             });

@@ -279,10 +279,15 @@ namespace EvotoClient.ViewModel
             MainVm.ChangeView(EvotoView.FindVote);
         }
 
-        public void ShowPage(bool forwards = true)
+        private void ShowPage(bool forwards = true)
         {
             var page = Results[CurrentResults - 1];
             TransitionView.ShowPage(page, forwards);
+        }
+
+        public void ReInit()
+        {
+            Connect();
         }
 
         #endregion
