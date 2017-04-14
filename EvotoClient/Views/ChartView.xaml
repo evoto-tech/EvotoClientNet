@@ -21,6 +21,7 @@
                    Grid.Column="0"
                    Text="{Binding Question}" 
                    VerticalAlignment="Center"
+                   TextWrapping="Wrap"
                    Padding="16 0 0 0"></TextBlock>
         <chartingToolkit:Chart x:Name="Chart" BorderThickness="0" Grid.Row="1" Grid.Column="0">
             <chartingToolkit:PieSeries ItemsSource="{Binding Data}"
