@@ -12,7 +12,7 @@
         <chartingToolkit:Chart Title="{Binding Question}" BorderThickness="0">
             <chartingToolkit:PieSeries ItemsSource="{Binding Data}"
                                        IndependentValueBinding="{Binding Path=Key}"
-                                       DependentValueBinding="{Binding Path=Value}" />
+                                       DependentValueBinding="{Binding Path=Value}" BorderThickness="0" />
         </chartingToolkit:Chart>
     </Grid>
 </UserControl>
