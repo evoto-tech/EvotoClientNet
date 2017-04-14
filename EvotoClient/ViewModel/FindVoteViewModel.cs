@@ -3,23 +3,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Command;
-using Newtonsoft.Json;
 
 namespace EvotoClient.ViewModel
 {
     public class FindVoteViewModel : EvotoViewModelBase
     {
         private List<BlockchainVoteModelPlainText> _answers;
+        private List<BlockchainQuestionModel> _questions;
 
         public FindVoteViewModel()
         {
             BackCommand = new RelayCommand(DoBack);
-            FindCommand = new RelayCommand(DoFind);
+            FindCommand = new RelayCommand(DoFind, CanFind);
         }
 
-        public void SetResults(List<BlockchainVoteModelPlainText> results)
+        public void SetResults(List<BlockchainQuestionModel> questions, List<BlockchainVoteModelPlainText> answers)
         {
-            _answers = results;
+            _questions = questions;
+            _answers = answers;
         }
 
         #region Commands
@@ -37,15 +38,19 @@ namespace EvotoClient.ViewModel
         public string MagicWords
         {
             get { return _magicWords; }
-            set { Set(ref _magicWords, value); }
+            set
+            {
+                Set(ref _magicWords, value);
+                FindCommand.RaiseCanExecuteChanged();
+            }
         }
 
-        private bool _notFound;
+        private string _lastMagicWords;
 
-        public bool NotFound
+        public string LastMagicWords
         {
-            get { return _notFound; }
-            set { Set(ref _notFound, value); }
+            get { return _lastMagicWords; }
+            set { Set(ref _lastMagicWords, value); }
         }
 
         private string _answerText;
@@ -74,14 +79,42 @@ namespace EvotoClient.ViewModel
         {
             Task.Run(() =>
             {
-                var answer = _answers.FirstOrDefault(a => a.MagicWords == MagicWords);
-                var answerText = answer == null ? "" : JsonConvert.SerializeObject(answer.Answers);
+                LastMagicWords = MagicWords;
+                FindCommand.RaiseCanExecuteChanged();
+
+                var answer = _answers.FirstOrDefault(a => a.MagicWords == MagicWords.Trim());
                 Ui(() =>
                 {
-                    NotFound = answer == null;
-                    AnswerText = answerText;
+                    if (answer == null)
+                        AnswerText = "Answer Not Found";
+                    else
+                        AnswerText = FormatAnswer(answer);
                 });
             });
+        }
+
+        private string FormatAnswer(BlockchainVoteModelPlainText answers)
+        {
+            var answerText = "";
+            foreach (var q in _questions)
+            {
+                if (answerText != "")
+                    answerText += "\n";
+                answerText += $"Question: {q.Question}\n";
+                var answer = answers.Answers.FirstOrDefault(a => a.Question == q.Number);
+                if (answer == null)
+                    answerText += "Answer Not Found!";
+                else
+                    answerText += "Answer: " + answer.Answer;
+            }
+            return answerText;
+        }
+        
+        private bool CanFind()
+        {
+            if (string.IsNullOrWhiteSpace(MagicWords))
+                return false;
+            return MagicWords != LastMagicWords;
         }
 
         #endregion
