@@ -53,4 +53,8 @@
         <Setter Property="Window.Title" Value="{DynamicResource Title}"/>
     </Style>
 
+    <Style x:Key="DatePickerStyle" TargetType="{x:Type DatePicker}">
+
+    </Style>
+    
 </ResourceDictionary>
