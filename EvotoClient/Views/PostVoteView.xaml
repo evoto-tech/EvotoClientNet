@@ -28,7 +28,7 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="Magic Words: " VerticalAlignment="Center" FontWeight="Bold" />
                     <TextBox Text="{Binding MagicWords}" TextAlignment="Center" VerticalAlignment="Center"
-                             IsReadOnly="True" Width="100" />
+                             IsReadOnly="True" Width="150" />
                 </StackPanel>
                 <Button Margin="5 5" Command="{Binding CopyCommand}">Copy to Clipboard</Button>
                 <TextBlock Text="{Binding CopyStatus}" HorizontalAlignment="Center" />

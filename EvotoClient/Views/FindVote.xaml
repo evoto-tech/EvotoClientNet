@@ -33,7 +33,7 @@
                 <TextBlock Text="Magic Words: " VerticalAlignment="Center" FontWeight="Bold" />
                 <TextBox Text="{Binding MagicWords, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                          TextAlignment="Center" VerticalAlignment="Center"
-                         Width="100">
+                         Width="150">
                     <TextBox.InputBindings>
                         <KeyBinding Command="{Binding FindCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
                     </TextBox.InputBindings>

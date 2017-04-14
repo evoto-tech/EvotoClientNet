@@ -17,7 +17,7 @@ namespace EvotoClient.ViewModel
         public VoteViewModel()
         {
             VoteCommand = new RelayCommand(DoVote, CanVote);
-            BackCommand = new RelayCommand(DoBack);
+            BackCommand = new RelayCommand(DoBack, CanBack);
 
             NextCommand = new RelayCommand(DoNext, CanNext);
             PrevCommand = new RelayCommand(DoPrev, CanPrev);
@@ -53,6 +53,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _loading, value);
                 RaisePropertyChanged(nameof(VoteVisble));
+                VoteCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -125,6 +126,8 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _voting, value);
                 RaisePropertyChanged(nameof(VoteVisble));
+                BackCommand.RaiseCanExecuteChanged();
+                VoteCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -230,10 +233,15 @@ namespace EvotoClient.ViewModel
             if (!MultiChainVm.Connected)
                 throw new Exception("Not connected");
 
+            // Get userbar to temporarily disable logout
+            var userBar = GetVm<UserBarViewModel>();
+
+            // Reset vote progress
             VoteProgress = new VoteProgressViewModel();
 
             Ui(() =>
             {
+                userBar.LogoutDisabled = true;
                 Voting = true;
                 ErrorMessage = "";
             });
@@ -247,6 +255,7 @@ namespace EvotoClient.ViewModel
                     {
                         Voting = false;
                         VoteProgress = null;
+                        userBar.LogoutDisabled = false;
 
                         var postVoteVm = GetVm<PostVoteViewModel>();
                         postVoteVm.Voted(_currentDetails, words);
@@ -259,6 +268,7 @@ namespace EvotoClient.ViewModel
                     {
                         Voting = false;
                         VoteProgress = null;
+                        userBar.LogoutDisabled = false;
 
                         ErrorMessage =
                             "An error occurred while voting. Please try again or contact a system administrator";
@@ -269,6 +279,9 @@ namespace EvotoClient.ViewModel
 
         private bool CanVote()
         {
+            if (Voting || Loading)
+                return false;
+
             if (!Questions.Any())
                 return false;
             return Questions.All(q => q.HasAnswer);
@@ -277,6 +290,11 @@ namespace EvotoClient.ViewModel
         private void DoBack()
         {
             MainVm.ChangeView(EvotoView.Home);
+        }
+
+        private bool CanBack()
+        {
+            return !Voting;
         }
 
         private void DoNext()
