@@ -120,9 +120,9 @@ namespace EvotoClient.ViewModel
                 if (SelectedVote.IsCurrent)
                 {
                     showResults = await _voteClient.HasVoted(SelectedVote.ChainString);
-
-                    Ui(() => { Loading = false; });
                 }
+
+                Ui(() => { Loading = false; });
 
                 if (!showResults)
                 {
