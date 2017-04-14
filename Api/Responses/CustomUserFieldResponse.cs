@@ -13,12 +13,16 @@ namespace Api.Responses
         [DataMember(Name = "required")]
         public bool Required { get; private set; }
 
+        [DataMember(Name = "type")]
+        public string Type { get; private set; }
+
         public CustomUserField MapToModel()
         {
             return new CustomUserField
             {
                Name = Name,
-               Required = Required
+               Required = Required,
+               Type = Type
             };
         }
     }
