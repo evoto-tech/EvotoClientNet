@@ -16,10 +16,10 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="10*" MaxHeight="50"/>
+            <RowDefinition Height="10*" MaxHeight="50"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="{Binding AnswerText}" />
         <TextBox Grid.Row="0" Visibility="{Binding NotFound, Converter={StaticResource BoolToVisibilityHiddenConverter}}" Text="Answer not found" />
