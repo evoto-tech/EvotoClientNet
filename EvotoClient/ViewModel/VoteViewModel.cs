@@ -56,7 +56,7 @@ namespace EvotoClient.ViewModel
             }
         }
 
-        public bool VoteVisble => !Loading;
+        public bool VoteVisble => !Loading && !Voting;
 
         public string QuestionText
         {
@@ -114,6 +114,26 @@ namespace EvotoClient.ViewModel
         {
             get { return _errorMessage; }
             set { Set(ref _errorMessage, value); }
+        }
+
+        public bool _voting;
+
+        public bool Voting
+        {
+            get { return _voting; }
+            set
+            {
+                Set(ref _voting, value);
+                RaisePropertyChanged(nameof(VoteVisble));
+            }
+        }
+
+        private VoteProgressViewModel _voteProgress;
+
+        public VoteProgressViewModel VoteProgress
+        {
+            get { return _voteProgress; }
+            private set { Set(ref _voteProgress, value); }
         }
 
         #endregion
@@ -209,9 +229,12 @@ namespace EvotoClient.ViewModel
         {
             if (!MultiChainVm.Connected)
                 throw new Exception("Not connected");
+
+            VoteProgress = new VoteProgressViewModel();
+
             Ui(() =>
             {
-                Loading = true;
+                Voting = true;
                 ErrorMessage = "";
             });
 
@@ -219,10 +242,11 @@ namespace EvotoClient.ViewModel
             {
                 try
                 {
-                    var words = await MultiChainVm.Vote(Questions.ToList(), _currentDetails);
+                    var words = await MultiChainVm.Vote(Questions.ToList(), _currentDetails, VoteProgress.Progress);
                     Ui(() =>
                     {
-                        Loading = false;
+                        Voting = false;
+                        VoteProgress = null;
 
                         var postVoteVm = GetVm<PostVoteViewModel>();
                         postVoteVm.Voted(_currentDetails, words);
@@ -233,7 +257,8 @@ namespace EvotoClient.ViewModel
                 {
                     Ui(() =>
                     {
-                        Loading = false;
+                        Voting = false;
+                        VoteProgress = null;
 
                         ErrorMessage =
                             "An error occurred while voting. Please try again or contact a system administrator";
