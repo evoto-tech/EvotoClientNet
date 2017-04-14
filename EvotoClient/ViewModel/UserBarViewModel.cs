@@ -7,7 +7,7 @@ namespace EvotoClient.ViewModel
     {
         public UserBarViewModel()
         {
-            LogoutCommand = new RelayCommand(DoLogout);
+            LogoutCommand = new RelayCommand(DoLogout, CanLogout);
 
             MainVm.OnLogin += (sender, details) => { UpdateDetails(details); };
         }
@@ -31,6 +31,11 @@ namespace EvotoClient.ViewModel
             MainVm.Logout(this);
         }
 
+        private bool CanLogout()
+        {
+            return !LogoutDisabled;
+        }
+
         #endregion
 
         #region Properties
@@ -41,6 +46,18 @@ namespace EvotoClient.ViewModel
         {
             get { return _email; }
             set { Set(ref _email, value); }
+        }
+
+        private bool _logoutDisabled;
+
+        public bool LogoutDisabled
+        {
+            get { return _logoutDisabled; }
+            set
+            {
+                Set(ref _logoutDisabled, value);
+                LogoutCommand.RaiseCanExecuteChanged();
+            }
         }
 
         #endregion
