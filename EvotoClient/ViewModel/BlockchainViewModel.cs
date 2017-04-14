@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using System;
+using Models;
 
 namespace EvotoClient.ViewModel
 {
@@ -18,7 +19,19 @@ namespace EvotoClient.ViewModel
         public string ChainString => _model.ChainString;
 
         public string EndDate
-            => "Ends: " + _model.ExpiryDate.ToShortTimeString() + " " + _model.ExpiryDate.ToShortDateString();
+        {
+            get
+            {
+                var time = _model.ExpiryDate.ToShortTimeString();
+                var date = _model.ExpiryDate.ToShortDateString();
+                var verb = (IsCurrent) ? "Ends" : "Ended";
+                return $"{verb}: {time} {date}";
+            }
+        }
+
+        public DateTime ExpiryDate => _model.ExpiryDate;
+
+        public bool IsCurrent => _model.ExpiryDate > DateTime.UtcNow;
 
         public BlockchainDetails GetModel()
         {
