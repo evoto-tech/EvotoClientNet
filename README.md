@@ -10,6 +10,7 @@ Download the [lastest release](https://github.com/evoto-tech/EvotoClientNet/rele
 The application should build without any external files or dependencies, in Visual Studio 2015 or 2017. To do so, first clone the repository and its recursive submodules:
 
     git clone https://github.com/evoto-tech/EvotoClientNet.git
+    cd EvotoClientNet
     git submodule init --update --recursive
 
 # Running
