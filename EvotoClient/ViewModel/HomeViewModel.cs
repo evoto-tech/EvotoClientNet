@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using Api.Clients;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Practices.ServiceLocation;
@@ -28,7 +29,10 @@ namespace EvotoClient.ViewModel
             ProceedCommand = new RelayCommand(DoProceed, CanProceed);
             RefreshCommand = new RelayCommand(async () => await GetVotes(), CanRefresh);
 
-            Votes = new ObservableRangeCollection<BlockchainViewModel>();
+            VoteCollection = new ObservableRangeCollection<BlockchainViewModel>();
+            VoteSource = CollectionViewSource.GetDefaultView(VoteCollection);
+            VoteSource.Filter = VoteFilter;
+            VoteSource.SortDescriptions.Add(new SortDescription("ExpiryDate", ListSortDirection.Ascending));
         }
 
         #region Commands
@@ -67,11 +71,24 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private bool _showAllVotes;
+
+        public bool ShowAllVotes
+        {
+            get { return _showAllVotes; }
+            set
+            {
+                Set(ref _showAllVotes, value);
+                VoteSource.Refresh();
+            }
+        }
+
         public bool NoVotesMessageVisible => !Loading && NoVotes;
 
         public bool VotesVisible => !Loading && !NoVotes;
 
-        public ObservableRangeCollection<BlockchainViewModel> Votes { get; }
+        public ObservableRangeCollection<BlockchainViewModel> VoteCollection { get; }
+        public ICollectionView VoteSource { get; }
 
         private BlockchainViewModel _selectedVote;
 
@@ -101,10 +118,7 @@ namespace EvotoClient.ViewModel
             {
                 var voted = await _voteClient.HasVoted(SelectedVote.ChainString);
 
-                Ui(() =>
-                {
-                    Loading = false;
-                });
+                Ui(() => { Loading = false; });
 
                 if (!voted)
                 {
@@ -119,8 +133,6 @@ namespace EvotoClient.ViewModel
                     resultsVm.SelectVote(SelectedVote.GetModel());
                 }
             });
-
-            
         }
 
         private bool CanProceed()
@@ -145,8 +157,9 @@ namespace EvotoClient.ViewModel
                 Loading = false;
                 if (votes.Any())
                 {
-                    Votes.Clear();
-                    Votes.AddRange(voteVms);
+                    VoteCollection.Clear();
+                    VoteCollection.AddRange(voteVms);
+                    VoteSource.Refresh();
                     NoVotes = false;
                 }
                 else
@@ -154,6 +167,11 @@ namespace EvotoClient.ViewModel
                     NoVotes = true;
                 }
             });
+        }
+
+        private bool VoteFilter(object item)
+        {
+            return ShowAllVotes || ((BlockchainViewModel) item).IsCurrent;
         }
 
         #endregion
