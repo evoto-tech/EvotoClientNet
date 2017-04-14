@@ -33,6 +33,14 @@ namespace EvotoClient.ViewModel
 
         public bool IsCurrent => _model.ExpiryDate > DateTime.UtcNow;
 
+        public bool Encrypted
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(_model.EncryptKey);
+            }
+        }
+
         public BlockchainDetails GetModel()
         {
             return _model;
