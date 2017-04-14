@@ -28,6 +28,7 @@ namespace EvotoClient.ViewModel
 
             ProceedCommand = new RelayCommand(DoProceed, CanProceed);
             RefreshCommand = new RelayCommand(async () => await GetVotes(), CanRefresh);
+            ClickErrorCommand = new RelayCommand(DoError);
 
             VoteCollection = new ObservableRangeCollection<BlockchainViewModel>();
             VoteSource = CollectionViewSource.GetDefaultView(VoteCollection);
@@ -39,6 +40,7 @@ namespace EvotoClient.ViewModel
 
         public RelayCommand ProceedCommand { get; }
         public RelayCommand RefreshCommand { get; }
+        public RelayCommand ClickErrorCommand { get; }
 
         #endregion
 
@@ -83,6 +85,22 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage;}
+            set { Set(ref _errorMessage, value); }
+        }
+
+        private bool _showErrorMessage;
+
+        public bool ShowErrorMessage
+        {
+            get { return _showErrorMessage;}
+            set { Set(ref _showErrorMessage, value); }
+        }
+
         public bool NoVotesMessageVisible => !Loading && NoVotes;
 
         public bool VotesVisible => !Loading && !NoVotes;
@@ -113,16 +131,20 @@ namespace EvotoClient.ViewModel
 
             Loading = true;
 
-            // Contact the Registrar to see if we have voted on this vote yet
             Task.Run(async () =>
             {
                 var showResults = true;
                 if (SelectedVote.IsCurrent)
                 {
+                    // Contact the Registrar to see if we have voted on this vote yet
                     showResults = await _voteClient.HasVoted(SelectedVote.ChainString);
                 }
 
-                Ui(() => { Loading = false; });
+                Ui(() =>
+                {
+                    Loading = false;
+                    ErrorMessage = "";
+                });
 
                 if (!showResults)
                 {
@@ -132,11 +154,27 @@ namespace EvotoClient.ViewModel
                 }
                 else
                 {
-                    MainVm.ChangeView(EvotoView.Results);
-                    var resultsVm = GetVm<ResultsViewModel>();
-                    resultsVm.SelectVote(SelectedVote.GetModel());
+                    if (!SelectedVote.Encrypted)
+                    {
+                        MainVm.ChangeView(EvotoView.Results);
+                        var resultsVm = GetVm<ResultsViewModel>();
+                        resultsVm.SelectVote(SelectedVote.GetModel());
+                    }
+                    else
+                    {
+                        Ui(() =>
+                        {
+                            ErrorMessage = "This vote is encrypted and still active. Results cannot be viewed.";
+                            ShowErrorMessage = true;
+                        });
+                    }
                 }
             });
+        }
+
+        private void DoError()
+        {
+            ShowErrorMessage = false;
         }
 
         private bool CanProceed()
