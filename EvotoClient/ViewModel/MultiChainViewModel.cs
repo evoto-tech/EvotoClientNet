@@ -104,6 +104,9 @@ namespace EvotoClient.ViewModel
                 // Request a voting asset (currency)
                 var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, unblindedToken.ToString());
 
+                // Wait until the currency has been confirmed
+                await Model.ConfirmVoteAllocated();
+
                 // Where the transaction's currency comes from
                 var txIds = new List<CreateRawTransactionTxIn>
                 {
