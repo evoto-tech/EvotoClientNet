@@ -43,11 +43,13 @@
                    >Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink></TextBlock>
 
         <StackPanel Grid.Column="1"
-                    Grid.Row="1"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    VerticalAlignment="Center"
                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
             <Image
                    MaxWidth="200"
-                   gif:ImageBehavior.AnimatedSource="../Skins/blockchain.gif" />
+                   gif:ImageBehavior.AnimatedSource="../Skins/blockchain.gif" HorizontalAlignment="Center" />
             <TextBlock Text="{Binding LoadingText}" HorizontalAlignment="Center" TextAlignment="Center" />
         </StackPanel>
 
