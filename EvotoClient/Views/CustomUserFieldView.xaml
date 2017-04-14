@@ -19,7 +19,6 @@
         <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" />
         <TextBox Grid.Column="1" Text="{Binding Value}" Visibility="{Binding ShowText, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <DatePicker
-            Style="{StaticResource DatePickerStyle}"
             BorderThickness="0"
             Grid.Column="1" SelectedDate="{Binding Date}" Visibility="{Binding ShowDate, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
