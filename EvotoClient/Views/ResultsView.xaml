@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:EvotoClient.Converters"
              xmlns:transitions="clr-namespace:EvotoClient.Transitions"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
 
@@ -23,24 +24,26 @@
             <ColumnDefinition Width="20*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*" />
+            <RowDefinition Height="30*" />
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="30*" />
             <RowDefinition Height="10*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <local:PageTransition
-            Grid.Row="0" Grid.Column="1"
+            Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"
             x:Name="pageTransition" Margin="25"
             Visibility="{Binding ResultsVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
 
-        <TextBlock Grid.Row="0" Grid.Column="1"
+        <TextBlock Grid.Row="1" Grid.Column="1"
                    Visibility="{Binding CannotConnect, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                    HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap"
                    >Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink></TextBlock>
 
         <StackPanel Grid.Column="1"
-                    Grid.Row="0"
+                    Grid.Row="1"
                     Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
             <Image
                    MaxWidth="200"
@@ -48,10 +51,17 @@
             <TextBlock Text="{Binding LoadingText}" HorizontalAlignment="Center" TextAlignment="Center" />
         </StackPanel>
 
-        <Button Grid.Row="0" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
-        <Button Grid.Row="0" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
+        <Rectangle Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" Fill="White" />
+        <Rectangle Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" Fill="White"/>
 
-        <Button Grid.Row="1" Grid.ColumnSpan="3" Command="{Binding FindVoteCommand}">Find My Vote</Button>
-        <Button Grid.Row="2" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
+        <Button Grid.Row="1" Grid.Column="0" Command="{Binding PrevCommand}" Margin="15">
+            <materialDesign:PackIcon Kind="ArrowLeftBold" />
+        </Button>
+        <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}" Margin="15">
+            <materialDesign:PackIcon Kind="ArrowRightBold" />
+        </Button>
+
+        <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding FindVoteCommand}">Find My Vote</Button>
+        <Button Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>
