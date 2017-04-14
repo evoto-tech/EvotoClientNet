@@ -63,7 +63,7 @@
             <materialDesign:PackIcon Kind="ArrowRightBold" />
         </Button>
 
-        <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding FindVoteCommand}">Find My Vote</Button>
+        <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding FindVoteCommand}" Margin="0 0 0 4">Find My Vote</Button>
         <Button Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>

@@ -91,7 +91,9 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+        <Grid
+            Visibility="{Binding VotesVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+            Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="16" />
                 <ColumnDefinition />
@@ -103,7 +105,7 @@
                                      VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Grid.Row="0" FontSize="14" Margin="3 0 0 0" VerticalAlignment="Center">Indicates an encrypted vote.</TextBlock>
         </Grid>
-        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ProceedCommand}">Proceed</Button>
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding ProceedCommand}" Margin="0 0 0 4">Proceed</Button>
         <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding RefreshCommand}">Refresh</Button>
 
         <materialDesign:Snackbar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"

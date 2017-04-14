@@ -169,10 +169,12 @@ namespace EvotoClient.ViewModel
             }
             catch (ApiException)
             {
+                progress.Report(-1);
                 throw new CouldNotVoteException();
             }
             catch (Exception e)
             {
+                progress.Report(-1);
                 Debug.WriteLine(e.Message);
                 throw new CouldNotVoteException();
             }
