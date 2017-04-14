@@ -56,4 +56,7 @@
     <DataTemplate DataType="{x:Type vm:UserBarViewModel}">
         <views:UserBarView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:VoteProgressViewModel}">
+        <views:VoteProgressView />
+    </DataTemplate>
 </ResourceDictionary>
