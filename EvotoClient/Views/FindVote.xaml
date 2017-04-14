@@ -16,19 +16,38 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="10*" MaxHeight="50"/>
-            <RowDefinition Height="10*" MaxHeight="50"/>
+            <RowDefinition Height="40*" />
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="10*" MaxHeight="50" />
+            <RowDefinition Height="10*" MaxHeight="50" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="{Binding AnswerText}" />
-        <TextBox Grid.Row="0" Visibility="{Binding NotFound, Converter={StaticResource BoolToVisibilityHiddenConverter}}" Text="Answer not found" />
+        <TextBlock Grid.Row="0"
+                   TextWrapping="Wrap"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="{Binding AnswerText}" />
 
-        <Border BorderBrush="{x:Null}">
-            <TextBox Grid.Row="1" Text="{Binding MagicWords}" TextAlignment="Center" VerticalAlignment="Center" />
+        <Border Grid.Row="1" BorderBrush="{x:Null}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="Magic Words: " VerticalAlignment="Center" FontWeight="Bold" />
+                <TextBox Text="{Binding MagicWords, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center" VerticalAlignment="Center"
+                         Width="100">
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding FindCommand}" CommandParameter="{Binding ElementName=This}" Key="Return" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </StackPanel>
         </Border>
 
-        <Button Grid.Row="2" Command="{Binding FindCommand}">Find</Button>
-        <Button Grid.Row="3" Command="{Binding BackCommand}">Back</Button>
+        <TextBlock Grid.Row="2" VerticalAlignment="Center">
+            This feature can be used to identify your vote within the Blockchain results.
+            <LineBreak />
+            To do so, please enter the magic words given to you after you voted.
+        </TextBlock>
+
+        <Button Grid.Row="3" Command="{Binding FindCommand}">Find</Button>
+        <Button Grid.Row="4" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>

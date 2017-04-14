@@ -16,13 +16,14 @@ namespace EvotoClient.ViewModel
     {
         private readonly VoteClient _voteClient;
         private List<BlockchainVoteModelPlainText> _answers;
+        private List<BlockchainQuestionModel> _questions;
         private BlockchainDetails _currentDetails;
 
         public ResultsViewModel()
         {
             _voteClient = new VoteClient();
 
-            FindVoteCommand = new RelayCommand(DoFindVote);
+            FindVoteCommand = new RelayCommand(DoFindVote, CanFindVote);
             BackCommand = new RelayCommand(DoBack);
 
             NextCommand = new RelayCommand(DoNext, CanNext);
@@ -64,6 +65,7 @@ namespace EvotoClient.ViewModel
             {
                 Set(ref _loading, value);
                 RaisePropertyChanged(nameof(ResultsVisible));
+                FindVoteCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -185,7 +187,7 @@ namespace EvotoClient.ViewModel
             try
             {
                 // Read the questions from the blockchain
-                var questions = await MultiChainVm.Model.GetQuestions();
+                _questions = await MultiChainVm.Model.GetQuestions();
 
                 var decryptKey = "";
 
@@ -198,7 +200,7 @@ namespace EvotoClient.ViewModel
                     await MultiChainVm.Model.GetResults(blockchain.WalletId, decryptKey);
 
                 // For each question, get its total for each answer
-                var results = questions.Select(question =>
+                var results = _questions.Select(question =>
                 {
                     // Setup response dictionary, answer -> num votes
                     var options = question.Answers.ToDictionary(a => a.Answer, a => 0);
@@ -275,8 +277,13 @@ namespace EvotoClient.ViewModel
         private void DoFindVote()
         {
             var findVoteVm = GetVm<FindVoteViewModel>();
-            findVoteVm.SetResults(_answers);
+            findVoteVm.SetResults(_questions, _answers);
             MainVm.ChangeView(EvotoView.FindVote);
+        }
+
+        private bool CanFindVote()
+        {
+            return !Loading;
         }
 
         private void ShowPage(bool forwards = true)

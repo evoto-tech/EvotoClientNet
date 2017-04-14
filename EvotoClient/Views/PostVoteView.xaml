@@ -25,10 +25,11 @@
 
         <Border Grid.Row="0" BorderBrush="{x:Null}">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Magic Words: " VerticalAlignment="Center" FontWeight="Bold"></TextBlock>
-                <TextBox Text="{Binding MagicWords}" TextAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" />
-            </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Magic Words: " VerticalAlignment="Center" FontWeight="Bold" />
+                    <TextBox Text="{Binding MagicWords}" TextAlignment="Center" VerticalAlignment="Center"
+                             IsReadOnly="True" Width="100" />
+                </StackPanel>
                 <Button Margin="5 5" Command="{Binding CopyCommand}">Copy to Clipboard</Button>
                 <TextBlock Text="{Binding CopyStatus}" HorizontalAlignment="Center" />
             </StackPanel>
@@ -36,13 +37,13 @@
 
         <TextBlock
             Grid.Row="1"
-            HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Left"
-            >
+            HorizontalAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" TextAlignment="Left">
             Please keep these words safe.
             <LineBreak />
             You (or anyone else) can use them to identify your vote on the blockchain.
             <LineBreak />
-            When the results are finalised you will be able to use these words to ensure that your vote has been counted.</TextBlock>
+            When the results are finalised you will be able to use these words to ensure that your vote has been counted.
+        </TextBlock>
 
         <TextBlock
             Grid.Row="2"
