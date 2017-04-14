@@ -24,7 +24,9 @@
         <TextBlock Grid.Row="0" Text="{Binding AnswerText}" />
         <TextBox Grid.Row="0" Visibility="{Binding NotFound, Converter={StaticResource BoolToVisibilityHiddenConverter}}" Text="Answer not found" />
 
-        <TextBox Grid.Row="1" Text="{Binding MagicWords}" />
+        <Border BorderBrush="{x:Null}">
+            <TextBox Grid.Row="1" Text="{Binding MagicWords}" TextAlignment="Center" VerticalAlignment="Center" />
+        </Border>
 
         <Button Grid.Row="2" Command="{Binding FindCommand}">Find</Button>
         <Button Grid.Row="3" Command="{Binding BackCommand}">Back</Button>

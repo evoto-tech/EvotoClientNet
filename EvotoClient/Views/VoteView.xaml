@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:EvotoClient.Views"
              xmlns:converters="clr-namespace:EvotoClient.Converters"
              xmlns:transitions="clr-namespace:EvotoClient.Transitions"
@@ -23,13 +24,15 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*" />
-            <RowDefinition Height="75*" />
+            <RowDefinition Height="25*" />
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="25*" />
             <RowDefinition Height="10*" />
             <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Row="1" Grid.Column="1"
+                     Grid.Row="2" Grid.Column="1"
                      IsIndeterminate="True"
                      Visibility="{Binding Loading, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                      VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -37,18 +40,23 @@
         <TextBlock Grid.Row="0" Grid.Column="1"
                    Text="{Binding QuestionText}"
                    VerticalAlignment="Center"
+                   Style="{DynamicResource MaterialDesignTitleTextBlock}"
                    Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
         <local:PageTransition
-            Grid.Row="1" Grid.Column="1"
+            Grid.Row="1" Grid.Column="1" Grid.RowSpan="3"
             x:Name="pageTransition" Margin="25"
             Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
 
-        <Button Grid.Row="1" Grid.Column="0" Command="{Binding PrevCommand}">prev</Button>
-        <Button Grid.Row="1" Grid.Column="2" Command="{Binding NextCommand}">next</Button>
+        <Button Grid.Row="2" Grid.Column="0" Margin="12 10" Command="{Binding PrevCommand}">
+            <materialDesign:PackIcon Kind="ArrowLeftBold" Height="32" Width="32" />
+        </Button>
+        <Button Grid.Row="2" Grid.Column="2" Margin="12 10" Command="{Binding NextCommand}">
+            <materialDesign:PackIcon Kind="ArrowRightBold" Height="32" Width="32" />
+        </Button>
 
-        <Button Grid.Row="2" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
-        <Button Grid.Row="3" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
+        <Button Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
+        <Button Grid.Row="5" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>

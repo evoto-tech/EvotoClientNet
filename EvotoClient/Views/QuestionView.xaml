@@ -8,12 +8,14 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="1*" MaxHeight="75"/>
+            <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
         
         <TextBlock Grid.Row="0" Grid.Column="0"
-                   Text="{Binding Question}" />
+                   Text="{Binding Question}" 
+                   Style="{DynamicResource MaterialDesignTitleTextBlock}"
+                   FontSize="16"/>
 
         <ListBox Grid.Row="1" Grid.Column="0"
                  SelectedItem="{Binding SelectedAnswer}"
