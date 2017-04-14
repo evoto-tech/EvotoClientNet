@@ -144,6 +144,7 @@ namespace EvotoClient.ViewModel
                 {
                     Loading = false;
                     ErrorMessage = "";
+                    ShowErrorMessage = false;
                 });
 
                 if (!showResults)
