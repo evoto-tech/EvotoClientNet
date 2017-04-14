@@ -15,7 +15,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0"
                    Text="{Binding Question}" 
                    Style="{DynamicResource MaterialDesignTitleTextBlock}"
-                   FontSize="16"/>
+                   FontSize="16" TextWrapping="Wrap" />
 
         <ListBox Grid.Row="1" Grid.Column="0"
                  SelectedItem="{Binding SelectedAnswer}"

@@ -59,7 +59,8 @@
         
         <ContentControl
             Grid.Row="1" Grid.Column="1" Grid.RowSpan="3"
-            Margin="25"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Margin="10"
             Visibility="{Binding Voting}"
             Content="{Binding VoteProgress}"></ContentControl>
 
