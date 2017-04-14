@@ -18,6 +18,8 @@ namespace EvotoClient.ViewModel
             "Sending Vote"
         };
 
+        private VoteProgressItemViewModel _currentStep;
+
         public VoteProgressViewModel()
         {
             Progress = new Progress<int>(UpdateProgress);
@@ -33,6 +35,12 @@ namespace EvotoClient.ViewModel
 
         private void UpdateProgress(int stepComplete)
         {
+            if (stepComplete < 0)
+            {
+                _currentStep.SetComplete(false);
+                return;
+            }
+
             if (stepComplete > ProgressItems.Count)
             {
                 Debug.WriteLine($"Error, invalid step complete: {stepComplete}");
@@ -41,14 +49,10 @@ namespace EvotoClient.ViewModel
 
             Ui(() =>
             {
-                if (stepComplete > 1)
-                {
-                    var previousStep = ProgressItems[stepComplete - 2];
-                    previousStep.SetComplete(true);
-                }
+                _currentStep?.SetComplete(true);
 
-                var currentStep = ProgressItems[stepComplete - 1];
-                currentStep.SetInProgress();
+                _currentStep = ProgressItems[stepComplete - 1];
+                _currentStep.SetInProgress();
             });
         }
     }
