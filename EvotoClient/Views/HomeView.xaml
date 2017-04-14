@@ -68,20 +68,20 @@
                 <DataTemplate>
                     <Grid Margin="4">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="6*" />
-                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="8*" />
+                            <ColumnDefinition Width="62*" />
+                            <ColumnDefinition Width="30*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="1*" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
-                        <TextBlock Padding="16 0 0 0" Grid.Row="0" Grid.Column="1" FontWeight="Bold"
+                        <TextBlock Padding="6 0 0 0" Grid.Row="0" Grid.Column="1" FontWeight="Bold"
                                    Text="{Binding Name}" />
-                        <materialDesign:PackIcon Kind="Lock" Height="32" Width="32" Grid.Row="0" Grid.Column="0" 
+                        <materialDesign:PackIcon Kind="Lock" Height="32" Width="32" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                                                  Visibility="{Binding Encrypted, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                                                  VerticalAlignment="Center"/>
-                        <TextBlock Padding="16 0 0 0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                        <TextBlock Padding="6 0 0 0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                                    Text="{Binding Info}" TextWrapping="Wrap" />
                         <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding EndDate}" />
                     </Grid>
