@@ -41,7 +41,7 @@
             </StackPanel>
         </Border>
 
-        <TextBlock Grid.Row="2" VerticalAlignment="Center">
+        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Left">
             This feature can be used to identify your vote within the Blockchain results.
             <LineBreak />
             To do so, please enter the magic words given to you after you voted.
