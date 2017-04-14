@@ -16,7 +16,7 @@ namespace Api.Exceptions
         {
             if (ms.ModelState == null)
                 return ms.Message;
-            return $"{string.Join("\n", ms.ModelState.SelectMany(kv => kv.Value))}";
+            return $"{string.Join("\n", ms.ModelState.SelectMany(kv => kv.Value)).Replace(". ", "\n")}";
         }
     }
 }

@@ -53,4 +53,7 @@
     <DataTemplate DataType="{x:Type vm:ChartViewModel}">
         <views:ChartView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:UserBarViewModel}">
+        <views:UserBarView />
+    </DataTemplate>
 </ResourceDictionary>

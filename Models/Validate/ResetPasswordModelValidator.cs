@@ -3,12 +3,14 @@ using Models.Forms;
 
 namespace Models.Validate
 {
-    public class ResetPasswordModelValidator : AbstractValidator<ResetPasswordModel>
+    public class ResetPasswordModelValidator : PasswordValidator<ResetPasswordModel>
     {
         public ResetPasswordModelValidator()
         {
-            RuleFor(x => x.Password).Length(6, 30).Must(LoginModelValidator.ValidPassword);
-            RuleFor(x => x.Token).NotEmpty();
+            ValidPassword();
+            RuleFor(x => x.Password).Equal(x => x.ConfirmPassword).WithMessage("Passwords must match");
+            RuleFor(x => x.Token).NotEmpty()
+                .WithMessage("Invalid Token");
         }
     }
 }

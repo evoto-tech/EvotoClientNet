@@ -9,9 +9,9 @@ using Blockchain;
 using Blockchain.Models;
 using GalaSoft.MvvmLight.Ioc;
 using Models;
+using Models.Exception;
 using MultiChainLib.Model;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 
 namespace EvotoClient.ViewModel
@@ -109,7 +109,7 @@ namespace EvotoClient.ViewModel
                 {
                     new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}
                 };
-                
+
                 // Where the transaction's currency goes to (registrar)
                 var toInfo = new List<CreateRawTransactionAmount>
                 {
@@ -127,7 +127,7 @@ namespace EvotoClient.ViewModel
                     Answer = q.SelectedAnswer.Answer,
                     Question = q.QuestionNumber
                 }).ToList();
-                
+
 
                 // Send our vote, encrytped if required
                 if (blockchain.ShouldEncryptResults)
@@ -155,10 +155,14 @@ namespace EvotoClient.ViewModel
 
                 return regiMeta.Words;
             }
-            catch (ApiException e)
+            catch (ApiException)
+            {
+                throw new CouldNotVoteException();
+            }
+            catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-                return "";
+                throw new CouldNotVoteException();
             }
         }
 

@@ -26,5 +26,13 @@ namespace Api
             RefreshToken = response.RefreshToken;
             Expires = response.ExpiresAt.DateTime;
         }
+
+        public void Clear()
+        {
+            UserId = 0;
+            AuthenticationToken = "";
+            RefreshToken = "";
+            Expires = DateTime.Now;
+        }
     }
 }

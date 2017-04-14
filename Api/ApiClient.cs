@@ -49,9 +49,7 @@ namespace Api
                 BaseAddress = new Uri($"{url}/{baseUri}")
             };
             if (!CurrentAuth.Expired)
-            {
                 SetAuthorizationHeader();
-            }
 
             _anonymousClient = new HttpClient(handler)
             {
@@ -77,6 +75,14 @@ namespace Api
         private void ClearAuthorizationHeader()
         {
             _client.DefaultRequestHeaders.Clear();
+        }
+
+        /// <summary>
+        ///     Deletes any tokens and user authentication info. Used when logging out
+        /// </summary>
+        public static void ClearAuth()
+        {
+            CurrentAuth.Clear();
         }
 
         /// <summary>
@@ -316,32 +322,36 @@ namespace Api
                 {"password", password}
             });
 
-            var response = await _client.PostAsync(TOKEN_ENDPOINT, data);
-
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-
-                if (content.Contains("Unconfirmed Email"))
-                    throw new EmailVerificationNeededException();
-
-                throw new IncorrectLoginException(content);
-            }
-                
-            if (!response.IsSuccessStatusCode)
-                throw new UnableToObtainTokenException();
-
-            Debug.WriteLine("Logged in successfully");
-
             try
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var update = JSON.Deserialize<TokenUpdate>(content, JilOptions);
+                var response = await _client.PostAsync(TOKEN_ENDPOINT, data);
+
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (content.Contains("Unconfirmed Email"))
+                        throw new EmailVerificationNeededException();
+
+                    throw new IncorrectLoginException(content);
+                }
+
+                if (!response.IsSuccessStatusCode)
+                    throw new UnableToObtainTokenException();
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var update = JSON.Deserialize<TokenUpdate>(responseContent, JilOptions);
                 CurrentAuth.Update(update);
             }
-            catch (Exception e)
+            catch (HttpRequestException)
+            {
+                throw new ApiErrorException();
+            }
+            catch (DeserializationException e)
             {
                 Debug.WriteLine($"Could not read Token Response. {e.Message}");
+                throw new ApiErrorException("Invalid Token Response");
             }
 
             SetAuthorizationHeader();

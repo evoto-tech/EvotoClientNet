@@ -7,16 +7,16 @@ namespace Models.Validate
     {
         public LoginModelValidator()
         {
-            RuleFor(x => x.Password).Length(6, 30).Must(ValidPassword);
             RuleFor(x => x.Email)
                 .EmailAddress().WithMessage("Invalid Email Address")
                 .NotEmpty().WithMessage("Invalid Email Address");
+            ValidPassword();
         }
 
-        public static bool ValidPassword(string password)
+        public void ValidPassword()
         {
-            // TODO: Password complexity valiation
-            return true;
+            RuleFor(x => x.Password).Length(6, 30)
+                .WithMessage("Invalid Password (must have between 6 and 30 chars)");
         }
     }
 }

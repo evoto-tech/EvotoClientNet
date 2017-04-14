@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
 using Api.Exceptions;
@@ -20,7 +21,7 @@ namespace EvotoClient.ViewModel
         {
             _validator = new RegisterModelValidator();
             _userClient = new UserClient();
-            RegisterCommand = new RelayCommand<object>(DoRegister, CanRegister);
+            RegisterCommand = new RelayCommand<object>(DoRegister);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
 
             CustomFields = new ObservableRangeCollection<CustomUserFieldViewModel>();
@@ -56,12 +57,13 @@ namespace EvotoClient.ViewModel
 
         public bool FieldsLoading
         {
-            get { return _fieldsLoading;}
+            get { return _fieldsLoading; }
             set
             {
                 Set(ref _fieldsLoading, value);
                 RaisePropertyChanged(nameof(ShowFields));
                 RaisePropertyChanged(nameof(LoadingSpinner));
+                RaisePropertyChanged(nameof(CanRegister));
             }
         }
 
@@ -85,6 +87,8 @@ namespace EvotoClient.ViewModel
 
         public ObservableRangeCollection<CustomUserFieldViewModel> CustomFields { get; }
 
+        public bool CanRegister => !FieldsLoading && !_registerDisabled;
+
         #endregion
 
         #region Methods
@@ -92,12 +96,9 @@ namespace EvotoClient.ViewModel
         private bool IsFormValid(object parameter, out RegisterModel registerModel)
         {
             registerModel = null;
-            var valid = true;
 
-            // Start out with list of custom field messages, as they should be first. Maybe
-            var errorMessages =
-                CustomFields.Where(cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
-                    .Select(f => $"{f.Name} is Required").ToList();
+            var errorMessages = new List<string>();
+            var customErrors = false;
 
             var passwordContainer = parameter as IHavePasswords;
             if (passwordContainer == null)
@@ -107,31 +108,55 @@ namespace EvotoClient.ViewModel
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
 
-            // Check they match
-            if (p1 != p2)
-            {
-                errorMessages.Add("Passwords do not match");
-                valid = false;
-            }
-
             // Validate the form
             registerModel = new RegisterModel(Email, p1, p2);
             var v = _validator.Validate(registerModel);
             if (!v.IsValid)
             {
-                errorMessages.AddRange(v.Errors.Select(e => e.ErrorMessage));
-                valid = false;
+                // Put the errors into our error list, ensuring email goes first, followed by custom, followed by password
+                // This is the same order as the view
+                foreach (var msg in v.Errors)
+                {
+                    if ((msg.PropertyName != nameof(registerModel.Email)) && !customErrors)
+                    {
+                        customErrors = true;
+                        errorMessages.AddRange(GetCustomErrors());
+                    }
+                    errorMessages.Add(msg.ErrorMessage);
+                }
             }
 
+            if (!customErrors)
+                errorMessages.AddRange(GetCustomErrors());
+
             // Display error message(s) if invalid
-            if (!valid)
+            if (errorMessages.Any())
+            {
                 ErrorMessage = string.Join("\n", errorMessages);
-            return valid;
+                return false;
+            }
+            ErrorMessage = "";
+            return true;
         }
 
-        private bool CanRegister(object _)
+        private IEnumerable<string> GetCustomErrors()
         {
-            return !FieldsLoading && !_registerDisabled;
+            return CustomFields.Where(cf => cf.Required && string.IsNullOrWhiteSpace(cf.Value))
+                .Select(f => $"{f.Name} is Required");
+        }
+
+        private void ResetForm(object parameter)
+        {
+            var passwordContainer = parameter as IHavePasswords;
+            if (passwordContainer == null)
+                return;
+
+            passwordContainer.SecurePassword.Clear();
+            passwordContainer.SecurePasswordConfirm.Clear();
+
+            Email = "";
+            foreach (var f in CustomFields)
+                f.Value = "";
         }
 
         private void DoRegister(object parameter)
@@ -153,15 +178,22 @@ namespace EvotoClient.ViewModel
                     await _userClient.Register(registerModel);
 
                     // Redirect to login page
-                    // TODO: If email verification off, login?
                     MainVm.ChangeView(EvotoView.Login);
                     var loginVm = ServiceLocator.Current.GetInstance<LoginViewModel>();
 
+                    Ui(() =>
+                    {
+                        Loading = false;
+                        ResetForm(parameter);
+                    });
+                    
                     // Autofill their email and ask them to verify it
                     loginVm.VerifyEmail(Email);
                 }
                 catch (RegisterDisabledException)
                 {
+                    _registerDisabled = true;
+                    RaisePropertyChanged(nameof(CanRegister));
                     Ui(() =>
                     {
                         ErrorMessage = "Sorry, registration is not enabled at this time";
@@ -170,8 +202,6 @@ namespace EvotoClient.ViewModel
                 }
                 catch (BadRequestException e)
                 {
-                    _registerDisabled = true;
-                    RegisterCommand.RaiseCanExecuteChanged();
                     Ui(() =>
                     {
                         ErrorMessage = e.Message;

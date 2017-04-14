@@ -29,13 +29,9 @@ namespace EvotoClient.ViewModel
             ResendCommand = new RelayCommand(DoResend);
 
             if (IsLoaded)
-            {
                 OnLoad(this, null);
-            }
             else
-            {
                 Loaded += OnLoad;
-            }
         }
 
         #region Commands 
@@ -60,7 +56,7 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _loading, value);
-                LoginCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(CanSubmit));
             }
         }
 
@@ -85,11 +81,7 @@ namespace EvotoClient.ViewModel
         public string Email
         {
             get { return _email; }
-            set
-            {
-                Set(ref _email, value);
-                LoginCommand.RaiseCanExecuteChanged();
-            }
+            set { Set(ref _email, value); }
         }
 
         private bool _registerEnabled;
@@ -115,6 +107,8 @@ namespace EvotoClient.ViewModel
             get { return _emailToken; }
             set { Set(ref _emailToken, value); }
         }
+
+        public bool CanSubmit => !Loading;
 
         #endregion
 
@@ -144,7 +138,7 @@ namespace EvotoClient.ViewModel
                     });
                 }
             });
-        } 
+        }
 
         private bool IsFormValid(object parameter, out LoginModel loginModel)
         {
@@ -172,7 +166,7 @@ namespace EvotoClient.ViewModel
                 }
 
             if (!valid)
-                ErrorMessage = string.Join("\n", errorMessages);
+                ErrorMessage = string.Join("\n", errorMessages.Distinct());
             return valid;
         }
 
@@ -196,14 +190,13 @@ namespace EvotoClient.ViewModel
                         await _userClient.VerifyEmail(model);
                     }
                     await _userClient.LoginAsync(loginModel.Email, loginModel.Password);
-                    var userDetails = await _userClient.GetCurrentUserDetails();
+
+                    var details = await _userClient.GetCurrentUserDetails();
+                    MainVm.Login(this, details);
 
                     ShowConfirmEmail = false;
                     Loading = false;
-
-                    MainVm.ChangeView(EvotoView.Home);
-                    MainVm.LoggedIn = true;
-                    MainVm.InvokeLogin(this, userDetails);
+                    Email = "";
                 }
                 catch (IncorrectLoginException)
                 {
@@ -236,10 +229,6 @@ namespace EvotoClient.ViewModel
                     Ui(() =>
                     {
                         ErrorMessage = "An Unknown Error Occurred";
-#if DEBUG
-// Just override debug message, as ELSE gives annoying compiler warnings
-                        ErrorMessage = e.Message;
-#endif
                         Loading = false;
                     });
                 }
@@ -278,7 +267,6 @@ namespace EvotoClient.ViewModel
 
                     Ui(() =>
                     {
-                        // TODO: This shouldn't be using the error property
                         ErrorMessage = "Email sent!";
                         Loading = false;
                     });

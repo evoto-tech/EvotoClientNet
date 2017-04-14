@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Blockchain.Exceptions;
+using Blockchain.Models;
 using EvotoClient.Views;
 using GalaSoft.MvvmLight.Command;
 using Models;
+using Models.Exception;
 
 namespace EvotoClient.ViewModel
 {
@@ -19,6 +22,8 @@ namespace EvotoClient.ViewModel
             NextCommand = new RelayCommand(DoNext, CanNext);
             PrevCommand = new RelayCommand(DoPrev, CanPrev);
 
+            ReconnectCommand = new RelayCommand(Connect);
+
             Loaded += (sender, args) => { TransitionView = ((VoteView) sender).pageTransition; };
         }
 
@@ -29,6 +34,8 @@ namespace EvotoClient.ViewModel
 
         public RelayCommand NextCommand { get; }
         public RelayCommand PrevCommand { get; }
+
+        public RelayCommand ReconnectCommand { get; }
 
         #endregion
 
@@ -93,6 +100,22 @@ namespace EvotoClient.ViewModel
             }
         }
 
+        private bool _cannotConnect;
+
+        public bool CannotConnect
+        {
+            get { return _cannotConnect; }
+            set { Set(ref _cannotConnect, value); }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set { Set(ref _errorMessage, value); }
+        }
+
         #endregion
 
         #region Methods
@@ -100,12 +123,39 @@ namespace EvotoClient.ViewModel
         public void SelectVote(BlockchainDetails blockchain)
         {
             _currentDetails = blockchain;
-            Ui(() => { Loading = true; });
+
+            Connect();
+        }
+
+        private void Connect()
+        {
+            if (Loading)
+                return;
+
+            Ui(() =>
+            {
+                Loading = true;
+                CannotConnect = false;
+                TotalQuestions = 0;
+                CurrentQuestion = 0;
+                ErrorMessage = "";
+            });
 
             Task.Run(async () =>
             {
-                await ConnectToBlockchain(blockchain);
-                await GetVoteDetails();
+                try
+                {
+                    await ConnectToBlockchain(_currentDetails);
+                    await GetVoteDetails();
+                }
+                catch (CouldNotConnectToBlockchainException)
+                {
+                    Ui(() =>
+                    {
+                        Loading = false;
+                        CannotConnect = true;
+                    });
+                }
             });
         }
 
@@ -122,8 +172,10 @@ namespace EvotoClient.ViewModel
                 else
                     return;
 
-            // TODO: Varied host
-            await MultiChainVm.Connect("localhost", blockchain.Port, blockchain.ChainString);
+            await MultiChainVm.Connect(blockchain.Host, blockchain.Port, blockchain.ChainString);
+
+            // Ensure our questions have been loaded. Connection may be slow
+            await MultiChainVm.Model.WaitUntilBlockchainSynced(3, new Progress<BlockchainSyncProgress>());
         }
 
         private async Task GetVoteDetails()
@@ -157,19 +209,36 @@ namespace EvotoClient.ViewModel
         {
             if (!MultiChainVm.Connected)
                 throw new Exception("Not connected");
-            Ui(() => { Loading = true; });
+            Ui(() =>
+            {
+                Loading = true;
+                ErrorMessage = "";
+            });
 
             Task.Run(async () =>
             {
-                var words = await MultiChainVm.Vote(Questions.ToList(), _currentDetails);
-                Ui(() =>
+                try
                 {
-                    Loading = false;
+                    var words = await MultiChainVm.Vote(Questions.ToList(), _currentDetails);
+                    Ui(() =>
+                    {
+                        Loading = false;
 
-                    var postVoteVm = GetVm<PostVoteViewModel>();
-                    postVoteVm.Voted(_currentDetails, words);
-                    MainVm.ChangeView(EvotoView.PostVote);
-                });
+                        var postVoteVm = GetVm<PostVoteViewModel>();
+                        postVoteVm.Voted(_currentDetails, words);
+                        MainVm.ChangeView(EvotoView.PostVote);
+                    });
+                }
+                catch (CouldNotVoteException)
+                {
+                    Ui(() =>
+                    {
+                        Loading = false;
+
+                        ErrorMessage =
+                            "An error occurred while voting. Please try again or contact a system administrator";
+                    });
+                }
             });
         }
 

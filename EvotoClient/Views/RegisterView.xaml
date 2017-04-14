@@ -6,7 +6,7 @@
              xmlns:c="clr-namespace:EvotoClient.Converters"
              x:Name="This"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="300" d:DesignWidth="500"
 
              DataContext="{Binding Register, Source={StaticResource Locator}}">
 
@@ -17,7 +17,6 @@
     <Grid
         Width="Auto" Height="Auto" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -43,40 +42,41 @@
             </TextBox.InputBindings>
         </TextBox>
 
-        <Label Grid.Row="1" Grid.Column="0"
-               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
-            Password
-        </Label>
-        <PasswordBox Grid.Row="1" Grid.Column="1" x:Name="Password"
-                     Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
-            <PasswordBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
-                            Key="Return" />
-            </PasswordBox.InputBindings>
-        </PasswordBox>
-
-        <Label Grid.Row="2" Grid.Column="0"
-               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
-            Confirm Password
-        </Label>
-        <PasswordBox Grid.Row="2" Grid.Column="1" x:Name="PasswordConfirm"
-                     Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
-            <PasswordBox.InputBindings>
-                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
-                            Key="Return" />
-            </PasswordBox.InputBindings>
-        </PasswordBox>
-
         <ItemsControl
             IsTabStop="False"
             Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
-            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding CustomFields}" />
+            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  ItemsSource="{Binding CustomFields}" />
+
+        <Label Grid.Row="2" Grid.Column="0"
+               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            Password
+        </Label>
+        <PasswordBox Grid.Row="2" Grid.Column="1" x:Name="Password"
+                     Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            <PasswordBox.InputBindings>
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
+            </PasswordBox.InputBindings>
+        </PasswordBox>
+
+        <Label Grid.Row="3" Grid.Column="0"
+               Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            Confirm Password
+        </Label>
+        <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="PasswordConfirm"
+                     Visibility="{Binding ShowFields, Converter={StaticResource BoolToVisibilityHiddenConverter}}">
+            <PasswordBox.InputBindings>
+                <KeyBinding Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=This}"
+                            Key="Return" />
+            </PasswordBox.InputBindings>
+        </PasswordBox>
 
         <Button
             Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="0 5px"
+            IsEnabled="{Binding CanRegister}"
             Command="{Binding RegisterCommand}"
             CommandParameter="{Binding ElementName=This}">
             Register
@@ -89,10 +89,10 @@
                      VerticalAlignment="Center" HorizontalAlignment="Center"
                      Margin="5 5 5 5" />
 
-        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
 
-        <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2">
-            <Hyperlink Command="{Binding ReturnToLoginCommand}">Login</Hyperlink>
+        <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+            <Hyperlink Command="{Binding ReturnToLoginCommand}">Back to Login</Hyperlink>
         </TextBlock>
     </Grid>
 </UserControl>

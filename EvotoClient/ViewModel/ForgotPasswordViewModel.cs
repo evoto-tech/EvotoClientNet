@@ -44,7 +44,7 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _loading, value);
-                SendEmailCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(CanSubmit));
             }
         }
 
@@ -63,6 +63,8 @@ namespace EvotoClient.ViewModel
             get { return _email; }
             set { Set(ref _email, value); }
         }
+
+        public bool CanSubmit => !Loading;
 
         #endregion
 
@@ -105,6 +107,7 @@ namespace EvotoClient.ViewModel
 
                     Ui(() =>
                     {
+                        Email = "";
                         Loading = false;
                     });
                 }

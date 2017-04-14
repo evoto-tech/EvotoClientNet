@@ -29,6 +29,7 @@
             <RowDefinition Height="25*" />
             <RowDefinition Height="10*" />
             <RowDefinition Height="10*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
 
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
@@ -43,6 +44,12 @@
                    Style="{DynamicResource MaterialDesignTitleTextBlock}"
                    Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
+        <TextBlock Grid.Row="1" Grid.Column="1"
+                   Visibility="{Binding CannotConnect, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                   HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">
+            Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink>
+        </TextBlock>
+
         <local:PageTransition
             Grid.Row="1" Grid.Column="1" Grid.RowSpan="3"
             x:Name="pageTransition" Margin="25"
@@ -55,6 +62,10 @@
         <Button Grid.Row="2" Grid.Column="2" Margin="12 10" Command="{Binding NextCommand}">
             <materialDesign:PackIcon Kind="ArrowRightBold" Height="32" Width="32" />
         </Button>
+
+        <TextBlock Grid.Row="3" Grid.Column="1"
+                   Text="{Binding ErrorMessage}" TextWrapping="Wrap"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
 
         <Button Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
         <Button Grid.Row="5" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>

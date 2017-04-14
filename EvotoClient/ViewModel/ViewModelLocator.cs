@@ -42,6 +42,7 @@ namespace EvotoClient.ViewModel
             SimpleIoc.Default.Register<ResultsViewModel>();
             SimpleIoc.Default.Register<ForgotPasswordViewModel>();
             SimpleIoc.Default.Register<ResetPasswordViewModel>();
+            SimpleIoc.Default.Register<UserBarViewModel>();
         }
 
         /// <summary>
@@ -98,6 +99,11 @@ namespace EvotoClient.ViewModel
         public ResetPasswordViewModel ResetPassword
         {
             get { return ServiceLocator.Current.GetInstance<ResetPasswordViewModel>(); }
+        }
+
+        public UserBarViewModel UserBar
+        {
+            get { return ServiceLocator.Current.GetInstance<UserBarViewModel>(); }
         }
 
         /// <summary>

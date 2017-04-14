@@ -2,17 +2,16 @@
 
 namespace Models.Forms
 {
-    public class RegisterModel
+    public class RegisterModel : PasswordForm
     {
         public RegisterModel(string email, string password, string confirmPassword)
         {
-            Email = email;
-            Password = password;
-            ConfirmPassword = confirmPassword;
+            Email = email?.Trim();
+            Password = password?.Trim();
+            ConfirmPassword = confirmPassword?.Trim();
         }
 
         public string Email { get; }
-        public string Password { get; }
         public string ConfirmPassword { get; }
 
         public List<CustomUserField> CustomFields { get; set; }

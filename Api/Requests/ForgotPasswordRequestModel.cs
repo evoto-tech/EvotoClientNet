@@ -7,6 +7,10 @@ namespace Api.Requests
     [Serializable]
     public class ForgotPasswordRequestModel
     {
+        public ForgotPasswordRequestModel()
+        {
+        }
+
         public ForgotPasswordRequestModel(ForgotPasswordModel model)
         {
             Email = model.Email;

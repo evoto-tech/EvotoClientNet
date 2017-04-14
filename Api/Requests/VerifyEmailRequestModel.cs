@@ -7,6 +7,10 @@ namespace Api.Requests
     [Serializable]
     public class VerifyEmailRequestModel
     {
+        public VerifyEmailRequestModel()
+        {
+        }
+
         public VerifyEmailRequestModel(VerifyEmailModel model)
         {
             Email = model.Email;

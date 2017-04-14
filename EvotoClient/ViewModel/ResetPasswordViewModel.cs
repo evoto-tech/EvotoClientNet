@@ -18,7 +18,7 @@ namespace EvotoClient.ViewModel
         {
             _validator = new ResetPasswordModelValidator();
             _userClient = new UserClient();
-            ResetCommand = new RelayCommand<object>(DoSendEmail);
+            ResetCommand = new RelayCommand<object>(DoResetPassword);
             BackCommand = new RelayCommand(DoBack);
             ReturnToLoginCommand = new RelayCommand(BackToLogin);
         }
@@ -43,7 +43,7 @@ namespace EvotoClient.ViewModel
             set
             {
                 Set(ref _loading, value);
-                ResetCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(CanSubmit));
             }
         }
 
@@ -71,6 +71,8 @@ namespace EvotoClient.ViewModel
             set { Set(ref _token, value); }
         }
 
+        public bool CanSubmit => !Loading;
+
         #endregion
 
         #region Methods
@@ -88,12 +90,6 @@ namespace EvotoClient.ViewModel
             var p1 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePassword);
             var p2 = LoginViewModel.ConvertToUnsecureString(passwordContainer.SecurePasswordConfirm);
 
-            if (p1 != p2)
-            {
-                errorMessages.Add("Passwords do not match");
-                valid = false;
-            }
-
             model = new ResetPasswordModel(Email, p1, p2, Token);
             var v = _validator.Validate(model);
             if (!v.IsValid)
@@ -107,7 +103,20 @@ namespace EvotoClient.ViewModel
             return valid;
         }
 
-        private void DoSendEmail(object parameter)
+        private void ResetForm(object parameter)
+        {
+            Email = "";
+            Token = "";
+
+            var passwordContainer = parameter as IHavePasswords;
+            if (passwordContainer == null)
+                return;
+
+            passwordContainer.SecurePassword.Clear();
+            passwordContainer.SecurePasswordConfirm.Clear();
+        }
+
+        private void DoResetPassword(object parameter)
         {
             ResetPasswordModel resetPasswordModel;
             if (!IsFormValid(parameter, out resetPasswordModel))
@@ -120,9 +129,14 @@ namespace EvotoClient.ViewModel
                 try
                 {
                     await _userClient.ResetPassword(resetPasswordModel);
-                    MainVm.ChangeView(EvotoView.Home);
+                    var userDetails = await _userClient.GetCurrentUserDetails();
+                    MainVm.Login(this, userDetails);
 
-                    Ui(() => { Loading = false; });
+                    Ui(() =>
+                    {
+                        Loading = false;
+                        ResetForm(parameter);
+                    });
                 }
                 catch (BadRequestException e)
                 {
@@ -170,15 +184,10 @@ namespace EvotoClient.ViewModel
                 Email = email;
                 Token = "";
                 if (sent)
-                {
-                    // TODO: Don't use Error Message
                     ErrorMessage =
                         $"An email has been sent to {email}.\nPlease click the link in the email, or enter the token above.";
-                }
                 else
-                {
                     ErrorMessage = "";
-                }
             });
         }
 

@@ -40,6 +40,9 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource PrimaryColourHover}"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource PrimaryColourDisabled}"/>
+            </Trigger>
         </Style.Triggers>
     </Style>
     

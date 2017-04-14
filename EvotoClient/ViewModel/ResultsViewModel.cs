@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Clients;
+using Blockchain.Exceptions;
 using Blockchain.Models;
 using EvotoClient.Views;
 using GalaSoft.MvvmLight.Command;
@@ -15,6 +16,7 @@ namespace EvotoClient.ViewModel
     {
         private readonly VoteClient _voteClient;
         private List<BlockchainVoteModelPlainText> _answers;
+        private BlockchainDetails _currentDetails;
 
         public ResultsViewModel()
         {
@@ -26,6 +28,8 @@ namespace EvotoClient.ViewModel
             NextCommand = new RelayCommand(DoNext, CanNext);
             PrevCommand = new RelayCommand(DoPrev, CanPrev);
 
+            ReconnectCommand = new RelayCommand(Connect);
+
             Loaded += (sender, args) => { TransitionView = ((ResultsView) sender).pageTransition; };
         }
 
@@ -36,6 +40,8 @@ namespace EvotoClient.ViewModel
 
         public RelayCommand NextCommand { get; }
         public RelayCommand PrevCommand { get; }
+
+        public RelayCommand ReconnectCommand { get; }
 
         #endregion
 
@@ -92,15 +98,34 @@ namespace EvotoClient.ViewModel
             set { Set(ref _loadingText, value); }
         }
 
+        private bool _cannotConnect;
+
+        public bool CannotConnect
+        {
+            get { return _cannotConnect; }
+            set { Set(ref _cannotConnect, value); }
+        }
+
         #endregion
 
         #region Methods
 
         public void SelectVote(BlockchainDetails blockchain)
         {
+            _currentDetails = blockchain;
+
+            Connect();
+        }
+
+        private void Connect()
+        {
+            if (Loading)
+                return;
+
             Ui(() =>
             {
                 Loading = true;
+                CannotConnect = false;
                 TotalResults = 0;
                 CurrentResults = 0;
             });
@@ -110,8 +135,19 @@ namespace EvotoClient.ViewModel
 
             Task.Run(async () =>
             {
-                await ConnectToBlockchain(blockchain);
-                await GetResults(blockchain);
+                try
+                {
+                    await ConnectToBlockchain(_currentDetails);
+                    await GetResults(_currentDetails);
+                }
+                catch (CouldNotConnectToBlockchainException)
+                {
+                    Ui(() =>
+                    {
+                        Loading = false;
+                        CannotConnect = true;
+                    });
+                }
             });
         }
 
@@ -123,8 +159,7 @@ namespace EvotoClient.ViewModel
                 else
                     return;
 
-            // TODO: Varied host
-            await MultiChainVm.Connect("localhost", blockchain.Port, blockchain.ChainString);
+            await MultiChainVm.Connect(blockchain.Host, blockchain.Port, blockchain.ChainString);
         }
 
         private void ResetProgress()
@@ -244,10 +279,15 @@ namespace EvotoClient.ViewModel
             MainVm.ChangeView(EvotoView.FindVote);
         }
 
-        public void ShowPage(bool forwards = true)
+        private void ShowPage(bool forwards = true)
         {
             var page = Results[CurrentResults - 1];
             TransitionView.ShowPage(page, forwards);
+        }
+
+        public void ReInit()
+        {
+            Connect();
         }
 
         #endregion
