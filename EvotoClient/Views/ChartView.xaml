@@ -9,7 +9,20 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <chartingToolkit:Chart Title="{Binding Question}" BorderThickness="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" MaxHeight="100" />
+            <RowDefinition Height="8*" />
+        </Grid.RowDefinitions>
+        <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}"
+                   Grid.Row="0"
+                   Grid.Column="0"
+                   Text="{Binding Question}" 
+                   VerticalAlignment="Center"
+                   Padding="16 0 0 0"></TextBlock>
+        <chartingToolkit:Chart x:Name="Chart" BorderThickness="0" Grid.Row="1" Grid.Column="0">
             <chartingToolkit:PieSeries ItemsSource="{Binding Data}"
                                        IndependentValueBinding="{Binding Path=Key}"
                                        DependentValueBinding="{Binding Path=Value}" BorderThickness="0" />
