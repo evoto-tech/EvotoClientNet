@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <chartingToolkit:Chart Title="{Binding Question}">
+        <chartingToolkit:Chart Title="{Binding Question}" BorderThickness="0">
             <chartingToolkit:PieSeries ItemsSource="{Binding Data}"
                                        IndependentValueBinding="{Binding Path=Key}"
                                        DependentValueBinding="{Binding Path=Value}" />
