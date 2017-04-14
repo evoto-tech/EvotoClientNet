@@ -34,6 +34,7 @@
 
         <CheckBox
             Style="{DynamicResource MaterialDesignCheckBox}"
+            Visibility="{Binding VotesVisible, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             Grid.Row="0" Grid.Column="1"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"

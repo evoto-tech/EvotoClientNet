@@ -73,9 +73,11 @@ namespace EvotoClient.ViewModel
             base.Cleanup();
         }
 
-        public async Task<string> Vote(List<QuestionViewModel> questions, BlockchainDetails blockchain)
+        public async Task<string> Vote(List<QuestionViewModel> questions, BlockchainDetails blockchain, IProgress<int> progress)
         {
             var voteClient = new VoteClient();
+
+            progress.Report(1);
 
             try
             {
@@ -87,6 +89,7 @@ namespace EvotoClient.ViewModel
                 var key = RsaTools.PublicKeyFromString(keyStr);
 
                 // Blind our token
+                progress.Report(2);
                 var blindedToken = RsaTools.BlindMessage(token, key);
 
                 // Get the token signed by the registrar
@@ -96,15 +99,24 @@ namespace EvotoClient.ViewModel
                 var unblindedToken = RsaTools.UnblindMessage(new BigInteger(blindSignature), blindedToken.Random,
                     key);
 
-                // TODO: Sleep
+                // Here we would normally sleep until a random number of other voters have had tokens blindly signed by the registrar.
+                // This would be possible through observation of the root stream using the voters key, or a maximum timeout.
+                // However, given that this is a prototype, there is not enough traffic to make this feasible.
+                progress.Report(3);
 
                 // Create a wallet address to vote from
                 var walletId = await Model.GetNewWalletAddress();
 
                 // Request a voting asset (currency)
+                progress.Report(4);
                 var regiMeta = await voteClient.GetVote(Model.Name, walletId, token, unblindedToken.ToString());
 
+                // Wait until the currency has been confirmed
+                progress.Report(5);
+                await Model.ConfirmVoteAllocated();
+
                 // Where the transaction's currency comes from
+                progress.Report(6);
                 var txIds = new List<CreateRawTransactionTxIn>
                 {
                     new CreateRawTransactionTxIn {TxId = regiMeta.TxId, Vout = 0}

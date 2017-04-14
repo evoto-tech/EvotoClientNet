@@ -270,6 +270,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\VoteProgressView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\VoteView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -295,6 +299,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModel\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\VoteProgressItemViewModel.cs" />
+    <Compile Include="ViewModel\VoteProgressViewModel.cs" />
     <Compile Include="ViewModel\VoteViewModel.cs" />
     <Compile Include="Views\CustomUserFieldView.xaml.cs">
       <DependentUpon>CustomUserFieldView.xaml</DependentUpon>
@@ -328,6 +334,9 @@
     </Compile>
     <Compile Include="Views\UserBarView.xaml.cs">
       <DependentUpon>UserBarView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VoteProgressView.xaml.cs">
+      <DependentUpon>VoteProgressView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VoteView.xaml.cs">
       <DependentUpon>VoteView.xaml</DependentUpon>

@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="EvotoClient.Views.VoteProgressView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:EvotoClient.Views"
+             xmlns:converters="clr-namespace:EvotoClient.Converters"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityHiddenConverter x:Key="BoolToVisibilityHiddenConverter" />
+    </UserControl.Resources>
+
+    <DataGrid ItemsSource="{Binding ProgressItems}"
+              AutoGenerateColumns="False" HeadersVisibility="None">
+        <DataGrid.RowStyle>
+            <Style TargetType="DataGridRow">
+                <Setter Property="IsHitTestVisible" Value="False" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </DataGrid.RowStyle>
+        <DataGrid.Columns>
+            <DataGridTemplateColumn Width="20">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <ProgressBar Style="{DynamicResource MaterialDesignCircularProgressBar}"
+                                         IsIndeterminate="True"
+                                         Visibility="{Binding InProgress, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                                         VerticalAlignment="Center" />
+
+                            <materialDesign:PackIcon
+                                Visibility="{Binding IsComplete, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                                Kind="Check" Foreground="#8BC34A" />
+
+                            <materialDesign:PackIcon
+                                Visibility="{Binding IsError, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
+                                Kind="Close" Foreground="#DD4B39" />
+                        </Canvas>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn>
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Step}" Margin="5 0" />
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>
