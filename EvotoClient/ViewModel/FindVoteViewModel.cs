@@ -80,8 +80,7 @@ namespace EvotoClient.ViewModel
             Task.Run(() =>
             {
                 LastMagicWords = MagicWords;
-                FindCommand.RaiseCanExecuteChanged();
-
+                
                 var answer = _answers.FirstOrDefault(a => a.MagicWords == MagicWords.Trim());
                 Ui(() =>
                 {
@@ -89,6 +88,8 @@ namespace EvotoClient.ViewModel
                         AnswerText = "Answer Not Found";
                     else
                         AnswerText = FormatAnswer(answer);
+
+                    FindCommand.RaiseCanExecuteChanged();
                 });
             });
         }
