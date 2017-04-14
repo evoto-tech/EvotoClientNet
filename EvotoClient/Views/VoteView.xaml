@@ -78,7 +78,7 @@
                    Text="{Binding ErrorMessage}" TextWrapping="Wrap"
                    HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
 
-        <Button Grid.Row="5" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
-        <Button Grid.Row="6" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
+        <Button Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" Command="{Binding VoteCommand}" Margin="0 0 0 4">Vote</Button>
+        <Button Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>

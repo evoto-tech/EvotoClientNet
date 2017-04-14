@@ -51,7 +51,7 @@
             Visibility="{Binding Encrypted, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             Text="{Binding EncryptedText}" />
 
-        <Button Grid.Row="3" Command="{Binding ProceedCommand}">Results</Button>
+        <Button Grid.Row="3" Command="{Binding ProceedCommand}" Margin="0 0 0 4">Results</Button>
         <Button Grid.Row="4" Command="{Binding HomeCommand}">Home</Button>
     </Grid>
 </UserControl>

@@ -47,7 +47,7 @@
             To do so, please enter the magic words given to you after you voted.
         </TextBlock>
 
-        <Button Grid.Row="3" Command="{Binding FindCommand}">Find</Button>
+        <Button Grid.Row="3" Command="{Binding FindCommand}" Margin="0 0 0 4">Find</Button>
         <Button Grid.Row="4" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>
