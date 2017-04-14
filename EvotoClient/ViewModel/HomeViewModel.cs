@@ -116,11 +116,15 @@ namespace EvotoClient.ViewModel
             // Contact the Registrar to see if we have voted on this vote yet
             Task.Run(async () =>
             {
-                var voted = await _voteClient.HasVoted(SelectedVote.ChainString);
+                var showResults = true;
+                if (SelectedVote.IsCurrent)
+                {
+                    showResults = await _voteClient.HasVoted(SelectedVote.ChainString);
 
-                Ui(() => { Loading = false; });
+                    Ui(() => { Loading = false; });
+                }
 
-                if (!voted)
+                if (!showResults)
                 {
                     MainVm.ChangeView(EvotoView.Vote);
                     var voteView = GetVm<VoteViewModel>();
