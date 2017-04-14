@@ -44,7 +44,7 @@
                    Style="{DynamicResource MaterialDesignTitleTextBlock}"
                    Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}" />
 
-        <TextBlock Grid.Row="1" Grid.Column="1"
+        <TextBlock Grid.Row="2" Grid.Column="1"
                    Visibility="{Binding CannotConnect, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
                    HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap">
             Could not connect to Blockchain. <Hyperlink Command="{Binding ReconnectCommand}">(Retry)</Hyperlink>
@@ -56,6 +56,9 @@
             Visibility="{Binding VoteVisble, Converter={StaticResource BoolToVisibilityHiddenConverter}}"
             TransitionType="Slide" />
 
+        <Rectangle Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" Fill="White" />
+        <Rectangle Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" Fill="White"/>
+
         <Button Grid.Row="2" Grid.Column="0" Margin="12 10" Command="{Binding PrevCommand}">
             <materialDesign:PackIcon Kind="ArrowLeftBold" Height="32" Width="32" />
         </Button>
@@ -63,11 +66,11 @@
             <materialDesign:PackIcon Kind="ArrowRightBold" Height="32" Width="32" />
         </Button>
 
-        <TextBlock Grid.Row="3" Grid.Column="1"
+        <TextBlock Grid.Row="4" Grid.Column="1"
                    Text="{Binding ErrorMessage}" TextWrapping="Wrap"
                    HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" />
 
-        <Button Grid.Row="4" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
-        <Button Grid.Row="5" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
+        <Button Grid.Row="5" Grid.ColumnSpan="3" Command="{Binding VoteCommand}">Vote</Button>
+        <Button Grid.Row="6" Grid.ColumnSpan="3" Command="{Binding BackCommand}">Back</Button>
     </Grid>
 </UserControl>
